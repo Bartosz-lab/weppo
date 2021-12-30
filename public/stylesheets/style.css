@@ -12,7 +12,7 @@
     --fg1:      #333333;
     --fg2:      #535353;
     --fg3:      #dbae93;
-    --fg4:      #a89984;
+    --fg4:      #c7c7c7;
 
     --gray:     #a89984;
     --gray2:    #928374;
@@ -75,7 +75,7 @@ body {
     padding-right: 5%; 
     text-align: right; 
     line-height: 2.3em;
-    transition:all .4s ease-in-out;
+    transition:all .2s ease-in-out;
 
     z-index: 100;
 }
@@ -93,6 +93,20 @@ body {
     font-size: 1em;
 
     /*border:0;*/
+}
+#links {
+    text-align: center;
+    margin-left: 10%;
+    margin-right: 10%;
+    transition: 0.2s ease-in-out;
+    line-height: 1.5em;
+    font-size: 0.7em;
+}
+
+#links.sticky {
+    height: 0px;
+    line-height: 0px;
+    font-size: 0px;
 }
 
 .nav-cell {
@@ -154,6 +168,7 @@ body {
 }
 
 ol {
+    text-align: center;
     width: 100%;
 	padding: 0;
 	margin: 0;
@@ -176,11 +191,11 @@ ol > li {
 
 
 ol > li:hover {
-	background-color: var(--fg);
+	background-color: var(--bg0);
 }
 
 ol > li:hover > a {
-	color: var(--bg);
+	color: var(--fg1);
 }
 
 img {
@@ -254,12 +269,12 @@ input[type=password]:focus
 
 button, submit {
 	width: 300px;
-	background-color: var(--bg);
+	background-color: var(--bg0);
 	font-size:0.8em;
 	color: var(--fg0);
 	padding: 2px;
 	margin-top: 2px;
-	border: 2px solid var(--fg);
+	border: 2px solid var(--fg4);
 	border-radius: 5px;
 	cursor: pointer;
 	letter-spacing: 2px;
