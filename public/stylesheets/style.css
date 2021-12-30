@@ -221,25 +221,25 @@ img {
     color:car(--accent);
 }
 
-a:link {
-    color: var(--accent);
+a {
+    color: teal;
     text-decoration: none;
     cursor: pointer;
 }
 
 /* visited link */
 a:visited {
-    color: var(--accent2);
+    color: var(--red);
 }
 
 /* mouse over link */
 a:hover {
-    color: var(--fg);
+    color: var(--fg2);
 }
 
 /* selected link */
 a:active {
-    color: var(--fg0);
+    color: var(--fg3);
 }
 
 input[type=text],

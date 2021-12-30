@@ -30,25 +30,9 @@
  </div>  
 
   <script>
-    var header = document.getElementById('header')
-    var links = document.getElementById('links')
-
-    var offset = header.offsetTop;
-
-    window.addEventListener('scroll', () => {
-      header.classList.toggle('sticky', window.scrollY > offset);
-      links.classList.toggle('sticky', window.scrollY > offset);
-    })
     
-    var action = (e) => {    
-      document.getElementById("textF").innerHTML = 
-        document.getElementById(e).innerHTML;
-      window.scrollTo({top: offset + 30, behavior: 'smooth'});
-      //document.getElementById('body').className=("theme"+e[1]);
-    }
     document.getElementById("textF").innerHTML = 
         document.getElementById("t1").innerHTML;
   </script>
-  <script src="jquery.js"></script>
 </body>
 </html>
