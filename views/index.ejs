@@ -1,11 +1,93 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Y-kom Sklep Internetowy</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,500;1,500&display=swap" rel="stylesheet"> 
+
+
+  <link href="stylesheets/style.css" rel="stylesheet" />
+</head>
+<body id="body" class="theme3">
+
+  <div class="separator"> Logo + Nazwa </div>
+  <div class="navigation" id = "header"> 
+    <div style="float: left; width: 14%; text-align: left;">Logo</div>
+    <div style="width: 72%; text-align: center; float: left;">
+      <ol>
+        <li>
+          <a class="btn" id="button1">Strona 1</a>
+        </li>
+        <li>
+          <a class="btn" id="button2">Strona 2</a>
+        </li>
+        <li>
+          <a class="btn" id="button3">Galeria</a>
+        </li>
+        <li>
+          <a class="btn" id="button4">Różności</a>
+        </li>
+      </ol> 
+    </div>
+    </div>
+  <div class="contener disp" id="textF">
+  </div>
+ 
+<div id="t1" style="display: none;">
+    <div class="title-caption">Strona główna</div>
+    <div class="title-caption subtitle-caption">Sekcja 1</div>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas consectetur nulla quis sem feugiat rhoncus. Vestibulum condimentum porttitor ante, et venenatis metus bibendum ac. Aenean et lacus vulputate, venenatis felis id, hendrerit sem. Vestibulum tortor est, gravida sit amet lobortis et, pulvinar eget erat. Integer at odio ut purus ornare molestie at eget nisi. Donec convallis tellus velit, et scelerisque mauris pulvinar non. Aenean venenatis eget purus eget rhoncus. Pellentesque eu venenatis tellus. Curabitur in tortor eget urna aliquam suscipit convallis sed ante.
+    <br><br>
+    Donec nisl neque, tincidunt eu mauris sed, pharetra blandit turpis. Fusce bibendum nibh eros, quis mattis risus tempor non. Nullam vitae varius odio, et rutrum lectus. Donec scelerisque, erat vitae scelerisque mattis, orci magna eleifend eros, sodales dictum sapien augue quis nisl. Proin nec blandit nulla. Quisque cursus ligula velit, quis aliquam sapien fringilla ac. Sed malesuada, nibh non sodales mollis, risus tellus efficitur risus, et lobortis justo quam a ante. Suspendisse id lacinia eros. Duis cursus, sapien nec luctus molestie, libero metus bibendum orci, et ultrices lacus ante vitae eros.
+    <br><br>
+    <div class="title-caption subtitle-caption">Sekcja 2</div>
+    Proin commodo cursus odio, at maximus augue congue a. Proin vel tempor purus. Donec dolor metus, ultricies at urna sed, venenatis vehicula lacus. Donec eu felis id purus volutpat tincidunt eu quis tellus. Cras eget sem tincidunt, mollis lectus id, tristique turpis. Vestibulum volutpat sem et lacus facilisis eleifend. Cras semper, eros at egestas interdum, felis felis pharetra ipsum, vel rutrum eros nisl et velit. Donec feugiat nisl posuere nunc dictum hendrerit. Maecenas a elementum ante, a tincidunt orci. Duis interdum, felis nec hendrerit consequat, arcu orci elementum ligula, sed tincidunt nunc ex sed dolor. Etiam metus risus, tempus pharetra velit et, congue vulputate libero. Pellentesque sollicitudin, turpis vel mattis molestie, erat est tincidunt magna, et dictum ex dolor nec neque. Donec dictum, mi quis faucibus sodales, eros lorem elementum diam, fermentum sodales odio augue ut eros.
+    <br><br>
+    Quisque in laoreet nulla. Donec mi mauris, accumsan at aliquam non, scelerisque ac enim. Ut et sodales neque. Phasellus et congue lacus, eu tincidunt ipsum. Proin iaculis leo nec vehicula iaculis. Donec lacinia ligula a lorem pellentesque dignissim. Nunc ultrices elementum nibh. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis ante, congue eget vestibulum in, posuere ultrices metus. In porttitor magna sit amet ipsum blandit iaculis. Duis vel velit ut enim interdum aliquam.
+    <br><br>
+
+ </div>  
+
+  <script>
+    var header = document.getElementById('header')
+
+    var offset = header.offsetTop;
+
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('sticky', window.scrollY > offset)
+    })
+    
+    var action = (e) => {    
+      document.getElementById("textF").innerHTML = 
+        document.getElementById(e).innerHTML;
+      window.scrollTo({top: offset + 30, behavior: 'smooth'});
+      //document.getElementById('body').className=("theme"+e[1]);
+    }
+
+    /*var elems = document.getElementsByClassName("btn")
+    for(var i = 0; i <= elems.length; i++) {
+      elems[i].addEventListener("click", action);
+    }*/
+
+    /*document.getElementById('button1').addEventListener('click', () => action("t1"));
+    document.getElementById('button2').addEventListener('click', () => action("t2"));
+    document.getElementById('button3').addEventListener('click', () => action("t3"));
+    document.getElementById('button4').addEventListener('click', () => action("t4"));*/
+
+    /*var bt1 = document.getElementById('button1');
+
+    bt1.addEventListener('click', () => {
+      window.scrollTo({top: offset - 10, behavior: 'smooth'});
+      document.getElementById('c1').innerHTML = "H̶̙̼̤̾̉ḝ̷̫͍̭ ̷̝͓͈̭̌̋c̵̨̝̤͔̀̍͑̃o̷̡̍͆͝m̷̤̱̤̿̌̅é̶͉̋͂͜s̶͉̲̱̞̉͜";
+      /*document.getElementById('c2').classList.toggle("disp");*/
+    //})
+
+    document.getElementById("textF").innerHTML = 
+        document.getElementById("t1").innerHTML;
+  </script>
+  <script src="jquery.js"></script>
+</body>
 </html>
