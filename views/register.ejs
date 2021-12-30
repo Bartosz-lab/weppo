@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('head') %>
+
+<body>
+<div style ="padding: 20%; padding-top: 10em; padding-bottom: 0px; text-align: center;"> 
+<h1> Rejestracja nowego użytkownika </h1><br>
+<form>
+    Email: <input type ="text" style="width:40%;" name="_login" id ="email" onkeyup="validateMail()"><br>
+    <div id="emailinfo"></div><br>
+    Hasło: <input type="password" style="width:40%;"name="_password" id="pass1"><br>
+    <div id="pass1info"></div><br>
+    Powtórz hasło: <input type="password" style="width:40%;"name="_password2" id="pass2"><br>
+    <div id="pass2info"></div><br>
+    <submit>Zarejestruj się</submit>
+</form>
+
+<script>
+    function validateMail() { return true; }
+
+    //TODO
+
+    function validatePassword1() {
+        var str = document.getElementById('pass1');
+        let strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})')
+    }
+
+
+</script>
+
+</div>
+</body>
+</html>
