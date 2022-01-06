@@ -13,6 +13,8 @@
  * @property {User_info} user_info information about user
  */
 
+const pg = require('pg');
+
  module.exports = {
     get_user_by_username: get_user_by_username,
     get_id_of_user: get_id_of_user,
@@ -25,17 +27,28 @@
 // dummy database
 
 var users = {};
+console.log(process.env.DATABASE_URL);
 
-
-
+const pool = new pg.Pool({
+    host: '',
+    database: '',
+    user: '',
+    password: '',
+    port: 1,
+    ssl: { rejectUnauthorized: false }
+});
 
 /**
  * Finding user by username function
  * @param {string} name username
- * @return {{name: string, pass: string, salt: string}} user object or null if user is not found
+ * @return {{name: string, pass: string, salt: string}} user object or undefined if user is not found
  */
-function get_user_by_username(name) {
-    return users[name];
+async function get_user_by_username(name) {
+    const result = await pool.query(`SELECT * FROM USERS WHERE EMAIL='${name}';`);
+    if(result.rows[0]) {
+        return result.rows[0];
+    }
+    return undefined;
 }
 /**
  * Finding user id by username function
@@ -51,11 +64,18 @@ function get_user_by_username(name) {
  * @param {User} user User obiect for add to database
  * @return {Error|number} error or user ID
  */
-function add_user(user) {
+async function add_user(user) {
     //tutaj potrzebne będzie sprawdzanie poprawności danych 
+
+    const result = await pool.query(`INSERT INTO USERS VALUES (DEFAULT, '${user.email}', '${user.hash}', '${user.salt}') RETURNING id;`);
+    if(result.rows[0]) {
+        return result.rows[0].id;
+    }
+
+
     user.id = 11;
     users[user.email] = user;
-    console.log(users);
+    //console.log(users);
     return 11;
 }
 

@@ -58,8 +58,3 @@ router.post('/register', (req, res) => {
         }
     });
 });
-
-//test user tj pass foobar
-auth.register({phone: '123'} , 'tj', 'foobar', err => {});
-
-
