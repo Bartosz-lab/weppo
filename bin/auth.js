@@ -3,7 +3,8 @@ const hasher = require('pbkdf2-password')();
 const database = require('../bin/database');
 
 module.exports = {
-  restrict: restrict,
+  restrict_login: restrict_login,
+  restrict_role: restrict_role,
   authenticate: authenticate,
   register: register
 }
@@ -31,25 +32,10 @@ function authenticate(name, pass, fn) {
       return fn(err);
     }
     if (hash === user.hash) {
-      return fn(null, user)
+      return fn(null, user.id)
     }
     fn(new Error('invalid password'));
   });
-}
-
-/**
- * Middleware Function checking if user is logged in
- * @param {http.IncomingMessage} req
- * @param {http.ServerResponse} res 
- * @param {Function} next 
- */
-function restrict(req, res, next) {
-  if (req.session.user) {
-    next();
-  } else {
-    req.session.error = 'Access denied!';
-    res.redirect('/login');
-  }
 }
 
 /**
@@ -80,7 +66,7 @@ function register(user_info, email, pass, fn) {
 
   // add user to database
   let db_err = database.add_user(user);
-  if(db_err instanceof Error) {
+  if (db_err instanceof Error) {
     return fn(db_err);
   }
   // add customer role to database
@@ -88,10 +74,45 @@ function register(user_info, email, pass, fn) {
 }
 
 /**
- * Function verifies password strength
- * @param {string} pass password for validate
- * @return {bool} function return true if password is strong enough
+ * Middleware Function checking if user is logged in
+ * @param {http.IncomingMessage} req
+ * @param {http.ServerResponse} res 
+ * @param {Function} next 
  */
-function password_validation(pass) {
-  return true;
+function restrict_login(req, res, next) {
+  if (req.session.user) {
+    next();
+  } else {
+    req.session.error = 'Access denied!';
+    res.redirect('/login?returnUrl=' + req.originalUrl);
+  }
 }
+
+/**
+ * Middleware Function checking if logged_user has a role
+ * @param {number} role user role to check
+ */
+function restrict_role(role) {
+  /**
+ * @param {http.IncomingMessage} req
+ * @param {http.ServerResponse} res 
+ * @param {Function} next 
+ */
+  return (req, res, next) => {
+    if (database.check_user_role(req.session.user, role)) {
+      next();
+    } else {
+      req.session.error = 'Access denied!';
+      res.send('NIe posiadasz odpowiedniej roli');
+    }
+  }
+}
+
+  /**
+   * Function verifies password strength
+   * @param {string} pass password for validate
+   * @return {bool} function return true if password is strong enough
+   */
+  function password_validation(pass) {
+    return true;
+  }

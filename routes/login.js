@@ -1,14 +1,8 @@
 const express = require('express');
-const session = require('express-session');
 const router = express.Router();
-
+module.exports = router;
 const auth = require('../bin/auth');
-
-
-//przekierowanie po zalogowaniu
-router.get('/restricted', auth.restrict, function (req, res) {
-    res.send('Wahoo! restricted area, click to <a href="/logout">logout</a>');
-});
+const role = require('../bin/role');
 
 //wylogowywanie
 router.get('/logout', function (req, res) {
@@ -19,12 +13,7 @@ router.get('/logout', function (req, res) {
     });
 });
 
-
-  
 //strona logowania
-router.get('/', function(req, res){
-    res.redirect('/login');
-  });
 router.get('/login', function (req, res) {
     res.render('test/login');
 });
@@ -39,16 +28,18 @@ router.post('/login', (req, res) => {
                 // in the session store to be retrieved,
                 // or in this case the entire user object
                 req.session.user = user;
-                req.session.success = 'Authenticated as ' + user.name
+                req.session.role = role.Customer;
+                req.session.success = 'Authenticated as ' + user
                     + ' click to <a href="/logout">logout</a>. '
                     + ' You may now access <a href="/restricted">/restricted</a>.';
-                res.redirect('back');
+                let returnUrl = req.query.returnUrl ? req.query.returnUrl : '/login';
+                res.redirect(returnUrl);
             });
         } else {
             req.session.error = 'Authentication failed, please check your '
                 + ' username and password.'
                 + ' (use "tj" and "foobar")';
-            res.redirect('/login');
+            res.redirect(req.url);
         }
     });
 });
@@ -68,9 +59,7 @@ router.post('/register', (req, res) => {
     });
 });
 
-
 //test user tj pass foobar
-auth.register({phone: '123'} , 'tj', 'foobar', err => {})
+auth.register({phone: '123'} , 'tj', 'foobar', err => {});
 
 
-module.exports = router;
