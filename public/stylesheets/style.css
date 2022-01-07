@@ -199,12 +199,9 @@ ol > li:hover > a {
 }
 
 img {
-    border:3px solid var(--accent2);
+    border-left: 3px solid /*var(--accent)*/ black;
     white-space: pre-wrap;    
-    border-radius:3em;
-    -moz-border-radius:3em;
-    -webkit-border-radius:3em;
-    width: 100%;
+    width: 250px;
     font-style: italic;
     text-align: left;
 }
@@ -267,8 +264,8 @@ input[type=password]:focus
     color: var(--fg);
 }
 
-button, submit {
-	width: 300px;
+button, submit, input[type=submit] {
+	width: auto;
 	background-color: var(--bg0);
 	font-size:0.8em;
 	color: var(--fg0);
@@ -280,13 +277,13 @@ button, submit {
 	letter-spacing: 2px;
 	outline: none;
 }
-button:focus, submit:focus {
+button:focus, submit:focus, input[type=submit]:focus {
 	-webkit-box-shadow: 0px 0px 15px 5px var(--bg1);
 	-moz-box-shadow: 0px 0px 15px 5px var(--bg1);
 	box-shadow: 0px 0px 15px 5px var(--bg1);
 }
 
-button:hover, submit:hover {
+button:hover, submit:hover, input[type=submit]:hover {
 	border: 2px solid var(--fg0);
 }
 
@@ -295,4 +292,22 @@ input::-webkit-input-placeholder {
 }
 input:focus::-webkit-input-placeholder{
     color: var(--fg);
+}
+.item-list {
+    width: 90%;
+    margin: auto;
+    border-radius: 1em;
+    background-color: var(--bg1);
+    padding-left: 1em ;
+    padding-right: 1em ;
+    padding-top: 5px;
+}
+
+.item-list-title {
+    text-align: left;
+    width: 50%;
+    padding-left: 30px;
+    line-height: 2em;
+    font-size: 1.6em;
+
 }
