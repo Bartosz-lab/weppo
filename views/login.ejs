@@ -6,10 +6,14 @@
 <div style ="padding: 20%; padding-top: 10em; padding-bottom: 0px; text-align: center;"> 
 <h1> Zaloguj się do konta </h1><br>
 Nie masz konta? <a href="/register">Zarejestruj się</a><br><br>
-<form>
-    Email: <input type ="text" style="width:40%;" name="_login"><br>
-    Hasło: <input type="password" style="width:40%;"name="_password"><br><br>
-    <submit>Zaloguj się</submit>
+
+<%- message %>
+
+<form method="post" action="/login">
+    Try accessing <a href="/restricted">/restricted</a>, then authenticate with "tj" and "foobar".<br>
+    Email: <input type ="text" style="width:40%;" name="login"><br>
+    Hasło: <input type="password" style="width:40%;"name="password"><br><br>
+    <input type="submit" value="Zaloguj się">
 </form>
 
 
