@@ -5,14 +5,18 @@
 <body>
 <div style ="padding: 20%; padding-top: 10em; padding-bottom: 0px; text-align: center;"> 
 <h1> Rejestracja nowego użytkownika </h1><br>
-<form>
-    Email: <input type ="text" style="width:40%;" name="_login" id ="email" onkeyup="validateMail()"><br>
+
+<%- message %>
+<br>
+
+<form method="post" action="/register">
+    Email: <input type ="text" style="width:40%;" name="login" id ="email" onkeyup="validateMail()"><br>
     <div id="emailinfo"></div><br>
-    Hasło: <input type="password" style="width:40%;"name="_password" id="pass1"><br>
+    Hasło: <input type="password" style="width:40%;"name="password" id="pass1"><br>
     <div id="pass1info"></div><br>
-    Powtórz hasło: <input type="password" style="width:40%;"name="_password2" id="pass2"><br>
+    Powtórz hasło: <input type="password" style="width:40%;"name="password2" id="pass2"><br>
     <div id="pass2info"></div><br>
-    <submit>Zarejestruj się</submit>
+    <input type="submit" value="zarejestruj się">
 </form>
 
 <script>
