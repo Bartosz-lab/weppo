@@ -15,7 +15,7 @@ router.get('/logout', function (req, res) {
 
 //strona logowania
 router.get('/login', function (req, res) {
-    res.render('test/login');
+    res.render('login');
 });
 
 router.post('/login', (req, res) => {
@@ -45,7 +45,7 @@ router.post('/login', (req, res) => {
 });
 
 router.get('/register', function (req, res) {
-    res.render('test/register');
+    res.render('register');
 });
 router.post('/register', (req, res) => {
     auth.register({phone: '123'}, req.body.username, req.body.password, err => {
