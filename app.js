@@ -5,14 +5,14 @@ const cookieParser  = require('cookie-parser');
 const logger        = require('morgan');
 const session       = require('express-session');
 
-const indexRouter = require('./routes/index');
-const loginRouter = require('./routes/login');
-const accRouter = require('./routes/account');
+const indexRouter   = require('./routes/index');
+const loginRouter   = require('./routes/login');
+const accRouter     = require('./routes/account');
 const productRouter = require('./routes/product');
 const categoryRouter = require('./routes/category');
-const orderRouter = require('./routes/order');
-const adressRouter = require('./routes/adress');
-const userRouter = require('./routes/user');
+const orderRouter   = require('./routes/order');
+const adressRouter  = require('./routes/adress');
+const userRouter    = require('./routes/user');
 
 
 const app = express();

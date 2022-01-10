@@ -31,35 +31,13 @@
     --orange:   #d65d0e;
     --orange2:  #fe8019;
 
-
-}
-
-.theme1 {
-    --accent: var(--orange);
-    --accent2: var(--orange2);
-}
-
-.theme2 {
-    --accent: var(--yellow);
-    --accent2: var(--yellow2);
-}
-
-.theme3 {
     --accent: var(--blue);
     --accent2: var(--blue2);
-}
-
-.theme4 {
-    --accent: var(--green);
-    --accent2: var(--green2);
 }
 
 body {
     color: var(--fg);
     background-color: var(--bg0_h);
-    /*background-image: url("bg.png");*/
-    background-repeat: no-repeat;
-    background-attachment: fixed;
     font-family: 'Cabin', sans-serif;
     font-size: 1.4em;
     text-align: justify;
@@ -158,12 +136,9 @@ body {
 
     background-color: var(--bg0);
 
-    /*border: 3px solid var(--accent2);*/
-
     border-radius:3em;
     -moz-border-radius:3em;
     -webkit-border-radius:3em;
-
     transition: visibility 0s, opacity 0.5s linear;
 }
 
@@ -199,9 +174,8 @@ ol > li:hover > a {
 }
 
 img {
-    border-left: 3px solid /*var(--accent)*/ black;
     white-space: pre-wrap;    
-    width: 250px;
+    width: 90%;
     font-style: italic;
     text-align: left;
 }
@@ -293,21 +267,48 @@ input::-webkit-input-placeholder {
 input:focus::-webkit-input-placeholder{
     color: var(--fg);
 }
-.item-list {
-    width: 90%;
-    margin: auto;
-    border-radius: 1em;
-    background-color: var(--bg1);
-    padding-left: 1em ;
-    padding-right: 1em ;
-    padding-top: 5px;
+
+.item-list-wrapper {
+    width:25%;
+    float:left;
+    text-align: justify;
+    padding-top: 1em;
 }
 
-.item-list-title {
-    text-align: left;
-    width: 50%;
-    padding-left: 30px;
-    line-height: 2em;
-    font-size: 1.6em;
+.item-list {
+    width: 90%;
+    text-align: center;
+    margin: auto;
+    transition:all .2s ease-in-out;
+    padding-top: 5px;
+    float:left;
+    cursor: pointer;
+    height: auto;
+}
 
+.item-list-title,
+.item-list-desc {
+    padding-left: 1em;
+    text-align: left;
+    line-height: 1.4em;
+    font-size: 0.8em;
+}
+
+.item-list-desc {
+    color: var(--fg2);
+    line-height: 1.1em;
+}
+
+.item-list:hover {
+    border-radius: 15px;
+    background-color: var(--bg0_h);
+    box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+}
+
+.main-page-title {
+    border-top: 2px solid var(--fg0); 
+    font-size: 2em; 
+    line-height: 1em;
 }
