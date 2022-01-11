@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('head') %>
+
+<body>
+<div class="contener"> 
+<h1> Edycja danych </h1><br>
+
+<a href="/account">Powrót</a><br><br>
+
+
+<form method="post" action="/account/settings">
+    To się jeszcze uzupełni
+    <div class="column">
+        Email: <br>
+        Imię: <br>
+    </div>
+    <div class="column" style="width:70%">
+        <input type ="text" style="width:100%" name="email" value=" <%- email %> "><br>
+        <input type="text" style="width:100%" name="name" value=" <%- name %> "><br><br>
+    </div>
+    <div style="clear:both"></div>
+    <input type="submit" value="Edytuj">
+</form>
+
+
+</div>
+</body>
+</html>
