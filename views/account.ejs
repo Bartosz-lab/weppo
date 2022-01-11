@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('head') %>
+
+<body>
+<div class="contener">
+    <h1> Panel użytkownika </h1>
+    <a href="/">Powrór na stronę główną</a><br>
+    <a href="/logout">Wyloguj się</a>
+    <div class = "subcontener">
+        <div class="column">
+            Dane do wysyłki: <br>
+            Imię:  <br>
+            Nazwisko:  <br>
+            Telefon:  <br>
+            Adres:  <br>
+            <a href='/account/settings'> Edytuj </a>
+        </div>
+        <div class="column">
+            <br>
+            <%- name %> <br>
+            <%- surname %> <br>
+            <%- tel %> <br>
+            <%- adress %>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+
+    <div class = "subcontener">
+        <div class="column">
+            Email: <br>
+            <a href='/account/settings'> Zmień hasło </a>
+        </div>
+        <div class="column">
+            <%- email %>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+
+
+
+</div>
+</body>
+
+
+</html>

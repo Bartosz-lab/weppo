@@ -15,7 +15,7 @@ router.get('/logout', function (req, res) {
 
 //strona logowania
 router.get('/login', function (req, res) {
-    res.render('login');
+    res.render('login', { returnUrl: req.query.returnUrl ? req.query.returnUrl : '/'});
 });
 
 router.post('/login', (req, res) => {
