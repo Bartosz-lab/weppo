@@ -65,7 +65,7 @@ async function register(user_info, login, pass, fn) {
     user.hash = hash;
 
     // add user to database
-    let db_err = await database.add_user(user);
+    let db_err = database.add_user(user);
     if (db_err instanceof Error) {
       return fn(db_err);
     }
