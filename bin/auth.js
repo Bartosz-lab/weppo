@@ -57,7 +57,7 @@ async function register(user_info, login, pass, fn) {
   };
 
   // generate hash and salt for password
-  hasher({ password: pass }, (err, pass, salt, hash) => {
+  hasher({ password: pass }, async (err, pass, salt, hash) => {
     if (err) {
       return fn(err);
     }
@@ -65,7 +65,7 @@ async function register(user_info, login, pass, fn) {
     user.hash = hash;
 
     // add user to database
-    let db_err = database.add_user(user);
+    let db_err = await database.add_user(user);
     if (db_err instanceof Error) {
       return fn(db_err);
     }

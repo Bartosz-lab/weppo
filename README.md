@@ -13,3 +13,17 @@ Kody błędu:
 
 Hoho chyba narazie traktuje to jako miejsce na notatki ale tu może będzie to zauważone xd
 Tak więc zauważyłem że jest literówka w wielu miejscach i pisze Powrór zamiast Powrót
+
+Ja tą stronę widziałbym tak, że masz szablon np. template (prawie jak topbar tylko bardziej) który zawiera cały szablon strony tzn. 
+
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('head') %>
+<body id="body">
+    <%- include('nagłówek') %>
+    <%- include('kontent') %>
+    <%- include('stopka') %>
+</body>
+</html>
+
+i wtedy wszystkie zakładki oprócz logowania i rejestracji powinny z tego korzystać

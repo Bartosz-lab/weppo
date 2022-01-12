@@ -59,6 +59,7 @@ router.post('/register', (req, res) => {
                     name: req.body.name,
                     surname: req.body.surname,
                     phone: req.body.phone,
+                    email: req.body.login,
                 }, 
                 req.body.login, req.body.password, err => {
         if (err) {
