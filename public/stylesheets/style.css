@@ -252,7 +252,7 @@ input[type=password]:focus
     color: var(--fg);
 }
 
-button, submit, input[type=submit] {
+.my_button, button, submit, input[type=submit] {
 	width: auto;
 	background-color: var(--bg0);
 	font-size:0.8em;

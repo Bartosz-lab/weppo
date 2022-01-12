@@ -1,38 +1,43 @@
 <script src="/scripts/script.js"></script>
-<div class="navigation" id = "header"> 
-<div style="float: left; width: 14%; text-align: left;">Y-kom</div>
-<div style="width: 72%; text-align: center; float: left;">
-    <form method="get">
-        <input type="text" name="_search" placeholder="Czego szukasz?">
-        <submit> Szukaj </submit>
-    </form>
-</div>
-<div style="float: left; width: 14%; text-align: left;">
-    <div style="float: left; width:50%; text-align: center;"><form method="get"><input type="hidden"><submit>Koszyk</submit></form></div>
-    <div style="float: left; width:50%; text-align: center;">
-        <form method="get" action="/account">
-            <input type="hidden" name="returnUrl" value="/account">
-            <input type="submit" value="Konto">
+<div class="navigation" id="header">
+    <div style="float: left; width: 14%; text-align: left;">Y-kom</div>
+    <div style="width: 72%; text-align: center; float: left;">
+        <form method="get">
+            <input type="text" name="_search" placeholder="Czego szukasz?">
+            <submit> Szukaj </submit>
         </form>
     </div>
-</div>
+    <div style="float: left; width: 14%; text-align: left;">
+        <div style="float: left; width:50%; text-align: center;">
+            <form method="get"><input type="hidden">
+                <submit>Koszyk</submit>
+            </form>
+        </div>
+        <div style="float: left; width:50%; text-align: center;">
+            <a href="/account" class="my_button">Konto</a> 
+            <!-- Wiem popsułem ci to miejsce trochę, ale tworzenie guzika poprzez formularz trochę psuło ścieżki przekierowań przy logowaniu
+            więc proszę używaj do tego po prostu stylizowanych i nie musisz przekazywać parametru returnUrl to jest zczytywane od strony serwera -->
 
-<br>
+            <!-- Tutaj powinna być lista rozwijana pokazująca opcje konta i to w zależności od wybranej roli no i jeszcze trzeba gdzieś tu zrobić możliwość wybranej roli( jeśli ma więcej niż jedną) czyli tutaj generowane to musi być automatycznie -->
+        </div>
+    </div>
 
-<div id="links">
-    <ol>
-    <li>
-        <a class="btn" id="button1">Komputery i laptopy</a>
-    </li>
-    <li>
-        <a class="btn" id="button2">Podzespoły</a>
-    </li>
-    <li>
-        <a class="btn" id="button3">Telefony</a>
-    </li>
-    <li>
-        <a class="btn" id="button4">Peryferia</a>
-    </li>
-    </ol>
-</div>
+    <br>
+
+    <div id="links">
+        <ol>
+            <li>
+                <a class="btn" id="button1">Komputery i laptopy</a>
+            </li>
+            <li>
+                <a class="btn" id="button2">Podzespoły</a>
+            </li>
+            <li>
+                <a class="btn" id="button3">Telefony</a>
+            </li>
+            <li>
+                <a class="btn" id="button4">Peryferia</a>
+            </li>
+        </ol>
+    </div>
 </div>
