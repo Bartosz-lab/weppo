@@ -2,45 +2,62 @@
 <html lang="en">
 <%- include('head') %>
 
-<body>
-<div class="contener" >
-<h1> Rejestracja nowego użytkownika </h1><br>
+    <body>
+        <div class="contener">
+            <h1> Rejestracja nowego użytkownika </h1><br>
 
-Masz konto? <a href="/login">Zaloguj się</a>
+            Masz konto? <a href="/login">Zaloguj się</a>
 
-<%- message %>
-<br>
+            <%= error %>
+                <br>
 
-<form method="post" action="/register">
+                <form method="post">
 
-    <div class="column">
-        Email: <br>
-        Hasło: <br>
-        Powtórz hasło: <br>
-    </div>
-    <div class="column" style="width: 70%">
-        <input type ="text" style="width:100%;" name="login" id ="email" onkeyup="validateMail()"><br>
-        <input type="password" style="width:100%;"name="password" id="pass1"><br>
-         <input type="password" style="width:100%;"name="password2" id="pass2"><br>
-    </div>
-    <div style="clear:both"></div>
-    <input type="submit" value="zarejestruj się">
-</form>
-
-
-<script>
-    function validateMail() { return true; }
-
-    //TODO
-
-    function validatePassword1() {
-        var str = document.getElementById('pass1');
-        let strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})')
-    }
+                    <div class="column">
+                        Email: <br>
+                        Hasło: <br>
+                        Powtórz hasło: <br>
+                    </div>
+                    <div class="column" style="width: 70%">
+                        <input type="text" style="width:100%;" name="login" id="email" onkeyup="validateMail()"><br>
+                        <input type="password" style="width:100%;" name="password" id="pass1"><br>
+                        <input type="password" style="width:100%;" name="password2" id="pass2"><br>
+                    </div>
+                    <div style="clear:both"></div>
+                    <input type="submit" value="zarejestruj się">
+                </form>
 
 
-</script>
+                <script>
+                    function validateMail() { return true; }
 
-</div>
-</body>
+                    //TODO
+
+                    function validatePassword1() {
+                        var str = document.getElementById('pass1');
+                        let strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})')
+                    }
+
+
+                </script>
+
+        </div>
+    </body>
+
 </html>
+
+<!-- 
+Info od Bartka:
+    Na pewno będą potrzebne jeszcze pola 
+        name
+        surname
+        phone
+    
+    i myślę ze na etapie wysyłania formularza powinna być prosta walidacja pól żeby nie były puste hasła się zgadzały itp.
+
+    formularz ma być wysyłany na dokładnie taki sam adres z jakiego jest otwierany tzn 
+    /login jest ok
+    /login?returnUrl=/order też jest ok
+
+    info o ewentualnym komunikacie będę przekazywał w zmeinnej error jako Kody błędu - readme
+ -->

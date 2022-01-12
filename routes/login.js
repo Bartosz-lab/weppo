@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-module.exports = router;
 const auth = require('../bin/auth');
 const role = require('../bin/role');
 
-//wylogowywanie
+module.exports = router;
+
+//logut path
 router.get('/logout', function (req, res) {
     // destroy the user's session to log them out
     // will be re-created next request
@@ -13,13 +14,15 @@ router.get('/logout', function (req, res) {
     });
 });
 
-//strona logowania
+//login page
 router.get('/login', function (req, res) {
-    res.render('login', { returnUrl: req.query.returnUrl ? req.query.returnUrl : '/'});
+    res.render('login', { 
+        returnUrl: req.query.returnUrl ? req.query.returnUrl : '/',
+        error: ""
+    });
 });
-
 router.post('/login', (req, res) => {
-    auth.authenticate(req.body.username, req.body.password, (err, user) => {
+    auth.authenticate(req.body.login, req.body.password, (err, user) => {
         if (user) {
             // Regenerate session when signing in
             // to prevent fixation
@@ -28,33 +31,45 @@ router.post('/login', (req, res) => {
                 // in the session store to be retrieved,
                 // or in this case the entire user object
                 req.session.user = user;
+
+                //miejsce na zastanowienie się jak to jest z tymi rolami
                 req.session.role = role.Customer;
-                req.session.success = 'Authenticated as ' + user
-                    + ' click to <a href="/logout">logout</a>. '
-                    + ' You may now access <a href="/restricted">/restricted</a>.';
-                let returnUrl = req.query.returnUrl ? req.query.returnUrl : '/login';
+
+                // redirect to url before logging
+                let returnUrl = req.query.returnUrl ? req.query.returnUrl : '/';
                 res.redirect(returnUrl);
             });
         } else {
-            req.session.error = 'Authentication failed, please check your '
-                + ' username and password.'
-                + ' (use "tj" and "foobar")';
+            if(err) {
+                req.session.error = err.message;
+            } else {
+                req.session.error = '4. Something went wrong';
+            }
             res.redirect(req.url);
         }
     });
 });
 
+//register page
 router.get('/register', function (req, res) {
-    res.render('register');
+    res.render('register', {error: ''});
 });
 router.post('/register', (req, res) => {
-    auth.register({phone: '123'}, req.body.username, req.body.password, err => {
+    auth.register({
+                    name: req.body.name,
+                    surname: req.body.surname,
+                    phone: req.body.phone,
+                }, 
+                req.body.login, req.body.password, err => {
         if (err) {
-            req.session.error = err;
-            res.redirect('/register');
+            req.session.error = err.message;
+            res.redirect(req.url);
         } else {
-            req.session.success = 'You may now log in';
-            res.redirect('/login');
+            req.session.error = '0. Success';
+
+            // redirect to url before logging
+            let returnUrl = req.query.returnUrl ? `/login?returnUrl=${req.query.returnUrl}`: '/login';
+            res.redirect(returnUrl);
         }
     });
 });
