@@ -26,7 +26,7 @@ const role = {
     Seller: 1,
     Customer: 2
 }
-module.exports = role;
+module.exports = { role: role};
 
 
 //Do Opisania

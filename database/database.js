@@ -1,5 +1,6 @@
 const db_users = require('./db_users');
-require('../typedef');
+const typedef = require('../typedef');
+const role = typedef.role;
 
 
 //to jest do przerobienia aby każda funkcja była dodawana do export w miejscu jej definicji będzie czytelniej
@@ -75,6 +76,21 @@ async function get_user_by_username(name) {
     //??
     return true;
 }
+/**
+ * get user roles
+ * @param {number} id user id in database
+ * @return {} 
+ */
+ async function get_user_roles(id) {
+    //??
+    let ret_obj = {};
+    ret_obj[role.Admin] = true;
+    ret_obj[role.Seller] = true;
+    ret_obj[role.Customer] = true;
+    
+    return ret_obj;
+}
+module.exports.get_user_roles = get_user_roles;
 
 /**
  * Do opisu
