@@ -51,8 +51,25 @@ router.post('/login',
     //midleware for choose a role
     async (req, res) => {
         const usr_role = await database.get_user_roles(req.session.user);
+        const number_of_roles = ((usr_role[role.Admin] ? 1 : 0) + (usr_role[role.Seller] ? 1 : 0) + (usr_role[role.Customer] ? 1 : 0));
         let returnUrl = req.query.returnUrl ? req.query.returnUrl : '/';
-        res.redirect(returnUrl);
+        if ( number_of_roles >= 2) {
+            res.render('role', {
+                role: typedef.role,
+                active: usr_role
+            });
+        } else if ( number_of_roles > 0){
+            if(usr_role[role.Admin]) {
+                req.session.role = role.Admin;
+            } else if(usr_role[role.Seller]){
+                req.session.role = role.Seller;
+            } else if(usr_role[role.Customer]){
+                req.session.role = role.Customer;
+            }
+            res.redirect(returnUrl);
+        } else {
+            res.redirect('/error');
+        }
     });
 
 //register page

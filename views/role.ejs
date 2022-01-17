@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('head') %>
+
+    <body>
+        <div class="contener">
+            <h1>Witaj Imię nazwisko </h1><br>
+            Wybierz role ....
+                <form method="post" style="line-height: 1.4em;" action="/role">
+
+                    <div class="column" style="line-height: 1.4em;width: 70%">
+                        <% if(active[role.Admin]) {%> <input type="radio" style="width:100%;" name="Admin" id="Admin"><br> <% } %> 
+                        <% if(active[role.Seller]) {%> <input type="radio" style="width:100%;" name="Seller" id="Seller"><br> <% } %> 
+                        <% if(active[role.Customer]) {%> <input type="radio" style="width:100%;" name="Customer" id="Customer"><br> <% } %> 
+                    </div>
+                    <div style="clear:both"></div>
+                    <input type="submit" value="Zaloguj">
+                </form>
+
+        </div>
+    </body>
+
+</html>
+
