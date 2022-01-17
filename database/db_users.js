@@ -120,19 +120,20 @@ module.exports.add_user = add_user;
  */
  async function add_role_to_user(id, role) {
     //Sprawdzamy czy user juz nie ma tej roli
-    const result = await Pool.query(`SELECT * FROM roles WHERE user_id ='${id}';`);
+    const result = await pool.query(`SELECT * FROM roles WHERE user_id ='${id}';`);
     let i = 0;
     let roles = [];
     while (result.rows[i]) {
       roles.push(result.rows[i].role);
       i++;
     }
-    if (!(result.rows[0]) || (roles.includes(role))) return ("ERROR - nie ma takiego uzytownika lub ma juz te role");
+    console.log(roles);
+    if (roles.includes(role)) return (new Error("uzytkownik juz ma taka role"));
     //Dodajemy role
-    const result2 = await Pool.query(`INSERT INTO roles (user_id, role) VALUES ('${id}', '${role}')`);
+    const result2 = await pool.query(`INSERT INTO roles (user_id, role) VALUES ('${id}', '${role}')`);
     return undefined;
-  }
-  module.exports.add_role_to_user = add_role_to_user;
+}
+module.exports.add_role_to_user = add_role_to_user;
 
 /**
  * Finding User roles by id
