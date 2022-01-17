@@ -17,8 +17,7 @@ router.get('/logout', function (req, res) {
 //login page
 router.get('/login', function (req, res) {
     res.render('login', { 
-        returnUrl: req.query.returnUrl ? req.query.returnUrl : '/',
-        error: ""
+        returnUrl: req.query.returnUrl ? req.query.returnUrl : '/'
     });
 });
 router.post('/login', (req, res) => {
@@ -52,7 +51,7 @@ router.post('/login', (req, res) => {
 
 //register page
 router.get('/register', function (req, res) {
-    res.render('register', {error: ''});
+    res.render('register');
 });
 router.post('/register', (req, res) => {
     auth.register({
