@@ -19,7 +19,7 @@ module.exports = {
  */
 async function authenticate(name, pass, fn) {
   // query the database for the given username
-  const user = await database.get_user_by_username(name);
+  const user = await database.get_user_by_username_for_login(name);
 
   if (!user) {
     return fn(new Error('2. Invalid login'));
@@ -33,7 +33,7 @@ async function authenticate(name, pass, fn) {
       return fn(err);
     }
     if (hash === user.hash) {
-      return fn(null, user.id)
+      return fn(null, user.id);
     }
     fn(new Error('3. Invalid password'));
   });
@@ -52,10 +52,10 @@ async function register(user_info, login, pass, fn) {
     return fn(new Error('5. Password too weak'));
   }
   let user = {
-    email: login,
+    username: login,
     user_info: user_info
   };
-
+  let role_err;
   // generate hash and salt for password
   hasher({ password: pass }, async (err, pass, salt, hash) => {
     if (err) {
@@ -65,14 +65,14 @@ async function register(user_info, login, pass, fn) {
     user.hash = hash;
 
     // add user to database
-    let db_err = await database.add_user(user);
+    const db_err = await database.add_user(user);
     if (db_err instanceof Error) {
       return fn(db_err);
     }
     // add customer role to database
-    return fn(database.add_role_to_user(db_err, role.Customer));
+    role_err = database.add_role_to_user(db_err, role.Customer);
   });
-  return fn(new Error('4. Something went wrong'));
+  return fn(role_err);
 }
 
 /**

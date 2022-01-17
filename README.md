@@ -9,7 +9,8 @@ Kody błędu:
 4. Something went wrong //pod to podpioł bym też nieznane błędy (bo mogą takie wystąpić)
 5. Password too weak
 
-
+Info 17.01.2022 2:22 
+Opisałem trochę account adress category i product zapewne dalej jest sporo niejasności no ale sam nie do końca wiem jak niektóre objekty powinny wyglądać.
 
 Hoho chyba narazie traktuje to jako miejsce na notatki ale tu może będzie to zauważone xd
 Tak więc zauważyłem że jest literówka w wielu miejscach i pisze Powrór zamiast Powrót
