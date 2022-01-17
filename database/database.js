@@ -50,21 +50,31 @@ async function get_user_by_username(name) {
 
 /**
  * Finding user id by username function
- * @param {string} name username
+ * @param {string} username username
  * @return {number | null} user id or null if user is not found
  */
- function get_id_of_user(name) {
-    return 11;
+ async function get_id_of_user(username) {
+    const result = await pool.query(`SELECT * FROM users WHERE username ='${username}';`);
+    if(result.rows[0]) {
+      return result.rows[0].id;
+    }
+    return new Error("6 invalid data");
 }
+module.exports.get_id_of_user = get_id_of_user;
+
 /**
  * Finding username by id function
  * @param {number} id ID
  * @return {string | null} username or null if user is not found
  */
- function get_username_of_user(id) {
-    return "tj";
+ async function get_id_of_user(id) {
+    const result = await pool.query(`SELECT * FROM users WHERE id ='${id}';`);
+    if(result.rows[0]) {
+      return result.rows[0].username;
+    }
+    return new Error("6 invalid data");
 }
-
+  
 
 /**
  * Check user role
@@ -72,28 +82,26 @@ async function get_user_by_username(name) {
  * @param {number} role 0 - admin, 1 - seller, 3 - client
  * @return {bool} true if user have this role
  */
- async function check_user_role(id, role) {
-    //??
-    return true;
-}
 /**
- * get user roles
+ * Check user role
  * @param {number} id user id in database
- * @return {} 
+ * @param {number} role 0 - admin, 1 - seller, 3 - client
+ * @return {bool} true if user have this role
  */
- async function get_user_roles(id) {
-    //??
-    let ret_obj = {};
-    ret_obj[role.Admin] = true;
-    ret_obj[role.Seller] = false;
-    ret_obj[role.Customer] = true;
-    
-    return ret_obj;
+ async function check_user_role(id, role) {
+    const result = await pool.query(`SELECT * FROM roles WHERE user_id ='${id}';`);
+    let i = 0;
+    let roles = [];
+    while (result.rows[i]) {
+      roles.push(result.rows[i].role);
+      i++;
+    }
+    return (roles.includes(role));
 }
-module.exports.get_user_roles = get_user_roles;
+module.exports.check_user_role = check_user_role;
 
 /**
- * Do opisu
+ * opis
  * @param {number} id user id in database
  * @return {Adress[]} 
  */
@@ -101,7 +109,7 @@ module.exports.get_user_roles = get_user_roles;
 
 }
 /**
- * Do opisu
+ * opis
  * @param {number} id adress id in database
  * @return {Adress[]} 
  */
