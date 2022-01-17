@@ -44,7 +44,6 @@ router.post('/login', (req, res) => {
             } else {
                 req.session.error = '4. Something went wrong';
             }
-            console.log(req.session.error);
             res.redirect(req.url);
         }
     });
