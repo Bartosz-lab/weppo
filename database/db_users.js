@@ -133,8 +133,6 @@ module.exports.add_user = add_user;
     return undefined;
 }
 module.exports.add_role_to_user = add_role_to_user;
-add_role_to_user(31,1);
-add_role_to_user(31,0);
 /**
  * Finding User roles by id
  * @param {number} id user ID
