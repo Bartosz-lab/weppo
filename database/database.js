@@ -7,7 +7,6 @@ const role = typedef.role;
  module.exports = {
     get_user_by_username: get_user_by_username,
     get_id_of_user: get_id_of_user,
-    get_username_of_user: get_username_of_user,
     check_user_role: check_user_role,
     get_adresses_by_user_id: get_adresses_by_user_id,
     get_adress_by_id: get_adress_by_id,
