@@ -120,21 +120,21 @@ module.exports.add_user = add_user;
  */
  async function add_role_to_user(id, role) {
     //Sprawdzamy czy user juz nie ma tej roli
-    const result = await pool.query(`SELECT * FROM roles WHERE user_id ='${id}';`);
+    const result = await Pool.query(`SELECT * FROM roles WHERE user_id ='${id}';`);
     let i = 0;
     let roles = [];
     while (result.rows[i]) {
       roles.push(result.rows[i].role);
       i++;
     }
-    console.log(roles);
     if (roles.includes(role)) return (new Error("uzytkownik juz ma taka role"));
     //Dodajemy role
-    const result2 = await pool.query(`INSERT INTO roles (user_id, role) VALUES ('${id}', '${role}')`);
+    const result2 = await Pool.query(`INSERT INTO roles (user_id, role) VALUES ('${id}', '${role}')`);
     return undefined;
 }
 module.exports.add_role_to_user = add_role_to_user;
-
+add_role_to_user(31,1);
+add_role_to_user(31,0);
 /**
  * Finding User roles by id
  * @param {number} id user ID
@@ -149,9 +149,9 @@ module.exports.add_role_to_user = add_role_to_user;
       i++;
     }
     let ret_obj = {};
-    ret_obj[role.Admin] = roles.includes("Admin");
-    ret_obj[role.Seller] =  roles.includes("Seller");
-    ret_obj[role.Customer] =  roles.includes("Customer")
+    ret_obj[role.Admin] = roles.includes(role.Admin);
+    ret_obj[role.Seller] =  roles.includes(role.Seller);
+    ret_obj[role.Customer] =  roles.includes(role.Customer);
     
     return ret_obj;
   }  
