@@ -79,3 +79,15 @@ router.post('/register', (req, res) => {
             }
         });
 });
+
+router.get('/switch', function(req, res) {
+    res.render( 'roleSwitch', {
+        name: "Jan",
+        surname: "Kowalski",
+        roles: [
+            "Kupujący",
+            "Sprzedawca",
+            "Administrator"
+        ]
+    })
+});

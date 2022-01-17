@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('head') %>
+
+<body>
+    <div class ="contener"> 
+        Witaj <%- name %> <%- surname %>. <br><br>
+        Wybierz rolę z której chcesz skorzystać:<br><br>
+        
+        <form method="post" action="/switch">
+            <div style="text-align: left; padding-left: 30%;">
+                <% for( i in roles ) { %>        
+                    <input type="radio" id="<%= roles[i] %>" name="fav_language" value=" <%= roles[i] %>">
+                    <label for="html"><%= roles[i] %></label><br>
+                <% } %>
+            </div>
+            <br>
+            <input type = "submit" value="Zatwierdź">
+        </form>
+    </div>
+</body>
+</html>
