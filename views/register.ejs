@@ -11,17 +11,38 @@
             <%= error %>
                 <br>
 
-                <form method="post">
+                <form method="post" style="line-height: 1.4em;">
 
                     <div class="column">
                         Email: <br>
                         Hasło: <br>
-                        Powtórz hasło: <br>
+                        Powtórz hasło: <br><br>
+
+                        Imię:<br>
+                        Nazwisko:<br>
+                        Numer telefonu:<br><br>
+
+                        Adres zamieszkania:<br>
+                        Województwo:<br>
+                        Miasto:<br>
+                        Kod pocztowy:<br>
+                        Ulica: <br>
                     </div>
-                    <div class="column" style="width: 70%">
+                    <div class="column" style="line-height: 1.4em;width: 70%">
                         <input type="text" style="width:100%;" name="login" id="email" onkeyup="validateMail()"><br>
                         <input type="password" style="width:100%;" name="password" id="pass1"><br>
-                        <input type="password" style="width:100%;" name="password2" id="pass2"><br>
+                        <input type="password" style="width:100%;" name="password2" id="pass2"><br><br>
+
+
+                        <input type="text" style="width:100%;" name="login" id="name"><br>
+                        <input type="text" style="width:100%;" name="name" ><br>
+                        <input type="tel" style="width:100%;" name="surname" ><br><br>
+
+                        <br>
+                        <input type="text" style="width:100%;" name="voivodeship" id="name"><br>
+                        <input type="text" style="width:100%;" name="city" ><br>
+                        <input type="text" style="width:100%;" name="zipcode" ><br>
+                        <input type="text" style="width:100%;" name="adress" ><br>
                     </div>
                     <div style="clear:both"></div>
                     <input type="submit" value="zarejestruj się">
