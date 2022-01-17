@@ -3,7 +3,7 @@ const { render } = require('express/lib/response');
 const router = express.Router();
 module.exports = router;
 
-const database = require('../bin/database');
+const database = require('../database/database');
 
 router.get('/', (req, res) => {
     res.redirect('/');

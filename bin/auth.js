@@ -1,6 +1,6 @@
 const hasher = require('pbkdf2-password')();
 
-const database = require('../bin/database');
+const database = require('../database/database');
 const role = require('../bin/role');
 
 module.exports = {

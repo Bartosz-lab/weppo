@@ -3,7 +3,7 @@ const router = express.Router();
 module.exports = router;
 const auth = require('../bin/auth');
 const role = require('../bin/role');
-const database = require('../bin/database');
+const database = require('../database/database');
 
 
 router.get('/', auth.restrict_login, auth.restrict_role(role.Customer), async (req, res) => {
