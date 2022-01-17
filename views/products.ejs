@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('head') %>
+<body id="body">
+<%- include('topbar') %>
+
+<div class ="contener">
+
+    <div style="font-size: 1.3em">
+        <form method="get" action="/search">
+            <input type="text" name="search" placeholder="Czego szukasz?">
+            <input type="submit" value = "Szukaj">
+        </form>
+    </div>
+    <br>
+
+  <div class="filter-bar">
+    <form>
+        Filtry <br><br>
+
+        Cena:<br>
+        Od: <input type="number">
+        Do: <input type="number">
+
+        <i>Tu będzie tego więcej</i>
+
+
+        <br><br><input type="submit" value = "Filtruj">
+    </form>
+  </div>
+
+
+
+  <% for( var i = 0; i < display.length; i++ ) { %> 
+    <%- include('wide-item', {href: display[i].href, name: display[i].name, price: display[i].price, imgurl: display[i].imgurl, desc: display[i].desc}) %>
+    <% } %>
+  <div style="clear:both"></div>
+</div>
+
+</body>
+</html>

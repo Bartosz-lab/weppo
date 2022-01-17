@@ -33,5 +33,20 @@ router.get('/', function(req, res, next) {
   });
 });
 
+router.get('/search', (req, res) => {
+  res.render('products', { 
+    display: display,
+    role: "Administrator", /* aktualna rola użytkownika, jeśli "" użytkownik niezalogowany */
+    name: 'Jan',
+    surname: 'Kowalski',
+    roles: [
+      "Administrator",
+      "Klient"
+    ]
+  });
+})
+
+
+
 
 module.exports = router;
