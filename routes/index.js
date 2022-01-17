@@ -21,7 +21,16 @@ display = [
 
 
 router.get('/', function(req, res, next) {
-  res.render('index', { display: display });
+  res.render('index', { 
+    display: display,
+    role: "Administrator", /* aktualna rola użytkownika, jeśli "" użytkownik niezalogowany */
+    name: 'Jan',
+    surname: 'Kowalski',
+    roles: [
+      "Administrator",
+      "Klient"
+    ]
+  });
 });
 
 

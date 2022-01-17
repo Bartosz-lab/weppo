@@ -22,7 +22,7 @@
     --green2:   #b8bb26;
     --yellow:   #d79921;
     --yellow2:  #fabd2f;
-    --blue:     #00cdd8;
+    --blue:     #268a8f;
     --blue2:    #00b4b4;
     --purple:   #b16286;
     --purple2:  #d3969b;
@@ -207,14 +207,14 @@ img {
 }
 
 a {
-    color: teal;
+    color: var(--accent);
     text-decoration: none;
     cursor: pointer;
 }
 
 /* visited link */
 a:visited {
-    color: var(--red);
+    color: var(--accent);
 }
 
 /* mouse over link */
@@ -225,6 +225,16 @@ a:hover {
 /* selected link */
 a:active {
     color: var(--fg3);
+}
+
+.links2 > a:link {
+    color: var(--fg);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.links2 > a:visited {
+    color: var(--fg);
 }
 
 input[type=text],
@@ -244,8 +254,7 @@ input[type=password] {
 
 input[type=text]:focus,
 input[type=tel]:focus,
-input[type=password]:focus
-{
+input[type=password]:focus {
 	-webkit-box-shadow: 0px 0px 10px 2px var(--bg1);
 	-moz-box-shadow: 0px 0px 10px 2px var(--bg1);
 	box-shadow: 0px 0px 10px 2px var(--bg1);
@@ -254,7 +263,7 @@ input[type=password]:focus
     color: var(--fg);
 }
 
-.my_button, button, submit, input[type=submit] {
+.richbutton, button, submit, input[type=submit] {
 	width: auto;
 	background-color: var(--bg0);
 	font-size:0.8em;
@@ -267,7 +276,7 @@ input[type=password]:focus
 	letter-spacing: 2px;
 	outline: none;
 }
-button:focus, submit:focus, input[type=submit]:focus {
+.richbutton:focus, button:focus, submit:focus, input[type=submit]:focus {
 	-webkit-box-shadow: 0px 0px 15px 5px var(--bg1);
 	-moz-box-shadow: 0px 0px 15px 5px var(--bg1);
 	box-shadow: 0px 0px 15px 5px var(--bg1);
@@ -327,4 +336,32 @@ input:focus::-webkit-input-placeholder{
     border-top: 2px solid var(--fg0); 
     font-size: 2em; 
     line-height: 1em;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    text-align: left;
+    transform: translateY(-0.5em);
+    transform: translateX(-10em);
+    transition: all .2s ease-in-out;
+    width: 20%;
+    min-width: 300px;
+    font-size: 0.6em;
+    line-height: 1.1em;
+    padding: 6px 8px;
+    display: none;
+    position: absolute;
+    background-color: var(--bg0);
+    
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+   
 }
