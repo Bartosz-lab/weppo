@@ -7,10 +7,10 @@ const role = typedef.role;
  * @param {string} name username
  * @return {{id: string, hash: string, salt: string}} object with id hash and salt or undefined if user is not found
  */
- async function get_user_by_username_for_login(name) {
+async function get_user_by_username_for_login(name) {
     //powinna zwracać tylko odpowiednie dane patrz wyżej
     const result = await Pool.query(`SELECT * FROM USERS WHERE USERNAME='${name}';`);
-    if(result.rows[0]) {
+    if (result.rows[0]) {
         return result.rows[0];
     }
     return undefined;
@@ -22,14 +22,14 @@ module.exports.get_user_by_username_for_login = get_user_by_username_for_login;
  * @param {number} id user ID
  * @return {User_info}  Returning User_info object or undefined if user is not found 
  */
- async function get_user_info_by_id(id) {
+async function get_user_info_by_id(id) {
     // const result = await Pool.query(`SELECT * FROM USERS WHERE ID='${id}';`);
     // if(result.rows[0]) {
     //     return result.rows[0];
     // }
     return {
-        name: "Jan", 
-        surname: "Kowalski", 
+        name: "Jan",
+        surname: "Kowalski",
         tel: "123456789",
         email: "jkowalski@gmail.com"
     };
@@ -41,18 +41,23 @@ module.exports.get_user_info_by_id = get_user_info_by_id;
  * @param {User} user User object to be added to database
  * @return {Error|number} error or user ID
  */
- async function add_user(user) {
+async function add_user(user) {
     //tutaj potrzebne będzie sprawdzanie poprawności danych 
     // mejl zawiera malpe, phone ma 9 cyfr i 2 myslinki, 
     // imie i nazwisko z duzej litery sie zaczyna, reszta mala, nie pusty
     // zmienic phone na text w bazie
-   const result = await pool.query(`INSERT INTO users VALUES (DEFAULT, 
+    try {
+        const result = await Pool.query(`INSERT INTO users VALUES (DEFAULT, 
     '${user.username}', '${user.hash}', '${user.salt}', '${user.user_info.name}',
     '${user.user_info.surname}','${user.user_info.phone}','${user.user_info.email}' ) RETURNING id;`);
-    if(result.rows[0]) {
-        return result.rows[0].id;
+        if (result.rows[0]) {
+            return result.rows[0].id;
+        }
+        return new Error("6 invalid data");
+    } catch (err) {
+        return err;
     }
-    return new Error("6 invalid data");
+
 }
 module.exports.add_user = add_user;
 
@@ -62,7 +67,7 @@ module.exports.add_user = add_user;
  * @param {typedef.Role} role role of user from typedef.role
  * @return {Error} error or undefined if role is saved correctly
  */
- async function add_role_to_user(id, role) {
+async function add_role_to_user(id, role) {
     //??
     return undefined;
 }

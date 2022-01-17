@@ -55,7 +55,7 @@ async function register(user_info, login, pass, fn) {
     username: login,
     user_info: user_info
   };
-  let role_err;
+  let db_err, role_err;
   // generate hash and salt for password
   hasher({ password: pass }, async (err, pass, salt, hash) => {
     if (err) {
@@ -65,12 +65,13 @@ async function register(user_info, login, pass, fn) {
     user.hash = hash;
 
     // add user to database
-    const db_err = await database.add_user(user);
-    if (db_err instanceof Error) {
-      return fn(db_err);
+    db_err = await database.add_user(user);
+    if (!(db_err instanceof Error)) {
+      // add customer role to database
+      role_err = database.add_role_to_user(db_err, role.Customer);
+    } else {
+      role_err = db_err;
     }
-    // add customer role to database
-    role_err = database.add_role_to_user(db_err, role.Customer);
   });
   return fn(role_err);
 }
