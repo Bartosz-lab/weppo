@@ -38,18 +38,21 @@ module.exports.get_user_info_by_id = get_user_info_by_id;
 
 /**
  * Add user to database
- * @param {User} user User obiect for add to database
+ * @param {User} user User object to be added to database
  * @return {Error|number} error or user ID
  */
  async function add_user(user) {
     //tutaj potrzebne będzie sprawdzanie poprawności danych 
-    //oraz zmiana query tak aby przetwarzała objekt user(definicja na górze pliku) na wpis w tabeli
-
-    const result = await Pool.query(`INSERT INTO USERS VALUES (DEFAULT, '${user.username}', '${user.hash}', '${user.salt}') RETURNING id;`);
+    // mejl zawiera malpe, phone ma 9 cyfr i 2 myslinki, 
+    // imie i nazwisko z duzej litery sie zaczyna, reszta mala, nie pusty
+    // zmienic phone na text w bazie
+   const result = await pool.query(`INSERT INTO users VALUES (DEFAULT, 
+    '${user.username}', '${user.hash}', '${user.salt}', '${user.user_info.name}',
+    '${user.user_info.surname}','${user.user_info.phone}','${user.user_info.email}' ) RETURNING id;`);
     if(result.rows[0]) {
         return result.rows[0].id;
     }
-    return new Error("TU powinien być odpowiedni kod błędu");
+    return new Error("6 invalid data");
 }
 module.exports.add_user = add_user;
 
