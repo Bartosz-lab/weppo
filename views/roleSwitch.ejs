@@ -7,12 +7,11 @@
         Witaj <%- name %> <%- surname %>. <br><br>
         Wybierz rolę z której chcesz skorzystać:<br><br>
         
-        <form method="post" action="/switch">
+        <form method="post">
             <div style="text-align: left; padding-left: 30%;">
-                <% for( i in roles ) { %>        
-                    <input type="radio" id="<%= roles[i] %>" name="fav_language" value=" <%= roles[i] %>">
-                    <label for="html"><%= roles[i] %></label><br>
-                <% } %>
+                <% if(active[role.Admin]) {%> <input type="radio" style="width:100%;" name="user_role" id="Admin" value=" <%= role.Admin %>"> <label for="html">Administrator</label><br> <% } %> 
+                <% if(active[role.Seller]) {%> <input type="radio" style="width:100%;" name="user_role" id="Seller" value=" <%= role.Seller %>"> <label for="html">Sprzedawca</label><br> <% } %> 
+                <% if(active[role.Customer]) {%> <input type="radio" style="width:100%;" name="user_role" id="Customer" value=" <%= role.Customer %>"> <label for="html">Klient</label><br> <% } %> 
             </div>
             <br>
             <input type = "submit" value="Zatwierdź">
