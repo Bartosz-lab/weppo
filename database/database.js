@@ -86,7 +86,7 @@ async function get_user_by_username(name) {
     let ret_obj = {};
     ret_obj[role.Admin] = true;
     ret_obj[role.Seller] = false;
-    ret_obj[role.Customer] = false;
+    ret_obj[role.Customer] = true;
     
     return ret_obj;
 }
