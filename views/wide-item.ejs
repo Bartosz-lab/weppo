@@ -1,7 +1,9 @@
 <div class="prodcontener">
-    <div onclick="location.href=' <%= href %>';">
-        <div style="float:left"><img src=" <%= imgurl %> "></div>
-        <div style="float:left; width: 50%; padding-top: 1em;">
+    <div>
+        <div style="float:left" onclick="location.href=' <%= href %>';">
+            <img src=" <%= imgurl %> ">
+        </div>
+        <div style="float:left; width: 50%; padding-top: 1em;" onclick="location.href=' <%= href %>';">
             <div class="item-list-title"> 
                 <%= name %>  
             </div><br>
@@ -12,10 +14,19 @@
                 <%= price %>zł
             </div> 
         </div>
-        <div style="float:left; width: auto; line-height: 200px;">
+        <div style="float:left; width: auto; padding-top: 3em;">
+        <% if( !basket ) { %>
             <form>
                 <input type="submit" value= "Dodaj do Koszyka">
             </form>
+        <% } else { %>
+            <form>
+                Ilość: <input type="number" value="1">
+            </form>
+            <form>
+                <input type="submit" value="Usuń z koszyka">
+            </form>
+        <% } %>
         </div>
         <div style="clear:both"></div>
     </div>

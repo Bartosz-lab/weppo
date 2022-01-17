@@ -46,7 +46,17 @@ router.get('/search', (req, res) => {
   });
 })
 
-
-
+router.get('/basket', (req, res) => {
+  res.render('basket', { 
+    display: display,
+    role: "Administrator", /* aktualna rola użytkownika, jeśli "" użytkownik niezalogowany */
+    name: 'Jan',
+    surname: 'Kowalski',
+    roles: [
+      "Administrator",
+      "Klient"
+    ]
+  });
+})
 
 module.exports = router;
