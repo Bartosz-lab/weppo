@@ -2,71 +2,121 @@
 <html lang="en">
 <%- include('head') %>
 
-    <body>
-        <div class="contener">
-            <h1> Rejestracja nowego użytkownika </h1><br>
+<body>
+<div class="contener">
+    <h1> Rejestracja nowego użytkownika </h1><br>
 
-            Masz konto? <a href="/login">Zaloguj się</a>
-
-            <%= error %>
-                <br>
-
-                <form method="post" style="line-height: 1.4em;">
-
-                    <div class="column">
-                        Email: <br>
-                        Hasło: <br>
-                        Powtórz hasło: <br><br>
-
-                        Imię:<br>
-                        Nazwisko:<br>
-                        Numer telefonu:<br>
-                    </div>
-                    <div class="column" style="line-height: 1.4em;width: 70%">
-                        <input type="text" style="width:100%;" name="login" id="email" onkeyup="validateMail()"><br>
-                        <input type="password" style="width:100%;" name="password" id="pass1"><br>
-                        <input type="password" style="width:100%;" name="password2" id="pass2"><br><br>
+    Masz konto? <a href="/login">Zaloguj się</a><br>
 
 
-                        <input type="text" style="width:100%;" name="name" id="name"><br>
-                        <input type="text" style="width:100%;" name="surname" ><br>
-                        <input type="tel" style="width:100%;" name="phone" ><br>
-                    </div>
-                    <div style="clear:both"></div>
-                    <input type="submit" value="zarejestruj się">
-                </form>
+    <% if(error[0] != '0'){ %>
+        <% if( error[0] == '4' || error[0] == '1' ) { %>
+            <div class="info"> Wystąpił problem z rejestracją. <br> 
+                Jeśli problem będzie się powtarzać, zalecamy skontaktowanie się z Obsługą Klienta.  </div>
+        <% } %>
+        <% if(error[0] == '5' ) { %>
+            <div class="info"> Podane hasło jest za słabe. <br> 
+                </div>
+        <% } %>
+    <% } %>
 
+    <form method="post" action="/register" style="line-height: 1.4em;">
 
-                <script>
-                    function validateMail() { return true; }
-
-                    //TODO
-
-                    function validatePassword1() {
-                        var str = document.getElementById('pass1');
-                        let strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})')
-                    }
-
-
-                </script>
-
+        <div class="column" style="width:15%">  Email:  </div>
+        <div class="column" style="line-height: 1.4em;width: 50%">
+            <input type="text" style="width:100%;" name="login" id="email" oninput="validateMail()"><br>
+            <div class="info" id = "info1"></div>
         </div>
-    </body>
+        <div style="clear:both"></div>
+        
+
+        <div class="column" style="width:15%"> Hasło: </div>
+        <div class="column" style="line-height: 1.4em;width: 50%">
+            <input type="password" style="width:100%;" name="password" id="pass1" onkeyup="validatePassword1()"><br>
+            <div class="info" id = "info2"></div>
+        </div>
+        <div style="clear:both"></div>
+        
+
+        <div class="column" style="width:15%"> Powtórz hasło:  </div>
+        <div class="column" style="line-height: 1.4em;width: 50%">
+            <input type="password" style="width:100%;" name="password2" id="pass2" onkeyup="validatePassword2()"><br>
+            <div class="info" id = "info3"></div>
+        </div>
+        <div style="clear:both"></div>
+        
+
+
+
+        <div class="column" >
+            Imię:<br>
+            Nazwisko:<br>
+            Numer telefonu:<br>
+        </div>  
+        <div class="column" style="line-height: 1.4em;width: 50%">
+            <input type="text" style="width:100%;" name="name" id="name"><br>
+            <input type="text" style="width:100%;" name="surname" ><br>
+            <input type="tel" style="width:100%;" name="phone" ><br>
+        </div>
+        <div style="clear:both"></div>
+        <input type="submit" value="zarejestruj się">
+    </form>
+
+
+    <script>
+        mailInp = document.getElementById("email");
+        pass1Inp = document.getElementById("pass1");
+        pass2Inp = document.getElementById("pass2");
+
+        info1 = document.getElementById("info1");
+        info2 = document.getElementById("info2");
+        info3 = document.getElementById("info3");
+
+        var emailPattern = new RegExp('^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$', 'i');
+        function validateMail() { 
+            if(mailInp.value == "") {
+                info1.innerHTML = "";
+                return;
+            }
+
+            if(!emailPattern.test(mailInp.value)) {
+                info1.innerHTML = "To nie jest poprawny adres email.<br><br>";
+                return;
+            }
+
+            info1.innerHTML = "Email jest poprawny.<br><br>";
+        }
+
+        function validatePassword1() {
+            if( pass1Inp.value == "") {
+                info2.innerHTML = "";
+                return;
+            }
+
+            if(!/^(?=.*\d)(?=.*[a-zA-Z])(?!.*\s).{8,15}$/.test( pass1Inp.value) ) {
+                info2.innerHTML = "Hasło jest za słabe. <br> Hasło musi zawierać conajmniej 8 znaków, w tym jedną dużą i jedną małą literę oraz jedną cyfrę.<br><br>";
+                return;
+            }
+            info2.innerHTML = "Hasło jest mocne.<br><br>";
+        }
+
+        function validatePassword2() {
+            if( pass2Inp.value == "" || pass1Inp.value == "") {
+                info3.innerHTML = "";
+                return;
+            }
+
+            if(pass2Inp.value != pass1Inp.value ) {
+                info3.innerHTML = "Podane hasła nie są identyczne.<br><br>";
+                return;
+            }
+            info3.innerHTML = "Hasła się zgadzają.<br><br>";
+        }
+
+
+    </script>
+
+</div>
+</body>
 
 </html>
-
-<!-- 
-Info od Bartka:
-    Na pewno będą potrzebne jeszcze pola 
-        name
-        surname
-        phone
-    
-    i myślę ze na etapie wysyłania formularza powinna być prosta walidacja pól żeby nie były puste hasła się zgadzały itp.
-
-    formularz ma być wysyłany na dokładnie taki sam adres z jakiego jest otwierany tzn 
-    /login jest ok
-    /login?returnUrl=/order też jest ok
-
-    info o ewentualnym komunikacie będę przekazywał w zmeinnej error jako Kody błędu - readme
- -->

@@ -202,6 +202,20 @@ body {
 
 }
 
+/*eksperymentalne chowanie informacji o jakości hasła*/
+/*.info { 
+    font-size: 0;
+    line-height: 0;
+    transition: font-size 0.1s ease-in-out, line-height 0.2s ease-in-out;
+}*/
+
+.info,
+.column:focus > .info,
+.column:hover > .info  {
+    font-size: 1em;
+    line-height: 1.2em;
+}
+
 
 ol {
     text-align: center;
