@@ -22,7 +22,7 @@ router.get('/', auth.restrict_login, async (req, res) => {
      *     user- typ {User_info} - definicja w database
      *     adress = typ{Adress[]} - definicja w database
      */
-    const render_obj = {};
+    let render_obj = {};
     render_obj.user = await database.get_user_info_by_id(req.session.user);
     render_obj.adress = await database.get_adresses_by_user_id(req.session.user);
     if(render_obj.user){
