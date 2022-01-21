@@ -4,41 +4,89 @@
 
 <body>
     <%- include('topbar') %>
-<div class="contener">
+<div class="contener" style="float: left; width: 10%;">
+    <!-- Lista z Linkami Zależnymi od rodzaju roli -->
+    <%- include('user_nav') %>
+
+</div>
+<div class="contener" style="float: right; width: 70%;">
     <h1> Panel użytkownika </h1>
     <a href="/">Powrót na stronę główną</a><br>
     <a href="/logout">Wyloguj się</a>
+
     <div class = "subcontener">
-        <div class="column">
-            Dane do wysyłki: <br>
-            Imię:  <br>
-            Nazwisko:  <br>
-            Telefon:  <br>
-            <a href='/account/settings'> Edytuj </a>
+        Dane użytkownika:
+        <!-- Formularz wysyłany w tle to znaczy bez odświeżania strony AJAX -->
+        <form method="post" action="/account/edit_user" style="line-height: 1.4em;">
+            <div class="column" >
+                Imię:<br>
+                Nazwisko:<br>
+                Numer telefonu:<br>
+            </div>  
+            <div class="column" style="line-height: 1.4em;width: 50%">
+                <input type="text" style="width:100%;" name="fistname" id="name" value="<%- user.name %>"><br>
+                <input type="text" style="width:100%;" name="lastname" value="<%- user.surname %>"><br>
+                <input type="tel" style="width:100%;" name="phone" value="<%- user.tel %>"><br>
+            </div>
+            <div style="clear:both"></div>
+            <!-- Guzik włączający możliwość edycji formlularza  a jeśli włączone to wysyłający dane (dałbym go chyba w prawym rogu bloku)-->
+            <input type="submit" value="Zapisz">
+            <!-- Jakiś handler błędu zapisu co do handlerów to zamiast wielu róznych w kodzie mozna by zdefiniować jeden ejs który przekształca kod błędu na napis -->
+            <%= error %>
+        </form>
+    </div>
+    <% if(user_role === role.Customer) { %> 
+        <div class = "subcontener">
+            Adresy lub nie adresy
         </div>
-        <div class="column">
-            <br>
-            <%- user.name %> <br>
-            <%- user.surname %> <br>
-            <%- user.tel %> <br>
-        </div>
-        <div style="clear:both"></div>
+    <% } %> 
+
+    <div class = "subcontener">
+        Zmiana Email
+        <!-- Formularz wysyłany w tle to znaczy bez odświeżania strony AJAX -->
+        <form method="post" action="/account/edit_email" style="line-height: 1.4em;">
+            <div class="column" style="width:15%">  Email:  </div>
+            <div class="column" style="line-height: 1.4em;width: 50%">
+                <input type="text" style="width:100%;" name="login" id="email" value="<%- user.email %>" oninput="validateMail()"><br>
+                <div class="info" id = "info1"></div>
+            </div>
+            <div style="clear:both"></div>
+            <!-- Guzik włączający możliwość edycji formlularza  a jeśli włączone to wysyłający dane (dałbym go chyba w prawym rogu bloku)-->
+            <input type="submit" value="Zapisz">
+            <!-- Jakiś handler błędu zapisu co do handlerów to zamiast wielu róznych w kodzie mozna by zdefiniować jeden ejs który przekształca kod błędu na napis -->
+            <%= error %> 
+        </form>
     </div>
 
     <div class = "subcontener">
-        <div class="column">
-            Email: <br>
-            <a href='/account/settings'> Zmień Dane </a>
-        </div>
-        <div class="column">
-            <%- user.email %>
-        </div>
-        <div style="clear:both"></div>
+        Zmiana hasła
+        <!-- Formularz wysyłany w tle to znaczy bez odświeżania strony AJAX -->
+        <form method="post" action="/account/edit_password" style="line-height: 1.4em;">
+            <div class="column" style="width:15%"> Hasło: </div>
+            <div class="column" style="line-height: 1.4em;width: 50%">
+                <input type="password" style="width:100%;" name="password" id="pass1" onkeyup="validatePassword1()"><br>
+                <div class="info" id = "info2"></div>
+            </div>
+            <div style="clear:both"></div>
+            
+    
+            <div class="column" style="width:15%"> Powtórz hasło:  </div>
+            <div class="column" style="line-height: 1.4em;width: 50%">
+                <input type="password" style="width:100%;" name="password2" id="pass2" onkeyup="validatePassword2()"><br>
+                <div class="info" id = "info3"></div>
+            </div>
+            <div style="clear:both"></div> <br>
+            <!-- Guzik włączający możliwość edycji formlularza  a jeśli włączone to wysyłający dane (dałbym go chyba w prawym rogu bloku)-->
+            <input type="submit" value="Zapisz">
+            <!-- Jakiś handler błędu zapisu co do handlerów to zamiast wielu róznych w kodzie mozna by zdefiniować jeden ejs który przekształca kod błędu na napis -->
+            <%= error %>
+        </form>
     </div>
 
 
 
 </div>
+<div style="clear:both"></div>
 </body>
 
 

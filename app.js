@@ -43,7 +43,6 @@ app.use(session({
 app.use(function (req, res, next) {
   var err = req.session.error;
   var user_role = req.session.role;
-
   delete req.session.error;
 
   res.locals.error = '';
@@ -51,7 +50,7 @@ app.use(function (req, res, next) {
   res.locals.role = role;
   
   if (err) res.locals.error = err;
-  if (user_role) res.locals.user_role = user_role;
+  if (user_role != undefined) res.locals.user_role = user_role;
   next();
 });
 
