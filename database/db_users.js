@@ -181,7 +181,7 @@ module.exports.check_user_role = check_user_role;
  * @param {string} new_phone
  * @return {bool} true if change is succesfull otherwise error
  */
-  async function change_user_data (id, new_name, new_lastname, new_hash, new_salt, new_email, new_phone) {
+  async function change_user_data (id, new_name, new_lastname, new_phone, new_hash, new_salt, new_email ) {
   const result = await Pool.query(`SELECT * FROM roles WHERE user_id ='${id}';`);
   if (result.rows[0]) {
     if (typeof new_name === 'string') {
@@ -206,4 +206,8 @@ module.exports.check_user_role = check_user_role;
   }
   else return new Error("6 invalid data");
 }
+<<<<<<< HEAD
 module.exports.change_user_data = change_user_data;
+=======
+module.exports.change_user_data = change_user_data;
+>>>>>>> 53f58430a3d68965bf6206b6085928d96ac79c37
