@@ -178,9 +178,10 @@ module.exports.check_user_role = check_user_role;
  * @param {string} new_surname
  * @param {string} new_password
  * @param {string} new_email
+ * @param {string} new_phone
  * @return {bool} true if change is succesfull otherwise error
  */
-  async function change_user_data (id, new_name, new_lastname, new_hash, new_salt, new_email) {
+  async function change_user_data (id, new_name, new_lastname, new_hash, new_salt, new_email, new_phone) {
   const result = await Pool.query(`SELECT * FROM roles WHERE user_id ='${id}';`);
   if (result.rows[0]) {
     if (typeof new_name === 'string') {
@@ -198,8 +199,24 @@ module.exports.check_user_role = check_user_role;
     if (typeof new_email === 'string') {
       const change_email = await Pool.query(`UPDATE users SET email = '${new_email}' WHERE id ='${id}';`);
     }
+    if (typeof new_phone === 'string') {
+      const change_phone = await Pool.query(`UPDATE users SET phone = '${new_phone}' WHERE id ='${id}';`);
+    }
     return true;
   }
   else return new Error("6 invalid data");
 }
 module.exports.change_user_data = change_user_data;
+
+async function main () {
+  try {
+    client.connect ();
+    const res = await change_user_data (70, 'Dzban', -1, 'ELELE', 'PIODAS', -1);
+    console.log (res);
+  }
+  catch (err) {
+    console.log (err.message);
+  }
+}
+
+main ();
