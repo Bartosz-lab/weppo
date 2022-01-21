@@ -1,8 +1,6 @@
-const Pool = require('../database/db_pool');
+var Pool = require('../database/db_pool');
 const typedef = require('../typedef');
 const role = typedef.role;
-
-
 
 /**
  * Finding user by id function
@@ -172,3 +170,36 @@ module.exports.get_user_roles = get_user_roles;
     return (roles.includes(role));
 }
 module.exports.check_user_role = check_user_role;
+
+/**
+ * Change users name / surname / password / email
+ * @param {number} id user id in database
+ * @param {string} new_name
+ * @param {string} new_surname
+ * @param {string} new_password
+ * @param {string} new_email
+ * @return {bool} true if change is succesfull otherwise error
+ */
+  async function change_user_data (id, new_name, new_lastname, new_hash, new_salt, new_email) {
+  const result = await Pool.query(`SELECT * FROM roles WHERE user_id ='${id}';`);
+  if (result.rows[0]) {
+    if (typeof new_name === 'string') {
+      const change_name = await Pool.query(`UPDATE users SET firstname = '${new_name}' WHERE id ='${id}';`);
+    }
+    if (typeof new_surname === 'string') {
+      const change_surname = await Pool.query(`UPDATE users SET lastname = '${new_lastname}' WHERE id ='${id}';`);
+    }
+    if (typeof new_hash === 'string') {
+      const change_hash = await Pool.query(`UPDATE users SET hash = '${new_hash}' WHERE id ='${id}';`);
+    }
+    if (typeof new_salt === 'string') {
+      const change_hash = await Pool.query(`UPDATE users SET salt = '${new_salt}' WHERE id ='${id}';`);
+    }
+    if (typeof new_email === 'string') {
+      const change_email = await Pool.query(`UPDATE users SET email = '${new_email}' WHERE id ='${id}';`);
+    }
+    return true;
+  }
+  else return new Error("6 invalid data");
+}
+module.exports.change_user_data = change_user_data;
