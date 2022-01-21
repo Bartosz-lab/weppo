@@ -100,7 +100,9 @@ router.post('/role', auth.restrict_login, async (req, res) => {
 
 //register page
 router.get('/register', function (req, res) {
-    res.render('register');
+    res.render('register', {
+        returnUrl: req.query.returnUrl ? req.query.returnUrl : '/'
+    });
 });
 router.post('/register', (req, res) => {
     auth.register({

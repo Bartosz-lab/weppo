@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('head') %>
-
+    <%- include('head') %>
     <body>
         <div class="contener">
             <h1> Zaloguj się do konta </h1><br>
@@ -20,11 +19,6 @@
             <% } %>
 
             <form method="post">
-                <!-- Uwaga Fragment Testowy -->
-                Try accessing <a href="<%= returnUrl %>">
-                    <%= returnUrl %>
-                </a>, then authenticate with "tj" and "foobar".<br>
-                <!-- Koniec Fragmentu Testowego -->
                 <div class="column">
                     Email:<br>
                     Hasło:<br>
@@ -38,17 +32,4 @@
             </form>
         </div>
     </body>
-
 </html>
-
-<!-- 
-Info od Bartka:
-    Tak właściwie formularz jest już ok
-
-    formularz wysyła jedynie login i password i ma być wysyłany na dokładnie taki sam adres z jakiego jest otwierany tzn 
-    /login jest ok
-    /login?returnUrl=/order też jest ok
-
-    info o ewentualnym komunikacie będę przekazywał w zmeinnej error jako Kody błędu - readme
-
- -->

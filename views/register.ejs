@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('head') %>
+    <%- include('head') %>
+    <body>
+        <div class="contener">
+            <h1> Rejestracja nowego użytkownika </h1><br>
 
-<body>
-<div class="contener">
-    <h1> Rejestracja nowego użytkownika </h1><br>
-
-    Masz konto? <a href="/login">Zaloguj się</a><br>
+            <a href="/">Powrót na stronę główną</a><br>
+            Masz konto? <a href="<%= (returnUrl != '/') ? `/login?returnUrl=${returnUrl}`: '/login'%>">Zaloguj się</a><br>
 
 
     <% if(error[0] != '0'){ %>
@@ -20,7 +20,7 @@
         <% } %>
     <% } %>
 
-    <form method="post" action="/register" style="line-height: 1.4em;">
+    <form method="post" style="line-height: 1.4em;">
 
         <div class="column" style="width:15%">  Email:  </div>
         <div class="column" style="line-height: 1.4em;width: 50%">
@@ -43,7 +43,7 @@
             <input type="password" style="width:100%;" name="password2" id="pass2" onkeyup="validatePassword2()"><br>
             <div class="info" id = "info3"></div>
         </div>
-        <div style="clear:both"></div>
+        <div style="clear:both"></div> <br>
         
 
 
