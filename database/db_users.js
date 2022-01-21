@@ -1,4 +1,4 @@
-var Pool = require('../database/db_pool');
+const Pool = require('../database/db_pool');
 const typedef = require('../typedef');
 const role = typedef.role;
 
@@ -187,8 +187,8 @@ module.exports.check_user_role = check_user_role;
     if (typeof new_name === 'string') {
       const change_name = await Pool.query(`UPDATE users SET firstname = '${new_name}' WHERE id ='${id}';`);
     }
-    if (typeof new_surname === 'string') {
-      const change_surname = await Pool.query(`UPDATE users SET lastname = '${new_lastname}' WHERE id ='${id}';`);
+    if (typeof new_lastname === 'string') {
+      const change_lastname = await Pool.query(`UPDATE users SET lastname = '${new_lastname}' WHERE id ='${id}';`);
     }
     if (typeof new_hash === 'string') {
       const change_hash = await Pool.query(`UPDATE users SET hash = '${new_hash}' WHERE id ='${id}';`);
@@ -207,16 +207,3 @@ module.exports.check_user_role = check_user_role;
   else return new Error("6 invalid data");
 }
 module.exports.change_user_data = change_user_data;
-
-async function main () {
-  try {
-    client.connect ();
-    const res = await change_user_data (70, 'Dzban', -1, 'ELELE', 'PIODAS', -1);
-    console.log (res);
-  }
-  catch (err) {
-    console.log (err.message);
-  }
-}
-
-main ();
