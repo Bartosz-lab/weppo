@@ -16,6 +16,7 @@ router.get('/', auth.restrict_login, async (req, res) => {
     let render_obj = {};
     render_obj.user = await database.get_user_info_by_id(req.session.user);
     render_obj.adress = await database.get_adresses_by_user_id(req.session.user);
+    console.log(render_obj.user.phone);
     if(render_obj.user){
         res.render('account', render_obj);
     } else {
@@ -30,7 +31,7 @@ router.post('/edit_user', auth.restrict_login, async (req, res) => {
         surname: req.body.lastname,
         phone: req.body.phone
     };
-    const err = undefined; //funkcja zapisująca w bazie
+    const err = await database.change_user_data(req.session.user, req.body.fistname, req.body.lastname, req.body.phone);
     if (err) {
         res.send(err.message);
     } else {
