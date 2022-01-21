@@ -18,7 +18,7 @@ router.get('/logout', function (req, res) {
 
 //login page
 router.get('/login', function (req, res) {
-    res.render('login', {
+    res.render('login/login', {
         returnUrl: req.query.returnUrl ? req.query.returnUrl : '/'
     });
 });
@@ -55,7 +55,7 @@ router.get('/role', auth.restrict_login, async (req, res) => {
     const usr_info = await database.get_user_info_by_id(req.session.user);
     const number_of_roles = +usr_roles[role.Admin] + usr_roles[role.Seller] + usr_roles[role.Customer];
     if (number_of_roles >= 2) {
-        res.render('roleSwitch', {
+        res.render('login/roleSwitch', {
             role: typedef.role,
             active: usr_roles,
             name: usr_info.name,
@@ -100,14 +100,14 @@ router.post('/role', auth.restrict_login, async (req, res) => {
 
 //register page
 router.get('/register', function (req, res) {
-    res.render('register', {
+    res.render('login/register', {
         returnUrl: req.query.returnUrl ? req.query.returnUrl : '/'
     });
 });
 router.post('/register', (req, res) => {
     auth.register({
-        name: req.body.name,
-        surname: req.body.surname,
+        name: req.body.fistname,
+        surname: req.body.lastname,
         phone: req.body.phone,
         email: req.body.login,
     },
