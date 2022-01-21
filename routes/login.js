@@ -89,7 +89,7 @@ router.post('/role', auth.restrict_login, async (req, res) => {
     }
 
     if (usr_roles[usr_role]) {
-        req.session.role = req.body.user_role;
+        req.session.role = parseInt(req.body.user_role);
         let returnUrl = req.query.returnUrl ? req.query.returnUrl : '/';
         res.redirect(returnUrl);
     } else {

@@ -105,6 +105,14 @@ module.exports.check_user_role = check_user_role;
  * @return {Adress[]} 
  */
  async function get_adresses_by_user_id(id) {
+     return [{
+         ul: "Krakowska",
+         miasto: "Wroclaw" 
+     },
+     {
+        ul: "Wroclawska",
+        miasto: "Krakow" 
+    }]
 
 }
 /**

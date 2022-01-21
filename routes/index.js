@@ -23,7 +23,6 @@ display = [
 router.get('/', function(req, res, next) {
   res.render('index', {
     display: display,
-    role: "Administrator", /* aktualna rola użytkownika, jeśli "" użytkownik niezalogowany */
     name: 'Jan',
     surname: 'Kowalski',
     roles: [
@@ -36,7 +35,6 @@ router.get('/', function(req, res, next) {
 router.get('/search', (req, res) => {
   res.render('products', { 
     display: display,
-    role: "Administrator", /* aktualna rola użytkownika, jeśli "" użytkownik niezalogowany */
     name: 'Jan',
     surname: 'Kowalski',
     roles: [
@@ -49,7 +47,6 @@ router.get('/search', (req, res) => {
 router.get('/basket', (req, res) => {
   res.render('basket', { 
     display: display,
-    role: "Administrator", /* aktualna rola użytkownika, jeśli "" użytkownik niezalogowany */
     name: 'Jan',
     surname: 'Kowalski',
     roles: [

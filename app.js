@@ -5,6 +5,10 @@ const cookieParser  = require('cookie-parser');
 const logger        = require('morgan');
 const session       = require('express-session');
 
+const typedef = require('./typedef');
+const role = typedef.role;
+
+
 const indexRouter   = require('./routes/index');
 const loginRouter   = require('./routes/login');
 const accRouter     = require('./routes/account');
@@ -38,12 +42,16 @@ app.use(session({
 //testowo 
 app.use(function (req, res, next) {
   var err = req.session.error;
-  var msg = req.session.success;
+  var user_role = req.session.role;
+
   delete req.session.error;
-  delete req.session.success;
+
   res.locals.error = '';
+  res.locals.user_role = undefined;
+  res.locals.role = role;
+  
   if (err) res.locals.error = err;
-  if (msg) res.locals.error = '<p class="msg success">' + msg + '</p>';
+  if (user_role) res.locals.user_role = user_role;
   next();
 });
 

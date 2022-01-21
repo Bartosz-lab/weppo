@@ -11,25 +11,18 @@
         <div style="float: left; width:50%; text-align: center;" class="links2">
             <a href="/basket" class="richbutton">Koszyk</a>
         </div>
-        <div style="float: left; width:50%; text-align: center;" class="links2 dropdown">
-            <a href="/account" class="richbutton">Konto</a>
-            <% if( role != "" ) { %>
+        <% if( user_role != undefined ) { %>
+            <div style="float: left; width:50%; text-align: center;" class="links2 dropdown">
+                <a href="/account" class="richbutton">Konto</a>
                 <div class="dropdown-content">
-                    Zalogowano jako: <%= name %> <%= surname %> <br><br>
-
-                    <% if( roles != [] ) { %>
-                        Obecna rola: <%= role %> <br>
-
-                        Zmień rolę:<br>
-
-                        <% for ( i in roles ) { %>
-                            <form>
-                                <input type="submit" value=" <%= roles[i] %>">
-                            </form>
-                        <% } %>
-                    <% } %>
+                     <%- include("user_nav") %> 
                 </div>
-            <% } %> 
+            </div>
+        <% } else { %>
+            <div style="float: left; width:50%; text-align: center;" class="links2">
+                <a href="/login" class="richbutton">Zaloguj się</a>
+            </div>
+        <% } %>
             <!-- Tutaj powinna być lista rozwijana pokazująca opcje konta i to w zależności od wybranej roli no i jeszcze trzeba gdzieś tu zrobić możliwość wybranej roli( jeśli ma więcej niż jedną) czyli tutaj generowane to musi być automatycznie -->
         </div>
     </div>
