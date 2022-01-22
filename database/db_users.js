@@ -206,8 +206,5 @@ module.exports.check_user_role = check_user_role;
   }
   else return new Error("6 invalid data");
 }
-<<<<<<< HEAD
+
 module.exports.change_user_data = change_user_data;
-=======
-module.exports.change_user_data = change_user_data;
->>>>>>> 53f58430a3d68965bf6206b6085928d96ac79c37
