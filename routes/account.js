@@ -40,8 +40,9 @@ router.post('/edit_user', upload.single(), auth.restrict_login, async (req, res)
         res.end('0. Success');
     }
 });
-router.post('/edit_email', auth.restrict_login, async (req, res) => {
+router.post('/edit_email', upload.single(), auth.restrict_login, async (req, res) => {
     const edited_email = req.body.email;
+    console.log(req.body.email);
     const err = undefined; //funkcja zapisująca w bazie
     if (err) {
         res.send(err.message);
@@ -49,10 +50,10 @@ router.post('/edit_email', auth.restrict_login, async (req, res) => {
         res.send('0. Success');
     }
 });
-router.post('/edit_password', auth.restrict_login, async (req, res) => {
-    const edited_user = req.body.email;
+router.post('/edit_password', upload.single(), auth.restrict_login, async (req, res) => {
+    const edited_user = req.body.password;
     //tutaj bardziej skomplikowanie bo jeszcze hashowanie i weryfikacja
-
+    console.log(req.body.password);
     const err = undefined; //funkcja zapisująca w bazie
     if (err) {
         res.send(err.message);

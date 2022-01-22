@@ -45,43 +45,41 @@
     <div class = "subcontener">
         Zmiana Email
         <!-- Formularz wysyłany w tle to znaczy bez odświeżania strony AJAX -->
-        <form method="post" action="/account/edit_email" style="line-height: 1.4em;">
-            <div class="column" style="width:15%">  Email:  </div>
-            <div class="column" style="line-height: 1.4em;width: 50%">
-                <input type="text" style="width:100%;" name="login" id="email" value="<%- user.email %>" oninput="validateMail()"><br>
-                <div class="info" id = "info1"></div>
-            </div>
-            <div style="clear:both"></div>
-            <!-- Guzik włączający możliwość edycji formlularza  a jeśli włączone to wysyłający dane (dałbym go chyba w prawym rogu bloku)-->
-            <input type="submit" value="Zapisz">
-            <!-- Jakiś handler błędu zapisu co do handlerów to zamiast wielu róznych w kodzie mozna by zdefiniować jeden ejs który przekształca kod błędu na napis -->
-            <%= error %> 
-        </form>
+        <div class="column" style="width:15%">  Email:  </div>
+        <div class="column" style="line-height: 1.4em;width: 50%">
+            <input type="text" style="width:100%;" name="login" id="login" value="<%- user.email %>"><br>
+            <div class="info" id = "info1"></div>
+        </div>
+        <div style="clear:both"></div>
+        <!-- Guzik włączający możliwość edycji formlularza  a jeśli włączone to wysyłający dane (dałbym go chyba w prawym rogu bloku)-->
+        <button onclick="AJAXEmEdit()">Zapisz</button>
+        <!-- Jakiś handler błędu zapisu co do handlerów to zamiast wielu róznych w kodzie mozna by zdefiniować jeden ejs który przekształca kod błędu na napis -->
+        <div class="info" id="emErr"></div>
+        <%= error %> 
     </div>
 
     <div class = "subcontener">
         Zmiana hasła
         <!-- Formularz wysyłany w tle to znaczy bez odświeżania strony AJAX -->
-        <form method="post" action="/account/edit_password" style="line-height: 1.4em;">
-            <div class="column" style="width:15%"> Hasło: </div>
-            <div class="column" style="line-height: 1.4em;width: 50%">
-                <input type="password" style="width:100%;" name="password" id="pass1" onkeyup="validatePassword1()"><br>
-                <div class="info" id = "info2"></div>
-            </div>
-            <div style="clear:both"></div>
-            
-    
-            <div class="column" style="width:15%"> Powtórz hasło:  </div>
-            <div class="column" style="line-height: 1.4em;width: 50%">
-                <input type="password" style="width:100%;" name="password2" id="pass2" onkeyup="validatePassword2()"><br>
-                <div class="info" id = "info3"></div>
-            </div>
-            <div style="clear:both"></div> <br>
-            <!-- Guzik włączający możliwość edycji formlularza  a jeśli włączone to wysyłający dane (dałbym go chyba w prawym rogu bloku)-->
-            <input type="submit" value="Zapisz">
-            <!-- Jakiś handler błędu zapisu co do handlerów to zamiast wielu róznych w kodzie mozna by zdefiniować jeden ejs który przekształca kod błędu na napis -->
-            <%= error %>
-        </form>
+        <div class="column" style="width:15%"> Hasło: </div>
+        <div class="column" style="line-height: 1.4em;width: 50%">
+            <input type="password" style="width:100%;" name="password" id="pass1"><br>
+            <div class="info" id = "info2"></div>
+        </div>
+        <div style="clear:both"></div>
+        
+
+        <div class="column" style="width:15%"> Powtórz hasło:  </div>
+        <div class="column" style="line-height: 1.4em;width: 50%">
+            <input type="password" style="width:100%;" name="password2" id="pass2"><br>
+            <div class="info" id = "info3"></div>
+        </div>
+        <div style="clear:both"></div> <br>
+        <!-- Guzik włączający możliwość edycji formlularza  a jeśli włączone to wysyłający dane (dałbym go chyba w prawym rogu bloku)-->
+        <button onclick="AJAXPassEdit()">Zapisz</button>
+        <!-- Jakiś handler błędu zapisu co do handlerów to zamiast wielu róznych w kodzie mozna by zdefiniować jeden ejs który przekształca kod błędu na napis -->
+        <div class="info" id="passErr"></div>
+        <%= error %>
     </div>
 
 
@@ -91,6 +89,7 @@
 </body>
 
 <script>
+    // =========================== KONTO ====================================
     function AJAXAccEdit() {
       var req = new XMLHttpRequest();
       req.open('post', '/account/edit_user', true);
@@ -107,6 +106,52 @@
       form.append("surname",    document.getElementById('surname').value);
       console.log("Form sent")
       req.send(form);
+    }
+
+    // =========================== EMAIL ====================================
+    function AJAXEmEdit() {
+        var req = new XMLHttpRequest();
+        req.open('post', '/account/edit_email', true);
+        req.onreadystatechange = () => {
+            if(req.readyState == XMLHttpRequest.DONE) {
+                console.log(req.response)
+                if(req.response[0] != '0')
+                document.getElementById("emErr").innerHTML = req.responseText;
+            }
+        }
+        var form = new FormData();
+        form.append("email",      document.getElementById('login').value);
+        console.log("Form sent")
+        req.send(form);
+    }
+
+    // =========================== PASS ====================================
+    function AJAXPassEdit() {
+        p1 = document.getElementById('pass1').value;
+        if(!/^(?=.*\d)(?=.*[a-zA-Z])(?!.*\s).{8,15}$/.test(p1)) {
+            document.getElementById("passErr").innerHTML = "Hasło jest za słabe<br>";
+            return;
+        } 
+        p2 = document.getElementById('pass2').value;
+        if(p1 != p2) {
+            document.getElementById("passErr").innerHTML = "Hasła nie są identyczne<br>";
+            return;
+        } 
+
+
+        var req = new XMLHttpRequest();
+        req.open('post', '/account/edit_password', true);
+        req.onreadystatechange = () => {
+            if(req.readyState == XMLHttpRequest.DONE) {
+                console.log(req.response)
+                if(req.response[0] != '0')
+                document.getElementById("passErr").innerHTML = req.responseText;
+            }
+        }
+        var form = new FormData();
+        form.append("password",      document.getElementById('pass1').value);
+        console.log("Form sent")
+        req.send(form);
     }
 </script>
 
