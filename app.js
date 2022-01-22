@@ -4,10 +4,11 @@ const path          = require('path');
 const cookieParser  = require('cookie-parser');
 const logger        = require('morgan');
 const session       = require('express-session');
+const multer        = require('multer');
+var upload = multer();
 
 const typedef = require('./typedef');
 const role = typedef.role;
-
 
 const indexRouter   = require('./routes/index');
 const loginRouter   = require('./routes/login');

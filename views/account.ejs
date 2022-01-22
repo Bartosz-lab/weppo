@@ -17,7 +17,7 @@
     <div class = "subcontener">
         Dane użytkownika:
         <!-- Formularz wysyłany w tle to znaczy bez odświeżania strony AJAX -->
-        <form method="post" action="/account/edit_user" style="line-height: 1.4em;">
+        <!-- <form style="line-height: 1.4em;"> -->
             <div class="column" >
                 Imię:<br>
                 Nazwisko:<br>
@@ -25,15 +25,16 @@
             </div>  
             <div class="column" style="line-height: 1.4em;width: 50%">
                 <input type="text" style="width:100%;" name="fistname" id="name" value="<%- user.name %>"><br>
-                <input type="text" style="width:100%;" name="lastname" value="<%- user.surname %>"><br>
-                <input type="tel" style="width:100%;" name="phone" value="<%- user.phone %>"><br>
+                <input type="text" style="width:100%;" name="lastname" id="surname" value="<%- user.surname %>"><br>
+                <input type="tel" style="width:100%;" name="phone" id="phone" value="<%- user.phone %>"><br>
             </div>
             <div style="clear:both"></div>
             <!-- Guzik włączający możliwość edycji formlularza  a jeśli włączone to wysyłający dane (dałbym go chyba w prawym rogu bloku)-->
-            <input type="submit" value="Zapisz">
+            <button onclick="AJAXAccEdit()">Zapisz</button>
             <!-- Jakiś handler błędu zapisu co do handlerów to zamiast wielu róznych w kodzie mozna by zdefiniować jeden ejs który przekształca kod błędu na napis -->
+            <div class="info" id="accErr"></div>
             <%= error %>
-        </form>
+        <!-- </form> -->
     </div>
     <% if(user_role === role.Customer) { %> 
         <div class = "subcontener">
@@ -88,6 +89,26 @@
 </div>
 <div style="clear:both"></div>
 </body>
+
+<script>
+    function AJAXAccEdit() {
+      var req = new XMLHttpRequest();
+      req.open('post', '/account/edit_user', true);
+      req.onreadystatechange = () => {
+        if(req.readyState == XMLHttpRequest.DONE) {
+            console.log(req.response)
+            if(req.response[0] != '0')
+            document.getElementById("accErr").innerHTML = req.responseText;
+        }
+      }
+      var form = new FormData();
+      form.append("phone",      document.getElementById('phone').value);
+      form.append("name",       document.getElementById('name').value);
+      form.append("surname",    document.getElementById('surname').value);
+      console.log("Form sent")
+      req.send(form);
+    }
+</script>
 
 
 </html>

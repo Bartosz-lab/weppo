@@ -4,6 +4,8 @@ const router = express.Router();
 module.exports = router;
 const auth = require('../bin/auth');
 const database = require('../database/database');
+const multer = require('multer');
+var upload = multer();
 
 
 router.get('/', auth.restrict_login, async (req, res) => {
@@ -25,7 +27,7 @@ router.get('/', auth.restrict_login, async (req, res) => {
     }
 });
 
-router.post('/edit_user', auth.restrict_login, async (req, res) => {
+router.post('/edit_user', upload.single(), auth.restrict_login, async (req, res) => {
     const edited_user = {
         name: req.body.fistname,
         surname: req.body.lastname,
@@ -33,9 +35,9 @@ router.post('/edit_user', auth.restrict_login, async (req, res) => {
     };
     const err = await database.change_user_data(req.session.user, req.body.fistname, req.body.lastname, req.body.phone);
     if (err) {
-        res.send(err.message);
+        res.end(err.message+"<br>Err"); // Dostaję pusty err.message więc zostawiam to tak tymczasowo
     } else {
-        res.send('0. Success');
+        res.end('0. Success');
     }
 });
 router.post('/edit_email', auth.restrict_login, async (req, res) => {
