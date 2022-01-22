@@ -18,6 +18,12 @@ router.get('/', auth.restrict_login, async (req, res) => {
     let render_obj = {};
     render_obj.user = await database.get_user_info_by_id(req.session.user);
     render_obj.adress = await database.get_adresses_by_user_id(req.session.user);
+
+    render_obj.orders = [ 
+        { date: "12-01-2022", price: "200" },
+        { date: "13-02-2077", price: "1337"}
+    ];
+
     console.log(render_obj.user.phone);
     if(render_obj.user){
         res.render('account', render_obj);

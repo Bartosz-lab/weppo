@@ -4,12 +4,12 @@
 
 <body>
     <%- include('topbar') %>
-<div class="contener" style="float: left; width: 10%;">
+<div class="subcontener" style="float: left; width: auto; padding-left: 1em; padding-right: 1em;">
     <!-- Lista z Linkami Zależnymi od rodzaju roli -->
     <%- include('user_nav') %>
 
 </div>
-<div class="contener" style="float: right; width: 70%;">
+<div class="contener" style="float: left; width: 70%;">
     <h1> Panel użytkownika </h1>
     <a href="/">Powrót na stronę główną</a><br>
     <a href="/logout">Wyloguj się</a>
@@ -87,6 +87,8 @@
 </div>
 <div style="clear:both"></div>
 </body>
+
+<%- include('footer') %>
 
 <script>
     // =========================== KONTO ====================================

@@ -10,7 +10,26 @@
 
 <% } else if(user_role === role.Customer) { %> 
     
-    Zamówienia KLIENTA
-    HELP
+    <div class="richbutton">
+        <a href="/basket">Zobacz swój koszyk</a><br>
+    </div>
 
+    
+
+    <% if( orders ) { %>
+        Aktywne zamówienia:<br>
+
+        <% for( i in orders ) { %>
+        
+        <div class="prodcontener" style="width:auto" onclick="alert('Przeniesienie do strony zamówienia.')"> 
+            <div class="nodecor" style="text-align: left"> Data złożenia: </div>
+            <div class="nodecor" style="text-align: right;"><%- orders[i].date %></div>
+            <div class="nodecor" style="text-align: left;">Cena: </div>
+            <div class="nodecor" style="text-align: right;"><%- orders[i].price %>zł</div>
+        </div>
+    <% }} %>
+
+    <div class="richbutton">
+        <a href="">Historia zamówień</a>
+    </div>
 <% } %> 

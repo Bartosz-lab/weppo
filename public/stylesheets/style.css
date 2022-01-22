@@ -432,3 +432,8 @@ input:focus::-webkit-input-placeholder{
     display: block;
    
 }
+
+.nodecor {
+    padding: 0;
+    margin: 0;
+}

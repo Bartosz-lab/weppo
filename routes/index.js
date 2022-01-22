@@ -22,6 +22,7 @@ display = [
 
 router.get('/', function(req, res, next) {
   res.render('index', {
+    orders: null,
     display: display,
     name: 'Jan',
     surname: 'Kowalski',
