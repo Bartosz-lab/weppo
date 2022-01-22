@@ -49,8 +49,8 @@ body {
     height: 2.3em; 
     background-color: var(--bg0);
     color: var(--fg);
-    padding-left: 5%; 
-    padding-right: 5%; 
+    padding-left: 1%; 
+    padding-right: 1%; 
     text-align: right; 
     line-height: 2.3em;
     transition:all .2s ease-in-out;
@@ -334,10 +334,10 @@ input[type=password]:focus {
 	border: 2px solid var(--fg4);
 	border-radius: 5px;
 	cursor: pointer;
-	letter-spacing: 2px;
 	outline: none;
+    letter-spacing: 0px;
 }
-.richbutton:focus, button:focus, submit:focus, input[type=submit]:focus {
+.richbutton:focus a, button:focus, submit:focus, input[type=submit]:focus {
 	-webkit-box-shadow: 0px 0px 15px 5px var(--bg1);
 	-moz-box-shadow: 0px 0px 15px 5px var(--bg1);
 	box-shadow: 0px 0px 15px 5px var(--bg1);
