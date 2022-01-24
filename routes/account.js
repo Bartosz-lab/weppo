@@ -34,12 +34,7 @@ router.get('/', auth.restrict_login, async (req, res) => {
 });
 
 router.post('/edit_user', upload.single(), auth.restrict_login, async (req, res) => {
-    const edited_user = {
-        name: req.body.fistname,
-        surname: req.body.lastname,
-        phone: req.body.phone
-    };
-    const err = await database.change_user_data(req.session.user, req.body.fistname, req.body.lastname, req.body.phone);
+    const err = await database.change_user_data(req.session.user, req.body.firstname, req.body.lastname, req.body.phone);
     if (err) {
         res.end(err.message+"<br>Err"); // Dostaję pusty err.message więc zostawiam to tak tymczasowo
     } else {

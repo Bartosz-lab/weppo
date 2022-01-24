@@ -106,7 +106,7 @@ router.get('/register', function (req, res) {
 });
 router.post('/register', (req, res) => {
     auth.register({
-        name: req.body.fistname,
+        name: req.body.firstname,
         surname: req.body.lastname,
         phone: req.body.phone,
         email: req.body.login,

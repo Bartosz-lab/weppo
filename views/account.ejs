@@ -24,7 +24,7 @@
                 Numer telefonu:<br>
             </div>  
             <div class="column" style="line-height: 1.4em;width: 50%">
-                <input type="text" style="width:100%;" name="fistname" id="name" value="<%- user.name %>"><br>
+                <input type="text" style="width:100%;" name="firstname" id="name" value="<%- user.name %>"><br>
                 <input type="text" style="width:100%;" name="lastname" id="surname" value="<%- user.surname %>"><br>
                 <input type="tel" style="width:100%;" name="phone" id="phone" value="<%- user.phone %>"><br>
             </div>
@@ -104,8 +104,8 @@
       }
       var form = new FormData();
       form.append("phone",      document.getElementById('phone').value);
-      form.append("name",       document.getElementById('name').value);
-      form.append("surname",    document.getElementById('surname').value);
+      form.append("firstname",       document.getElementById('name').value);
+      form.append("lastname",    document.getElementById('surname').value);
       console.log("Form sent")
       req.send(form);
     }

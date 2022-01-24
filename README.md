@@ -8,6 +8,8 @@ Kody błędu:
 3. Invalid password
 4. Something went wrong //pod to podpioł bym też nieznane błędy (bo mogą takie wystąpić)
 5. Password too weak
+6. Invalid data
+7. Database Error
 
 Info 17.01.2022 2:22 
 Opisałem trochę account adress category i product zapewne dalej jest sporo niejasności no ale sam nie do końca wiem jak niektóre objekty powinny wyglądać.
