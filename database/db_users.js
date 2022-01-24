@@ -3,17 +3,23 @@ const typedef = require('../typedef');
 const role = typedef.role;
 
 /**
- * Finding user by id function
+ * Finding password by User ID
  * @param {number} id user ID
- * @return {{name: string, pass: string, salt: string}} user object or undefined if user is not found
+ * @return {{hash: string, salt: string}} User password
  */
-async function get_user_by_id(name) {
-  const result = await Pool.query(`SELECT * FROM USERS WHERE ID='${id}';`);
-  if (result.rows[0]) {
-    return result.rows[0];
+async function get_password_by_user_id(id) {
+  try {
+    const result = await Pool.query(`SELECT hash, salt FROM USERS WHERE ID=$1;`, [id]);
+    if (result.rows[0]) {
+      return result.rows[0];
+    } else {
+      throw new Error('8. User not found');
+    }
+  } catch {
+    throw new Error('7. Database Error');
   }
-  return undefined;
 }
+module.exports.get_password_by_user_id = get_password_by_user_id;
 
 /**
  * Finding user id by username function
@@ -177,12 +183,11 @@ module.exports.check_user_role = check_user_role;
  * @param {string} new_name User Firstname
  * @param {string} new_lastname User Lastame
  * @param {string} new_phone User Phone Number
+ * @param {string} new_email User Email
  * @param {string} new_hash User Hashed Password
  * @param {string} new_salt User salt for Password
- * @param {string} new_email User Email
- * @return {Error | undefined} undefined if change is succesfull otherwise error
  */
-async function change_user_data(id, new_name, new_lastname, new_phone, new_hash, new_salt, new_email) {
+async function change_user_data(id, new_name, new_lastname, new_phone, new_email, new_hash, new_salt) {
   //brakuje lepszego sprawdzenia czy parametr ma być przesłany, a jeśli tak to czy jest on poprawny
   //proponuję stworzenie osobnego pliku z funkcjami sprawdź czy poprawe imie, nazwisko, telefon itp.
   try {
@@ -196,36 +201,35 @@ async function change_user_data(id, new_name, new_lastname, new_phone, new_hash,
         params.push(new_name);
       }
       if (typeof new_lastname === 'string') {
-        if(i>2) query += ',';
+        if (i > 2) query += ',';
         query += ` lastname=$${i++}`;
         params.push(new_lastname);
       }
       if (typeof new_hash === 'string') {
-        if(i>2) query += ',';
+        if (i > 2) query += ',';
         query += ` hash=$${i++}`;
         params.push(new_hash);
       }
       if (typeof new_salt === 'string') {
-        if(i>2) query += ',';
+        if (i > 2) query += ',';
         query += ` salt=$${i++}`;
         params.push(new_salt);
       }
       if (typeof new_email === 'string') {
-        if(i>2) query += ',';
+        if (i > 2) query += ',';
         query += ` email=$${i++}`;
         params.push(new_email);
       }
       if (typeof new_phone === 'string') {
-        if(i>2) query += ',';
+        if (i > 2) query += ',';
         query += ` phone=$${i++}`;
         params.push(new_phone);
       }
       query += ' WHERE id=$1;';
       await Pool.query(query, params);
-      return undefined;
     }
-  } catch (err) {
-    return new Error('7. Database Error');
+  } catch {
+    throw new Error('7. Database Error');
   }
 }
 module.exports.change_user_data = change_user_data;

@@ -19,13 +19,13 @@ router.get('/', auth.restrict_login, async (req, res) => {
     render_obj.user = await database.get_user_info_by_id(req.session.user);
     render_obj.adress = await database.get_adresses_by_user_id(req.session.user);
 
-    render_obj.orders = [ 
+    render_obj.orders = [
         { date: "12-01-2022", price: "200" },
-        { date: "13-02-2077", price: "1337"}
+        { date: "13-02-2077", price: "1337" }
     ];
 
     console.log(render_obj.user.phone);
-    if(render_obj.user){
+    if (render_obj.user) {
         res.render('account', render_obj);
     } else {
         //tutaj trzeba wrócić
@@ -34,31 +34,27 @@ router.get('/', auth.restrict_login, async (req, res) => {
 });
 
 router.post('/edit_user', upload.single(), auth.restrict_login, async (req, res) => {
-    const err = await database.change_user_data(req.session.user, req.body.firstname, req.body.lastname, req.body.phone);
-    if (err) {
-        res.end(err.message+"<br>Err"); // Dostaję pusty err.message więc zostawiam to tak tymczasowo
-    } else {
+    try {
+        await database.change_user_data(req.session.user, req.body.firstname, req.body.lastname, req.body.phone);
         res.end('0. Success');
+    } catch (err) {
+        res.end(err.message);
     }
 });
 router.post('/edit_email', upload.single(), auth.restrict_login, async (req, res) => {
-    const edited_email = req.body.email;
-    console.log(req.body.email);
-    const err = undefined; //funkcja zapisująca w bazie
-    if (err) {
-        res.send(err.message);
-    } else {
-        res.send('0. Success');
+    try {
+        await database.change_user_data(req.session.user, null, null, null, req.body.email);
+        res.end('0. Success');
+    } catch (err) {
+        res.end(err.message);
     }
 });
 router.post('/edit_password', upload.single(), auth.restrict_login, async (req, res) => {
-    const edited_user = req.body.password;
-    //tutaj bardziej skomplikowanie bo jeszcze hashowanie i weryfikacja
-    console.log(req.body.password);
-    const err = undefined; //funkcja zapisująca w bazie
-    if (err) {
-        res.send(err.message);
-    } else {
-        res.send('0. Success');
+    try {
+        await auth.password_validation(req.session.user, req.body.last_password);
+        await auth.change_password(req.session.user, req.body.password);
+        res.end('0. Success');
+    } catch (err) {
+        res.end(err.message);
     }
 });

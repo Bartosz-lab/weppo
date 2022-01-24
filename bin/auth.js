@@ -40,6 +40,48 @@ async function authenticate(name, pass, fn) {
 }
 
 /**
+ * password validation
+ * If function ends wihtout throwing Error, password is correct
+ * @param {number} id User ID
+ * @param {string} pass password
+ */
+async function password_validation(id, pass) {
+  const user = await database.get_password_by_user_id(id);
+
+  // apply the same algorithm to the POSTed password, 
+  // applying the hash against the pass / salt, 
+  // if there is a match we found the user
+  hasher({ password: pass, salt: user.salt }, (err, pass, salt, hash) => {
+    if (err) {
+      throw new Error('4. Something went wrong');
+    }
+    if (hash != user.hash) {
+      throw new Error('3. Invalid password');
+    }
+  });
+}
+module.exports.password_validation = password_validation;
+
+/**
+ * Saving password
+ * If function ends wihtout throwing Error, password is saved correctly
+ * @param {number} id User ID
+ * @param {string} pass password
+ */
+async function change_password(id, pass) {
+  // apply the same algorithm to the POSTed password, 
+  // applying the hash against the pass / salt, 
+  // if there is a match we found the user
+  hasher({ password: pass }, async (err, pass, salt, hash) => {
+    if (err) {
+      throw new Error('4. Something went wrong');
+    }
+    await database.change_user_data(id, null, null, null, null, hash, salt);
+  });
+}
+module.exports.change_password = change_password;
+
+/**
  * new user-customer registration function
  * @param {database.User_info} user_info user object
  * @param {string} email unique email as username 

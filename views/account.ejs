@@ -61,6 +61,15 @@
     <div class = "subcontener">
         Zmiana hasła<br>
         <!-- Formularz wysyłany w tle to znaczy bez odświeżania strony AJAX -->
+        <div class="column" style="width:15%"> Stare hasło: </div>
+        <div class="column" style="line-height: 1.4em;width: 50%">
+            <input type="password" style="width:100%;" name="last_password" id="last_pass"><br>
+            <div class="info" id = "info2"></div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div style="clear:both"></div>
         <div class="column" style="width:15%"> Hasło: </div>
         <div class="column" style="line-height: 1.4em;width: 50%">
             <input type="password" style="width:100%;" name="password" id="pass1"><br>
@@ -152,6 +161,7 @@
         }
         var form = new FormData();
         form.append("password",      document.getElementById('pass1').value);
+        form.append("last_password",      document.getElementById('last_pass').value);
         console.log("Form sent")
         req.send(form);
     }
