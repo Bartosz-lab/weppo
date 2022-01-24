@@ -360,6 +360,18 @@ input:focus::-webkit-input-placeholder{
     color: var(--fg);
 }
 
+textarea {
+    white-space:pre-wrap;
+}
+
+.submissionfield { 
+    width: 90px; 
+    height: 390px; 
+    border: 1px solid #999999; 
+    padding: 5px; 
+    white-space:pre-wrap;
+}
+
 .item-list-wrapper {
     width:25%;
     float:left;
