@@ -22,6 +22,45 @@ async function get_password_by_user_id(id) {
 module.exports.get_password_by_user_id = get_password_by_user_id;
 
 /**
+ * Finding User information by User ID
+ * @param {number} id user ID
+ * @return {User_info}  Returning User_info object
+ */
+ async function get_user_info_by_id(id) {
+  try {
+    const result = await Pool.query(`SELECT firstname, lastname, phone, email FROM users WHERE ID=$1;`, [id]);
+    if (result.rows[0]) {
+      return {
+        name: result.rows[0].firstname,
+        surname: result.rows[0].lastname,
+        phone: result.rows[0].phone,
+        email: result.rows[0].email
+      };
+    }
+    else {
+      throw new Error('8. User not found');
+    }
+  } catch {
+    throw new Error('7. Database Error');
+  }
+}
+module.exports.get_user_info_by_id = get_user_info_by_id
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
  * Finding user id by username function
  * @param {string} username username
  * @return {number | null} user id or null if user is not found
@@ -69,27 +108,7 @@ async function get_user_by_username_for_login(name) {
 }
 module.exports.get_user_by_username_for_login = get_user_by_username_for_login;
 
-/**
- * Finding User information by id function
- * @param {number} id user ID
- * @return {User_info}  Returning User_info object or undefined if user is not found 
- */
-async function get_user_info_by_id(id) {
-  const result = await Pool.query(`SELECT * FROM users WHERE ID='${id}';`);
-  if (result.rows[0]) {
-    let my_User_info = {
-      name: result.rows[0].firstname,
-      surname: result.rows[0].lastname,
-      phone: result.rows[0].phone,
-      email: result.rows[0].email
-    }
-    return (my_User_info);
-  }
-  else {
-    return (undefined);
-  }
-}
-module.exports.get_user_info_by_id = get_user_info_by_id;
+;
 
 /**
  * Add user to database
