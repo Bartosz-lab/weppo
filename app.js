@@ -49,6 +49,10 @@ app.use(function (req, res, next) {
   res.locals.error = '';
   res.locals.user_role = undefined;
   res.locals.role = role;
+  res.locals.orders = [
+    { date: "12-01-2022", price: "200" },
+    { date: "13-02-2077", price: "1337" }
+];;
   
   if (err) res.locals.error = err;
   if (user_role != undefined) res.locals.user_role = user_role;
