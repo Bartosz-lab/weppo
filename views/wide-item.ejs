@@ -27,8 +27,8 @@
                 <input type="submit" value="Usuń z koszyka">
             </form>
         <% } else if ( mode == 2) { %>
-            Ilość: <input type="number" value="1"><br>
-            Cena całkowita: <% price * count %>PLN
+            Ilość: <br><%= count %><br>
+            Cena całkowita: <br><%- price * count %> PLN
         <% } %>
         </div>
         <div style="clear:both"></div>

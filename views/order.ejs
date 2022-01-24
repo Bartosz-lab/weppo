@@ -8,8 +8,15 @@
 
 ID zamówienia: <%- id %><br>
 
-  <% for( var i = 0; i < display.length; i++ ) { %> 
-    <%- include('wide-item', {href: display[i].href, name: display[i].name, price: display[i].price, imgurl: display[i].imgurl, desc: display[i].desc, basket: false}) %>
+  <% for( var i = 0; i < items.length; i++ ) { %> 
+    <%- include('wide-item', {
+      href: items[i].href, 
+      name: items[i].name, 
+      price: items[i].price, 
+      imgurl: items[i].imgurl, 
+      desc: items[i].desc, 
+      count: items[i].count, 
+      mode: 2}) %>
     <% } %>
   <div style="clear:both"></div>
 </div>
