@@ -7,7 +7,7 @@
 <div class ="contener">
 
   <% for( var i = 0; i < display.length; i++ ) { %> 
-    <%- include('wide-item', {href: display[i].href, name: display[i].name, price: display[i].price, imgurl: display[i].imgurl, desc: display[i].desc, basket: true}) %>
+    <%- include('wide-item', {href: display[i].href, name: display[i].name, price: display[i].price, imgurl: display[i].imgurl, desc: display[i].desc, mode: 1}) %>
     <% } %>
   <div style="clear:both"></div>
 </div>

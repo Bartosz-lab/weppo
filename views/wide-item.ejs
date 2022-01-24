@@ -15,17 +15,20 @@
             </div> 
         </div>
         <div style="float:left; width: auto; padding-top: 3em;">
-        <% if( !basket ) { %>
+        <% if( mode == 0 ) { %>
             <form>
                 <input type="submit" value= "Dodaj do Koszyka">
             </form>
-        <% } else { %>
+        <% } else if ( mode == 1) { %>
             <form>
                 Ilość: <input type="number" value="1">
             </form>
             <form>
                 <input type="submit" value="Usuń z koszyka">
             </form>
+        <% } else if ( mode == 2) { %>
+            Ilość: <input type="number" value="1"><br>
+            Cena całkowita: <% price * count %>PLN
         <% } %>
         </div>
         <div style="clear:both"></div>
