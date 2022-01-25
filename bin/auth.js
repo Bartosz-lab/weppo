@@ -81,43 +81,23 @@ async function authenticate(login, pass) {
   return user.id;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  * Saving password
  * If function ends wihtout throwing Error, password is saved correctly
  * @param {number} id User ID
  * @param {string} pass password
  */
-async function change_password(id, pass) {
+ async function change_password(id, pass) {
   // apply the same algorithm to the POSTed password, 
   // applying the hash against the pass / salt, 
   // if there is a match we found the user
-  hasher({ password: pass }, async (err, pass, salt, hash) => {
-    if (err) {
+  const hash_data = await hasher({ password: pass });
+    if (hash_data.err) {
       throw new Error('4. Something went wrong');
     }
-    await database.change_user_data(id, null, null, null, null, hash, salt);
-  });
+    await database.change_user_data(id, null, null, null, null, hash_data.hash, hash_data.salt);
 }
 module.exports.change_password = change_password;
-
-
 
 /**
  * Middleware Function checking if user is logged in
@@ -144,12 +124,16 @@ function restrict_role(role) {
  * @param {http.ServerResponse} res 
  * @param {Function} next 
  */
-  return (req, res, next) => {
-    if (database.check_user_role(req.session.user, role)) {
-      next();
-    } else {
-      req.session.error = '1. Access deined';
-      res.send('NIe posiadasz odpowiedniej roli');
+  return async (req, res, next) => {
+    try {
+      if (await database.check_user_role(req.session.user, role)) {
+        next();
+      } else {
+        throw new Error('1. Access deined');
+      }
+    } catch (err) {
+      req.session.error = err.message;
+      res.redirect('/error');
     }
   }
 }
