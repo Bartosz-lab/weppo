@@ -3,6 +3,17 @@ const typedef = require('../typedef');
 const role = typedef.role;
 
 /**
+ * Throwing errors 
+ * @param {Error} err error
+ */
+ function throw_my_error(err) {
+  if(+err.message[0] >= 0 && +err.message[0] <= 10){
+    throw err;
+  } else {
+    throw new Error('7. Database Error');
+  }
+}
+/**
  * Finding password by User ID
  * @param {number} id user ID
  * @return {{hash: string, salt: string}} User password
@@ -15,8 +26,8 @@ async function get_password_by_user_id(id) {
     } else {
       throw new Error('8. User not found');
     }
-  } catch {
-    throw new Error('7. Database Error');
+  } catch (err) {
+    throw_my_error(err);
   }
 }
 module.exports.get_password_by_user_id = get_password_by_user_id;
@@ -40,8 +51,8 @@ async function get_user_info_by_id(id) {
     else {
       throw new Error('8. User not found');
     }
-  } catch {
-    throw new Error('7. Database Error');
+  } catch (err) {
+    throw_my_error(err);
   }
 }
 module.exports.get_user_info_by_id = get_user_info_by_id
@@ -65,8 +76,8 @@ async function add_user(user) {
       throw new Error('7. Database Error');
     }
     return result.rows[0].id;
-  } catch {
-    throw new Error('7. Database Error');
+  } catch (err) {
+    throw_my_error(err);
   }
 
 }
@@ -84,8 +95,8 @@ async function add_role_to_user(id, role) {
       throw new Error('9. User have this role');
     }
     await Pool.query(`INSERT INTO roles (user_id, role) VALUES ($1, $2)`, [id, role]);
-  } catch {
-    throw new Error('7. Database Error');
+  } catch (err) {
+    throw_my_error(err);
   }
 }
 module.exports.add_role_to_user = add_role_to_user;
@@ -105,8 +116,8 @@ async function check_user_role(id, role) {
       roles.push(result.rows[i].role);
     }
     return (roles.includes(role));
-  } catch {
-    throw new Error('7. Database Error');
+  } catch (err) {
+    throw_my_error(err);
   }
 }
 module.exports.check_user_role = check_user_role;
@@ -116,7 +127,7 @@ module.exports.check_user_role = check_user_role;
  * @param {number} id user ID
  * @return {Object} Object with key named by Role.role and bool value
  */
- async function get_user_roles(id) {
+ async function check_user_roles(id) {
   try {
     const result = await Pool.query(`SELECT role FROM roles WHERE user_id =$1;`, [id]);
     let roles = [];
@@ -131,11 +142,33 @@ module.exports.check_user_role = check_user_role;
     ret_obj[role.Customer] = roles.includes(role.Customer);
   
     return ret_obj;
-  } catch {
-    throw new Error('7. Database Error');
+  } catch (err) {
+    throw_my_error(err);
   }
 }
-module.exports.get_user_roles = get_user_roles;
+module.exports.check_user_roles = check_user_roles;
+
+/**
+ * Finding user by username function returning only information for log in
+ * @param {string} login username
+ * @return {{hash: string, salt: string}} object with id, hash and salt
+ */
+ async function get_user_password(login) {
+  try {
+    const result = await Pool.query(`SELECT id, hash, salt FROM users WHERE username=$1;`, [login]);
+    if (!result.rows[0]) {
+      throw new Error('2. Invalid login');
+    }
+    return {
+      id: result.rows[0].id,
+      hash: result.rows[0].hash,
+      salt: result.rows[0].salt
+    };
+  } catch (err) {
+    throw_my_error(err);
+  }
+}
+module.exports.get_user_password = get_user_password;
 
 
 
@@ -176,26 +209,7 @@ async function get_id_of_user(id) {
   return new Error("6 invalid data");
 }
 
-/**
- * Finding user by username function returning only information for log in
- * @param {string} name username
- * @return {{id: string, hash: string, salt: string}} object with id hash and salt or undefined if user is not found
- */
-async function get_user_by_username_for_login(name) {
-  //powinna zwracać tylko odpowiednie dane patrz wyżej
-  const result = await Pool.query(`SELECT * FROM users WHERE username ='${name}';`);
-  if (result.rows[0]) {
-    let my_result = result.rows[0];
-    let login_info = {
-      id: my_result.id,
-      hash: my_result.hash,
-      salt: my_result.salt
-    };
-    return login_info;
-  }
-  else return (undefined);
-}
-module.exports.get_user_by_username_for_login = get_user_by_username_for_login;
+
 
 ;
 

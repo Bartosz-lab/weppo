@@ -1,5 +1,4 @@
-const hasher = require('pbkdf2-password')();
-
+const hasher = require('../bin/hasher');
 const database = require('../database/database');
 const role = require('../bin/role');
 
@@ -45,55 +44,57 @@ async function register(user_info, login, pass) {
     throw new Error('5. Password too weak');
   }
   // generate hash and salt for password
-  hasher({ password: pass }, async (err, pass, salt, hash) => {
-    if (err) {
-      throw new Error('4. Something went wrong');
-    }
-    const user = {
-      username: login,
-      user_info: user_info,
-      salt: salt,
-      hash: hash
-    };
-    const user_id = await database.add_user(user);
-    await database.add_role_to_user(user_id, role.Customer);
-  });
+  const hash_data = await hasher({ password: pass });
+  if (hash_data.err) {
+    throw new Error('4. Something went wrong');
+  }
+  const user = {
+    username: login,
+    user_info: user_info,
+    salt: hash_data.salt,
+    hash: hash_data.hash
+  };
+  const user_id = await database.add_user(user);
+  await database.add_role_to_user(user_id, role.Customer);
 }
 
-
-
-
-
-
-
 /**
- * logging validation function
- * @param {string} name username
+ * Logging process
+ * If function ends wihtout throwing Error, logging data is correct
+ * @param {string} login username
  * @param {string} pass password
- * @param {Function} fn function to be performed after authorization
- * @return {Function} call given function fn
+ * @returns {number} User ID
  */
-async function authenticate(name, pass, fn) {
-  // query the database for the given username
-  const user = await database.get_user_by_username_for_login(name);
-
-  if (!user) {
-    return fn(new Error('2. Invalid login'));
-  }
+async function authenticate(login, pass) {
+  const user = await database.get_user_password(login);
 
   // apply the same algorithm to the POSTed password, 
   // applying the hash against the pass / salt, 
   // if there is a match we found the user
-  hasher({ password: pass, salt: user.salt }, (err, pass, salt, hash) => {
-    if (err) {
-      return fn(err);
-    }
-    if (hash === user.hash) {
-      return fn(null, user.id);
-    }
-    fn(new Error('3. Invalid password'));
-  });
+  const hash_data = await hasher({ password: pass, salt: user.salt });
+  if (hash_data.err) {
+    throw new Error('4. Something went wrong');
+  }
+  if (hash_data.hash != user.hash) {
+    throw new Error('3. Invalid password');
+  }
+  return user.id;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
