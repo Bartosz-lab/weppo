@@ -51,49 +51,63 @@ router.post('/login',
 
 //choose role
 router.get('/role', auth.restrict_login, async (req, res) => {
-    const usr_roles = await database.get_user_roles(req.session.user);
-    const usr_info = await database.get_user_info_by_id(req.session.user);
-    const number_of_roles = +usr_roles[role.Admin] + usr_roles[role.Seller] + usr_roles[role.Customer];
-    if (number_of_roles >= 2) {
-        res.render('login/roleSwitch', {
-            role: typedef.role,
-            active: usr_roles,
-            name: usr_info.name,
-            surname: usr_info.surname
-        });
-    } else if (number_of_roles > 0) {
-        if (usr_roles[role.Admin]) {
-            req.session.role = role.Admin;
-        } else if (usr_roles[role.Seller]) {
-            req.session.role = role.Seller;
-        } else if (usr_roles[role.Customer]) {
-            req.session.role = role.Customer;
+    try {
+        const usr_roles = await database.get_user_roles(req.session.user);
+        const usr_info = await database.get_user_info_by_id(req.session.user);
+
+        const number_of_roles = +usr_roles[role.Admin] + usr_roles[role.Seller] + usr_roles[role.Customer];
+        if (number_of_roles >= 2) {
+            res.render('login/roleSwitch', {
+                role: typedef.role,
+                active: usr_roles,
+                name: usr_info.name,
+                surname: usr_info.surname
+            });
+        } else if (number_of_roles > 0) {
+            if (usr_roles[role.Admin]) {
+                req.session.role = role.Admin;
+            } else if (usr_roles[role.Seller]) {
+                req.session.role = role.Seller;
+            } else if (usr_roles[role.Customer]) {
+                req.session.role = role.Customer;
+            }
+            const returnUrl = req.query.returnUrl ? req.query.returnUrl : '/';
+            res.redirect(returnUrl);
+        } else {
+            req.session.error = '4. Something went wrong';
+            res.redirect('/error');
         }
-        let returnUrl = req.query.returnUrl ? req.query.returnUrl : '/';
-        res.redirect(returnUrl);
-    } else {
-        req.session.error = '4. Something went wrong';
+    } catch (err) {
+        req.session.error = err.message;
         res.redirect('/error');
     }
 });
 router.post('/role', auth.restrict_login, async (req, res) => {
-    const usr_roles = await database.get_user_roles(req.session.user);
-
-    let usr_role;
-    if (role.Admin == req.body.user_role) {
-        usr_role = role.Admin;
-    } else if (role.Seller == req.body.user_role) {
-        usr_role = role.Seller;
-    } else if (role.Customer == req.body.user_role) {
-        usr_role = role.Customer;
-    }
-
-    if (usr_roles[usr_role]) {
-        req.session.role = parseInt(req.body.user_role);
-        let returnUrl = req.query.returnUrl ? req.query.returnUrl : '/';
-        res.redirect(returnUrl);
-    } else {
-        req.session.error = '4. Something went wrong';
+    try {
+        const selected_role = parseInt(req.body.user_role);
+        const usr_roles = await database.get_user_roles(req.session.user);
+        let usr_role;
+        switch (selected_role) {
+            case role.Admin:
+                usr_role = role.Admin;
+                break;
+            case role.Seller:
+                usr_role = role.Seller;
+                break;
+            case role.Customer:
+                usr_role = role.Customer;
+                break;
+        }
+        if (usr_roles[usr_role]) {
+            req.session.role = selected_role;
+            const returnUrl = req.query.returnUrl ? req.query.returnUrl : '/';
+            res.redirect(returnUrl);
+        } else {
+            req.session.error = '4. Something went wrong';
+            res.redirect('/error');
+        }
+    } catch (err) {
+        req.session.error = err.message;
         res.redirect('/error');
     }
 });
@@ -122,7 +136,4 @@ router.post('/register', (req, res) => {
         req.session.error = err.message;
         res.redirect(req.url);
     }
-
-
-
 });

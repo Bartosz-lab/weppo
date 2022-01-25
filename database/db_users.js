@@ -24,7 +24,7 @@ module.exports.get_password_by_user_id = get_password_by_user_id;
 /**
  * Finding User information by User ID
  * @param {number} id user ID
- * @return {User_info}  User_info object
+ * @return {typedef.User_info}  User_info object
  */
 async function get_user_info_by_id(id) {
   try {
@@ -48,7 +48,7 @@ module.exports.get_user_info_by_id = get_user_info_by_id
 
 /**
  * Add user to database
- * @param {User} user User object to be added to database
+ * @param {typedef.User} user User object to be added to database
  * @return {number} user ID
  */
 async function add_user(user) {
@@ -110,6 +110,34 @@ async function check_user_role(id, role) {
   }
 }
 module.exports.check_user_role = check_user_role;
+
+/**
+ * Finding User roles by id
+ * @param {number} id user ID
+ * @return {Object} Object with key named by Role.role and bool value
+ */
+ async function get_user_roles(id) {
+  try {
+    const result = await Pool.query(`SELECT role FROM roles WHERE user_id =$1;`, [id]);
+    let roles = [];
+
+    for (let i = 0; i < result.rows.length; i++) {
+      roles.push(result.rows[i].role);
+    }
+
+    let ret_obj = {};
+    ret_obj[role.Admin] = roles.includes(role.Admin);
+    ret_obj[role.Seller] = roles.includes(role.Seller);
+    ret_obj[role.Customer] = roles.includes(role.Customer);
+  
+    return ret_obj;
+  } catch {
+    throw new Error('7. Database Error');
+  }
+}
+module.exports.get_user_roles = get_user_roles;
+
+
 
 
 
@@ -174,27 +202,7 @@ module.exports.get_user_by_username_for_login = get_user_by_username_for_login;
 
 
 
-/**
- * Finding User roles by id
- * @param {number} id user ID
- * @return {Role} roles 
- */
-async function get_user_roles(id) {
-  const result = await Pool.query(`SELECT * FROM roles WHERE user_id ='${id}';`);
-  let i = 0;
-  let roles = [];
-  while (result.rows[i]) {
-    roles.push(result.rows[i].role);
-    i++;
-  }
-  let ret_obj = {};
-  ret_obj[role.Admin] = roles.includes(role.Admin);
-  ret_obj[role.Seller] = roles.includes(role.Seller);
-  ret_obj[role.Customer] = roles.includes(role.Customer);
 
-  return ret_obj;
-}
-module.exports.get_user_roles = get_user_roles;
 
 /**
  * Check user role
