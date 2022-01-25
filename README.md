@@ -11,6 +11,7 @@ Kody błędu:
 6. Invalid data
 7. Database Error
 8. User not found
+9. User have this role
 
 Info 17.01.2022 2:22 
 Opisałem trochę account adress category i product zapewne dalej jest sporo niejasności no ale sam nie do końca wiem jak niektóre objekty powinny wyglądać.

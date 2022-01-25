@@ -24,9 +24,9 @@ module.exports.get_password_by_user_id = get_password_by_user_id;
 /**
  * Finding User information by User ID
  * @param {number} id user ID
- * @return {User_info}  Returning User_info object
+ * @return {User_info}  User_info object
  */
- async function get_user_info_by_id(id) {
+async function get_user_info_by_id(id) {
   try {
     const result = await Pool.query(`SELECT firstname, lastname, phone, email FROM users WHERE ID=$1;`, [id]);
     if (result.rows[0]) {
@@ -46,9 +46,70 @@ module.exports.get_password_by_user_id = get_password_by_user_id;
 }
 module.exports.get_user_info_by_id = get_user_info_by_id
 
+/**
+ * Add user to database
+ * @param {User} user User object to be added to database
+ * @return {number} user ID
+ */
+async function add_user(user) {
+  try {
+    //tutaj potrzebne będzie sprawdzanie poprawności danych 
+    // mejl zawiera malpe, phone ma 9 cyfr i 2 myslinki, 
+    // imie i nazwisko z duzej litery sie zaczyna, reszta mala, nie pusty
+    // zmienic phone na text w bazie
+    const result = await Pool.query(
+      `INSERT INTO users (id, username, hash, salt, firstname, lastname, phone, email) VALUES 
+      (DEFAULT, $1, $2, $3, $4, $5, $6, $7 ) RETURNING id;`,
+      [user.username, user.hash, user.salt, user.user_info.name, user.user_info.surname, user.user_info.phone, user.user_info.email]);
+    if (!result.rows[0]) {
+      throw new Error('7. Database Error');
+    }
+    return result.rows[0].id;
+  } catch {
+    throw new Error('7. Database Error');
+  }
 
+}
+module.exports.add_user = add_user;
 
+/**
+ * Add role to user
+ * If function ends wihtout throwing Error, role is added correctly
+ * @param {number} id user id in database
+ * @param {typedef.Role} role role of user from typedef.role
+ */
+async function add_role_to_user(id, role) {
+  try {
+    if (await check_user_role(id, role)) {
+      throw new Error('9. User have this role');
+    }
+    await Pool.query(`INSERT INTO roles (user_id, role) VALUES ($1, $2)`, [id, role]);
+  } catch {
+    throw new Error('7. Database Error');
+  }
+}
+module.exports.add_role_to_user = add_role_to_user;
 
+/**
+ * Check user role
+ * @param {number} id user id in database
+ * @param {typedef.Role} role role of user from typedef.role
+ * @return {bool} true if user have this role
+ */
+async function check_user_role(id, role) {
+  try {
+    const result = await Pool.query(`SELECT role FROM roles WHERE user_id =$1;`, [id]);
+    let roles = [];
+
+    for (let i = 0; i < result.rows.length; i++) {
+      roles.push(result.rows[i].role);
+    }
+    return (roles.includes(role));
+  } catch {
+    throw new Error('7. Database Error');
+  }
+}
+module.exports.check_user_role = check_user_role;
 
 
 
@@ -110,52 +171,9 @@ module.exports.get_user_by_username_for_login = get_user_by_username_for_login;
 
 ;
 
-/**
- * Add user to database
- * @param {User} user User object to be added to database
- * @return {Error|number} error or user ID
- */
-async function add_user(user) {
-  //tutaj potrzebne będzie sprawdzanie poprawności danych 
-  // mejl zawiera malpe, phone ma 9 cyfr i 2 myslinki, 
-  // imie i nazwisko z duzej litery sie zaczyna, reszta mala, nie pusty
-  // zmienic phone na text w bazie
-  try {
-    const result = await Pool.query(`INSERT INTO users VALUES (DEFAULT, 
-    '${user.username}', '${user.hash}', '${user.salt}', '${user.user_info.name}',
-    '${user.user_info.surname}','${user.user_info.phone}','${user.user_info.email}' ) RETURNING id;`);
-    if (result.rows[0]) {
-      return result.rows[0].id;
-    }
-    return new Error("6 invalid data");
-  } catch (err) {
-    return err;
-  }
 
-}
-module.exports.add_user = add_user;
 
-/**
- * Add role to user
- * @param {number} id user id in database
- * @param {typedef.Role} role role of user from typedef.role
- * @return {Error} error or undefined if role is saved correctly
- */
-async function add_role_to_user(id, role) {
-  //Sprawdzamy czy user juz nie ma tej roli
-  const result = await Pool.query(`SELECT * FROM roles WHERE user_id ='${id}';`);
-  let i = 0;
-  let roles = [];
-  while (result.rows[i]) {
-    roles.push(result.rows[i].role);
-    i++;
-  }
-  if (roles.includes(role)) return (new Error("uzytkownik juz ma taka role"));
-  //Dodajemy role
-  const result2 = await Pool.query(`INSERT INTO roles (user_id, role) VALUES ('${id}', '${role}')`);
-  return undefined;
-}
-module.exports.add_role_to_user = add_role_to_user;
+
 /**
  * Finding User roles by id
  * @param {number} id user ID

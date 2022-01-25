@@ -105,22 +105,24 @@ router.get('/register', function (req, res) {
     });
 });
 router.post('/register', (req, res) => {
-    auth.register({
-        name: req.body.firstname,
-        surname: req.body.lastname,
-        phone: req.body.phone,
-        email: req.body.login,
-    },
-        req.body.login, req.body.password, err => {
-            if (err) {
-                req.session.error = err.message;
-                res.redirect(req.url);
-            } else {
-                req.session.error = '0. Success';
+    try {
+        const user_info = {
+            name: req.body.firstname,
+            surname: req.body.lastname,
+            phone: req.body.phone,
+            email: req.body.login,
+        };
+        auth.register(user_info, req.body.login, req.body.password);
 
-                // redirect to url before logging
-                let returnUrl = req.query.returnUrl ? `/login?returnUrl=${req.query.returnUrl}` : '/login';
-                res.redirect(returnUrl);
-            }
-        });
+        req.session.error = '0. Success';
+        // redirect to url before logging
+        const returnUrl = req.query.returnUrl ? `/login?returnUrl=${req.query.returnUrl}` : '/login';
+        res.redirect(returnUrl);
+    } catch (err) {
+        req.session.error = err.message;
+        res.redirect(req.url);
+    }
+
+
+
 });
