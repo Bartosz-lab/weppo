@@ -1,8 +1,8 @@
-<div class="prodcontener" onclick="location.href='/p/<%= id %>';">
-    <div style="float:left">
+<div class="prodcontener"><!-- PRODCONTENER NIE MOŻE MIEĆ ZDARZENIA ONCLICK BO FORMULARZE NIE BĘDĄ DZIAŁAĆ -->
+    <div style="float:left" onclick="location.href='/p/<%= id %>';"> 
             <img src=" <%= imgurl %> ">
     </div>
-    <div style="float:left; width: 50%; padding-top: 1em;" >
+    <div style="float:left; width: 50%; padding-top: 1em;" onclick="location.href='/p/<%= id %>';">
         <div class="item-list-title"> 
             <%= name %>  
         </div>
