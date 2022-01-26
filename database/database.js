@@ -1,4 +1,3 @@
-const db_users = require('./db_users');
 const typedef = require('../typedef');
 const role = typedef.role;
 const Filter_type = typedef.filter_type;
@@ -6,13 +5,13 @@ const Filter_type = typedef.filter_type;
 
 //to jest do przerobienia aby każda funkcja była dodawana do export w miejscu jej definicji będzie czytelniej
 module.exports = {
+    ...require('./db_users'),
     get_user_by_username: get_user_by_username,
     get_id_of_user: get_id_of_user,
     check_user_role: check_user_role,
     get_adresses_by_user_id: get_adresses_by_user_id,
     get_adress_by_id: get_adress_by_id,
 }
-Object.assign(module.exports, db_users);
 //Uwaga nie wszustkie funkcje mają poprawnie opisane params i opisy tego co powinny robić.
 //W folderze database znajdują się tylko funkcje który mają poprawny opis (w sensie tego co robią [jeśli uważacie że moj styl opisu ich to opiszcie ładniej zachowójąc znaczenie])
 
