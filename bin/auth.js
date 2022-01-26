@@ -2,13 +2,6 @@ const hasher = require('../bin/hasher');
 const database = require('../database/database');
 const role = require('../bin/role');
 
-module.exports = {
-  restrict_login: restrict_login,
-  restrict_role: restrict_role,
-  authenticate: authenticate,
-  register: register
-}
-
 /**
  * password validation
  * If function ends wihtout throwing Error, password is correct
@@ -40,7 +33,7 @@ module.exports.password_validation = password_validation;
  * @param {string} pass user password in plain text
  */
 async function register(user_info, login, pass) {
-  if (!password_validation(pass)) {
+  if (!password_strength(pass)) {
     throw new Error('5. Password too weak');
   }
   // generate hash and salt for password
@@ -57,6 +50,7 @@ async function register(user_info, login, pass) {
   const user_id = await database.add_user(user);
   await database.add_role_to_user(user_id, role.Customer);
 }
+module.exports.register = register;
 
 /**
  * Logging process
@@ -80,6 +74,7 @@ async function authenticate(login, pass) {
   }
   return user.id;
 }
+module.exports.authenticate = authenticate;
 
 /**
  * Saving password
@@ -113,6 +108,7 @@ function restrict_login(req, res, next) {
     res.redirect('/login?returnUrl=' + req.originalUrl);
   }
 }
+module.exports.restrict_login = restrict_login;
 
 /**
  * Middleware Function checking if logged_user has a role
@@ -137,12 +133,13 @@ function restrict_role(role) {
     }
   }
 }
+module.exports.restrict_role = restrict_role;
 
 /**
  * Function verifies password strength
  * @param {string} pass password for validate
  * @return {bool} function return true if password is strong enough
  */
-function password_validation(pass) {
+function password_strength(pass) {
   return true;
 }
