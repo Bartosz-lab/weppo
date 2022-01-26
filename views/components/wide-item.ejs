@@ -7,12 +7,14 @@
             <%= name %>  
         </div>
         <br>
+        <% if( mode == 0 ) { %>
         <div class="item-list-desc"> 
             <% for(let param of params) { %>
                 <div> <%= param.key %>: <%= param.value %> </div>
             <% } %>
         </div>
-        <br>       
+        <br>  
+        <% } %>     
         <div class="item-list-title"> 
             <%= price %>zł
         </div> 
@@ -25,7 +27,7 @@
             </form>
         <% } else if ( mode == 1) { %>
             <form>
-                Ilość: <input type="number" value="1">
+                Ilość: <input type="number" value="<%= quantity %>">
             </form>
             <form>
                 <input type="submit" value="Usuń z koszyka">

@@ -236,6 +236,29 @@ module.exports.get_position_of_subcategory = get_position_of_subcategory;
 }
 module.exports.get_recemended_products_in_subcategory = get_recemended_products_in_subcategory;
 /**
+ * Get 
+ * @param {Number} id user ID
+ * @return {typedef.Product_for_basket[]} list of products to display in list
+ */
+ async function get_products_to_basket(id) {
+    return [
+        { id: 1, name: "Komp", imgurl: "images/test.png", price: 5000, quantity: 3 },
+        { id: 2, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.AFt6jAmiSg_OdO67WkA0CgHaD3%26pid%3DApi&f=1", desc: "Lorem Ipsum", price: 5000, quantity: 2 },
+        { id: 3, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, quantity: 2 },
+        { id: 4, name: "Komp", imgurl: "images/test.png", price: 5000, quantity: 1 },
+        { id: 5, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.progarchives.com%2Fwallpapers%2FRUSHCOLLAGE.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000, quantity: 2 }]
+}
+module.exports.get_products_to_basket = get_products_to_basket;
+/**
+ * Get 
+ * @param {Number} id product ID
+ * @return {typedef.Product_for_basket} 
+ */
+ async function get_product_to_basket(id) {
+    return { id: 1, name: "Komp", imgurl: "images/test.png", price: 5000 };
+}
+module.exports.get_product_to_basket = get_product_to_basket;
+/**
  * Update 
  * @param {typedef.Product} product
  */

@@ -40,7 +40,8 @@ router.get('/:id', async (req, res) => {
             page: page,
             products: await database.get_product_by_subcategory(req.params.id,sort_by, per_page, page, req.query['price-min'], req.query['price-max'], req.query['producer'], search_conds),
             filters: filters,
-            subcat_info: await database.get_position_of_subcategory(req.params.id)
+            subcat_info: await database.get_position_of_subcategory(req.params.id),
+            recommended: await database.get_recemended_products_in_subcategory(req.params.id)
         };
         res.render('products_list/products_list', render_obj);
     } catch (err) {

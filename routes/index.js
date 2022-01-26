@@ -48,16 +48,4 @@ router.get('/search', (req, res) => {
   });
 })
 
-router.get('/basket', (req, res) => {
-  res.render('basket', { 
-    display: display,
-    name: 'Jan',
-    surname: 'Kowalski',
-    roles: [
-      "Administrator",
-      "Klient"
-    ]
-  });
-})
-
 module.exports = router;
