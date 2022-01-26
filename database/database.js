@@ -243,3 +243,25 @@ module.exports.get_recemended_products_in_subcategory = get_recemended_products_
 
 }
 module.exports.update_product = update_product;
+
+/**
+ *  
+ * 
+ */
+ async function get_categories() {
+    return [{id: 1, val: "dyski"},{id: 2, val: "komputery"},]
+}
+module.exports.get_categories = get_categories;
+/**
+ *  
+ * 
+ */
+ async function get_subcategories() {
+    tab =  [{id: 1, cat_id: 1, val: "hdd"},
+            {id: 3, cat_id: 2, val: "PC"},
+            {id: 2, cat_id: 1, val: "ssd"}, 
+            {id: 4, cat_id: 2, val: "Laptop"}];
+
+    return tab.sort((a, b) => (a.cat_id > b.cat_id) ? 1 : ((a.cat_id == b.cat_id) ? ((a.id > b.id) ? 1 : -1) : -1));
+}
+module.exports.get_subcategories = get_subcategories;
