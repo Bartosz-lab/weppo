@@ -1,0 +1,19 @@
+<div class="filter-bar">
+    <form>
+        Filtry <br><br>
+
+        Cena:<br>
+        Od: <input type="number">
+        Do: <input type="number">
+
+        <i>Tu będzie tego więcej</i>
+        <% for(filter of filters) { %>
+            <%= JSON.stringify(filter) %>
+        <% } %>   
+
+        <!-- Wysyłane getem  jeśli filter jest enumem to ile wybranych wartości tyle razy go dodajesz, jeśli typu numerycznego to do nazwy doklejasz -min -max np. dla price  price-min=10&price-max=100-->
+
+
+        <br><br><input type="submit" value = "Filtruj">
+    </form>
+  </div>

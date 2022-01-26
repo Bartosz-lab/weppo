@@ -1,21 +1,66 @@
 //Poprawnie Opisane
 /**
  * @typedef {Object} User_info
- * @property {string} name name of user
- * @property {string} surname surname of user
- * @property {string} phone phone number
- * @property {string} email email
+ * @property {String} name name of user
+ * @property {String} surname surname of user
+ * @property {String} phone phone number
+ * @property {String} email email
  */
 /** 
- * @typedef  User
- * @property {number} id unique ID
- * @property {string} username unique username 
- * @property {string} hash hashed password
- * @property {string} salt salt for hash function
+ * @typedef  {Object} User
+ * @property {Number} id unique ID
+ * @property {String} username unique username 
+ * @property {String} hash hashed password
+ * @property {String} salt salt for hash function
  * @property {User_info} user_info information about user
  */
+
+
+/** 
+ * @typedef  {Object} Product_for_list 
+ * @property {Number} id unique ID
+ * @property {String} name Product name
+ * @property {String} imgurl URL path to photos
+ * @property {Number} price Product price
+ * @property {Param[]} params First 4 params of product
+ */
+/** 
+ * @typedef  {Object} Param 
+ * @property {String} key Param name
+ * @property {String} value Param value
+ */
+
+
+/** 
+ * @typedef  {Object} Filter 
+ * @property {Number} id Filter ID
+ * @property {String} name Filter name
+ * @property {Filter_type} type type of Filter
+ * @property {Filter_option[]} options Avaiable options
+ */
+/** 
+ * @typedef  {Object} Filter_option 
+ * @property {String} name Option name
+ * @property {String} sort_order Sort order value
+ */
 /**
- * @typedef {number} Role
+ * @typedef {String} Filter_type
+ **/
+/**
+ * @enum {Filter_type}
+ */
+const filter_type = {
+    bool: 'bool',
+    enum: 'enum',
+    number: 'number'
+}
+module.exports.filter_type = filter_type;
+
+
+
+
+/**
+ * @typedef {Number} Role
  **/
 
 /**
@@ -26,30 +71,44 @@ const role = {
     Seller: 1,
     Customer: 2
 }
-module.exports = { role: role};
+module.exports.role = role;
+/**
+ * @typedef {String} Sort
+ **/
+
+/**
+ * @enum {Sort}
+ */
+const sort = {
+    price_asc: 'price_asc',
+    price_desc: 'price_desc',
+    name_asc: 'name_asc',
+    name_desc: 'name_desc',
+}
+module.exports.sort = sort;
 
 
 //Do Opisania
 /** 
  * @typedef  Adress Michał powinien tu dokładny opis dać jak wygląda adres
- * @property {number} id unique ID
- * @property {string} user_id
- * @property {string} street
- * @property {string} home_number
- * @property {string} flat_number
+ * @property {Number} id unique ID
+ * @property {String} user_id
+ * @property {String} street
+ * @property {String} home_number
+ * @property {String} flat_number
  * itp tutaj trzeba opisać
  */
 /** 
  * @typedef  Product Michał powinien tu dokładny opis dać jak wygląda produkt
- * @property {number} id unique ID
- * @property {string} name
+ * @property {Number} id unique ID
+ * @property {String} name
  * @property {Object} proporties
- * @property {string} description
- * @property {string} price
+ * @property {String} description
+ * @property {String} price
  * itp tutaj trzeba opisać
  */
 /** 
  * @typedef  Orders 
- * @property {number} id unique ID
+ * @property {Number} id unique ID
  * itp tutaj trzeba opisać
  */
