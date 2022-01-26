@@ -28,9 +28,11 @@
         <% } else if ( mode == 1) { %>
             <form>
                 Ilość: <input type="number" value="<%= quantity %>">
+                //aktualizacja wartości za pomocą AJAX, jeśli 0 to usuwa
             </form>
             <form>
                 <input type="submit" value="Usuń z koszyka">
+                //aktualizacja wartości za pomocą AJAX, wywołanie z 0
             </form>
         <% } else if ( mode == 2) { %>
             Ilość: <br><%= count %><br>

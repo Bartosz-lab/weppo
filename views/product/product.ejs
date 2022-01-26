@@ -19,7 +19,7 @@
 
       <div class="column" style="width:40%">
         <div class="main-page-title">
-          <%= product.id %>:
+          <span id="product_id"><%= product.id %></span>:
           <% if(editable) { %>
           <input type="text" name="name" value="<%= product.name %>">
           <% } else { %>
@@ -52,9 +52,8 @@
           </select>
         </div>
         <% } else { %>
-        <form>
-          <input type="submit" value="Dodaj do koszyka">
-        </form>
+          Ilość: <input type="number" name="quantity" id="quantity" value=1>
+          <input type="submit" value="Dodaj do koszyka" onclick="Add_to_basket()">
         <% } %>
         <br><br>
 
@@ -96,7 +95,7 @@
 </div>
 <%- include('../template/footer') %>
 </body>
-<% if(editable) { %>
+<% //if(editable) { %>
 <script>
     async function postData(url = '', data = {}) {
       const response = await fetch(url, {
@@ -110,15 +109,24 @@
     }
   // =========================== params ====================================
     let subcat = document.getElementById('subcat_id');
+    let product_id = document.getElementById('product_id');
+    let quantity = document.getElementById('quantity');
 
     subcat.onchange = _ => {
         postData('/p/params', {id: subcat.value}).then(data => {
             console.log(data);
         });
     };
-    //tutaj jest przykład zgrabniejszego wykożystania AJAX 
+    function Add_to_basket()  {
+      console.log(product_id.innerText);
+      postData('/basket/update', {id: product_id.innerText, quantity: quantity.value}).then(data => {
+            console.log(data);
+        });
+
+    };
+    //tutaj jest przykład zgrabniejszego wykorzystania AJAX 
     //trzeba jeszcze przekonwerować zwracane dane na wyświetlający się formularz
 </script>
-<% } %>
+<% //} %>
 
 </html>

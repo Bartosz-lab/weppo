@@ -259,6 +259,13 @@ module.exports.get_products_to_basket = get_products_to_basket;
 }
 module.exports.get_product_to_basket = get_product_to_basket;
 /**
+ * add 
+ * @param {Number} id product ID
+ */
+ async function add_product_to_basket(id) {
+}
+module.exports.add_product_to_basket = add_product_to_basket;
+/**
  * Update 
  * @param {typedef.Product} product
  */
