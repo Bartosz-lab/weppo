@@ -5,7 +5,7 @@ const Filter_type = typedef.filter_type;
 
 
 //to jest do przerobienia aby każda funkcja była dodawana do export w miejscu jej definicji będzie czytelniej
- module.exports = {
+module.exports = {
     get_user_by_username: get_user_by_username,
     get_id_of_user: get_id_of_user,
     check_user_role: check_user_role,
@@ -30,7 +30,7 @@ const pool = require('./db_pool');
  */
 async function get_user_by_username(name) {
     const result = await pool.query(`SELECT * FROM USERS WHERE USERNAME='${name}';`);
-    if(result.rows[0]) {
+    if (result.rows[0]) {
         return result.rows[0];
     }
     return undefined;
@@ -40,9 +40,9 @@ async function get_user_by_username(name) {
  * @param {number} id user ID
  * @return {{name: string, pass: string, salt: string}} user object or undefined if user is not found
  */
- async function get_user_by_id(name) {
+async function get_user_by_id(name) {
     const result = await pool.query(`SELECT * FROM USERS WHERE ID='${id}';`);
-    if(result.rows[0]) {
+    if (result.rows[0]) {
         return result.rows[0];
     }
     return undefined;
@@ -53,10 +53,10 @@ async function get_user_by_username(name) {
  * @param {string} username username
  * @return {number | null} user id or null if user is not found
  */
- async function get_id_of_user(username) {
+async function get_id_of_user(username) {
     const result = await pool.query(`SELECT * FROM users WHERE username ='${username}';`);
-    if(result.rows[0]) {
-      return result.rows[0].id;
+    if (result.rows[0]) {
+        return result.rows[0].id;
     }
     return new Error("6 invalid data");
 }
@@ -67,14 +67,14 @@ module.exports.get_id_of_user = get_id_of_user;
  * @param {number} id ID
  * @return {string | null} username or null if user is not found
  */
- async function get_id_of_user(id) {
+async function get_id_of_user(id) {
     const result = await pool.query(`SELECT * FROM users WHERE id ='${id}';`);
-    if(result.rows[0]) {
-      return result.rows[0].username;
+    if (result.rows[0]) {
+        return result.rows[0].username;
     }
     return new Error("6 invalid data");
 }
-  
+
 
 /**
  * Check user role
@@ -88,13 +88,13 @@ module.exports.get_id_of_user = get_id_of_user;
  * @param {number} role 0 - admin, 1 - seller, 3 - client
  * @return {bool} true if user have this role
  */
- async function check_user_role(id, role) {
+async function check_user_role(id, role) {
     const result = await pool.query(`SELECT * FROM roles WHERE user_id ='${id}';`);
     let i = 0;
     let roles = [];
     while (result.rows[i]) {
-      roles.push(result.rows[i].role);
-      i++;
+        roles.push(result.rows[i].role);
+        i++;
     }
     return (roles.includes(role));
 }
@@ -105,14 +105,14 @@ module.exports.check_user_role = check_user_role;
  * @param {number} id user id in database
  * @return {Adress[]} 
  */
- async function get_adresses_by_user_id(id) {
-     return [{
-         ul: "Krakowska",
-         miasto: "Wroclaw" 
-     },
-     {
+async function get_adresses_by_user_id(id) {
+    return [{
+        ul: "Krakowska",
+        miasto: "Wroclaw"
+    },
+    {
         ul: "Wroclawska",
-        miasto: "Krakow" 
+        miasto: "Krakow"
     }]
 
 }
@@ -121,12 +121,12 @@ module.exports.check_user_role = check_user_role;
  * @param {number} id adress id in database
  * @return {Adress[]} 
  */
- async function get_adress_by_id(id) {
+async function get_adress_by_id(id) {
 
 }
 
 module.exports.get_products_by_category = get_products_by_category;
-async function get_products_by_category(id, number, start, type ) {
+async function get_products_by_category(id, number, start, type) {
     //kategoria, ile zwrócić, od jakiego zacząć, typ sortowania
 }
 
@@ -148,22 +148,48 @@ async function get_product_by_subcategory(id, sort_by, per_page, page, min_price
     // uprzednio je sortując w odpowiednim typie i zwraca produkty na określoną stronę tzn.
     // page = 1 zwraca produkty 1-> per_page (zakładam liczenie od 1)
     // page = 2 zwraca produkty per_page+1-> 2*per_page (zakładam liczenie od 1)
-   return [
-        { id: 1, name: "Komp", imgurl: "images/test.png",  price: 5000, params: [{key: 'dysk', value: 100}]},
+    return [
+        { id: 1, name: "Komp", imgurl: "images/test.png", price: 5000, params: [{ key: 'dysk', value: 100 }] },
         { id: 2, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.AFt6jAmiSg_OdO67WkA0CgHaD3%26pid%3DApi&f=1", desc: "Lorem Ipsum", price: 5000, params: [] },
-        { id: 3, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, params: [{key: 'dysk', value: 100}] },
-        { id: 4, name: "Komp", imgurl: "images/test.png",  price: 5000, params: [{key: 'dysk', value: 100}] },
-        { id: 5, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.progarchives.com%2Fwallpapers%2FRUSHCOLLAGE.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000, params: [{key: 'dysk', value: 100}] },
-        { id: 6, name: "Komp", imgurl: "images/test.png",  price: 5000, params: [{key: 'dysk', value: 100}] },
-        { id: 7, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.9y2kjK5P_qFYJq3CMIMCcgHaHa%26pid%3DApi&f=1", desc: "Lorem Ipsum", price: 5000, params: [{key: 'dysk', value: 100}] },
-        { id: 8, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, params: [{key: 'dysk', value: 100}] },
-        { id: 9, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.shortlist.com%2Fmedia%2Fimages%2F2019%2F05%2Fthe-50-greatest-rock-albums-ever-3-1556678339-s1A3-column-width-inline.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000, params: [{key: 'dysk', value: 100}] },
-        { id: 10, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.redroll.com%2Fwp-content%2Fuploads%2F2018%2F07%2Fprogrock1.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000, params: [{key: 'dysk', value: 100}] },
-        { id: 11, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, params: [{key: 'dysk', value: 100}] },
-        { id: 12, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, params: [{key: 'dysk', value: 100}] }
-      ] 
+        { id: 3, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 4, name: "Komp", imgurl: "images/test.png", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 5, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.progarchives.com%2Fwallpapers%2FRUSHCOLLAGE.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 6, name: "Komp", imgurl: "images/test.png", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 7, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.9y2kjK5P_qFYJq3CMIMCcgHaHa%26pid%3DApi&f=1", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 8, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 9, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.shortlist.com%2Fmedia%2Fimages%2F2019%2F05%2Fthe-50-greatest-rock-albums-ever-3-1556678339-s1A3-column-width-inline.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 10, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.redroll.com%2Fwp-content%2Fuploads%2F2018%2F07%2Fprogrock1.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 11, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 12, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] }
+    ]
 }
 module.exports.get_product_by_subcategory = get_product_by_subcategory;
+/**
+ * Get product
+ * @param {Number} id Product ID
+ * @return {typedef.Product} Product object
+ */
+async function get_product_by_id(id) {
+    return {
+        id: 1,
+        subcat_id: 1,
+        name: "Wasteland",
+        price: 50,
+        desc: "I'm your lie\n\
+    I am your pretending\n\
+    I'm the cause\n\
+    Of your shame and anger<br>\
+    \n\
+    I'm your crime\n\
+    Swept under the carpet\n\
+    Your vanity\n\
+    With all consequences",
+        imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.angrymetalguy.com%2Fwp-content%2Fuploads%2F2018%2F09%2FPress_Cover_01-1.jpg&f=1&nofb=1",
+        brand: "Kajko i Kokosz",
+        params: [{ key: 'dysk', value: 100 }, { key: 'koło', value: 300 }]
+    }
+}
+module.exports.get_product_by_id = get_product_by_id;
 
 /**
  * Get list of products
@@ -172,8 +198,8 @@ module.exports.get_product_by_subcategory = get_product_by_subcategory;
  */
 async function get_filters_by_subcategory(id) {
     // zwraca tablicę objektów filtrów dla danej podkategorii
-    return [{id: 1, name: 'dysk', type: Filter_type.enum, options: [{name: '100', sort_order: '1'},{name: '200', sort_order: '2'}]},
-    {id: 2, name: 'koła', type: Filter_type.enum, options: [{name: '100', sort_order: '1'},{name: '200', sort_order: '2'}]}]
+    return [{ id: 1, name: 'dysk', type: Filter_type.enum, options: [{ name: '100', sort_order: '1' }, { name: '200', sort_order: '2' }] },
+    { id: 2, name: 'koła', type: Filter_type.enum, options: [{ name: '100', sort_order: '1' }, { name: '200', sort_order: '2' }] }]
 }
 module.exports.get_filters_by_subcategory = get_filters_by_subcategory;
 /**
@@ -182,6 +208,38 @@ module.exports.get_filters_by_subcategory = get_filters_by_subcategory;
  * @return {{category_id: Number, category_name: String, id: Number, name: String}} list of Filters with his options
  */
 async function get_position_of_subcategory(id) {
-    return {category_id: 1, category_name: "Podzespoły", id: id, name: "Dyski"} ;
+    return { category_id: 1, category_name: "Podzespoły", id: id, name: "Dyski" };
 }
 module.exports.get_position_of_subcategory = get_position_of_subcategory;
+
+/**
+ * Get 
+ * @param {Number} id Subcategory ID
+ * @param {{id:Number, value: (String[] | String)}[]} search_conds Search contitionals
+ * @return {typedef.Product_for_list[]} list of products to display in list
+ */
+ async function get_recemended_products_in_subcategory(id) {
+    return [
+        { id: 1, name: "Komp", imgurl: "images/test.png", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 2, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.AFt6jAmiSg_OdO67WkA0CgHaD3%26pid%3DApi&f=1", desc: "Lorem Ipsum", price: 5000, params: [] },
+        { id: 3, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 4, name: "Komp", imgurl: "images/test.png", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 5, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.progarchives.com%2Fwallpapers%2FRUSHCOLLAGE.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 6, name: "Komp", imgurl: "images/test.png", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 7, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.9y2kjK5P_qFYJq3CMIMCcgHaHa%26pid%3DApi&f=1", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 8, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 9, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.shortlist.com%2Fmedia%2Fimages%2F2019%2F05%2Fthe-50-greatest-rock-albums-ever-3-1556678339-s1A3-column-width-inline.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 10, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.redroll.com%2Fwp-content%2Fuploads%2F2018%2F07%2Fprogrock1.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 11, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
+        { id: 12, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] }
+    ]
+}
+module.exports.get_recemended_products_in_subcategory = get_recemended_products_in_subcategory;
+/**
+ * Update 
+ * @param {typedef.Product} product
+ */
+ async function update_product(product) {
+
+}
+module.exports.update_product = update_product;

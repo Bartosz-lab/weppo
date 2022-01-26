@@ -3,43 +3,53 @@ const router = express.Router();
 module.exports = router;
 
 const database = require('../database/database');
+const typedef = require('../typedef');
+const Role = typedef.role;
 
 router.get('/', (req, res) => {
     res.redirect('/');
 });
 
 router.get('/:id',  async (req, res) => {
-    //strona produktu
-    /**
-     * Powinna być cena oraz cała reszta informacji wraz z własnościami i ich nazwami
-     *  Przekazywany objekt do widoku 
-     *     product = typ{Product} - definicja w database
-     *     proporties -nie wiem czy tu są potrzebne daj znać
-     */
+    try {
+        const product = await database.get_product_by_id(req.params.id);
+        const render_obj = {
+            product: product,
+            recommended: await database.get_recemended_products_in_subcategory(product.subcat_id),
+            subcat_info: await database.get_position_of_subcategory(product.subcat_id)
+        }
+        res.render('product/product', render_obj);
+    } catch (err) {
+        req.session.error = err.message;
+        res.redirect('/error');
+    }
+});
+router.post('/',  async (req, res) => {
+    try {
+        const filters = await database.get_filters_by_subcategory(req.body.subcat_id);
+        let params = [];
+        for (const filter of filters) {
+            if(req.query[filter.name]) {
+                params.push({id: filter.id, value: req.query[filter.name]});
+            } 
+        }
+        
+        const product = {
+            id: req.body.id,
+            subcat_id: req.body.subcat_id,
+            name: req.body.name,
+            price: req.query.price,
+            desc: req.body.desc,
+            imgurl: req.body.imgurl,
+            brand: req.query.brand,
+            params: params
+        }
+        await database.update_product(product);
+        req.session.error = '0. Success';
+        res.redirect(`p/${req.body.id}`);
 
-     const render_obj = {};
-     render_obj.product = await database.get_products_by_category(req.params.id);
-     render_obj.proporties = await database.get_proporties_by_subcategory(req.params.id);
-    res.render('product', {
-        id: req.params.id,
-        editable: false, //widok dla admina z edycją
-        name: "Wasteland",
-        price: 50,
-        imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.angrymetalguy.com%2Fwp-content%2Fuploads%2F2018%2F09%2FPress_Cover_01-1.jpg&f=1&nofb=1",
-        desc: "I'm your lie\n\
-                I am your pretending\n\
-                I'm the cause\n\
-                Of your shame and anger<br>\
-                \n\
-                I'm your crime\n\
-                Swept under the carpet\n\
-                Your vanity\n\
-                With all consequences",
-        display: [
-            { href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum Lorem Ipsum  Lorem Ipsum", price: 5000 },
-            { href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.AFt6jAmiSg_OdO67WkA0CgHaD3%26pid%3DApi&f=1", desc: "Lorem Ipsum", price: 5000 },
-            { href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000 },
-            { href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum Lorem Ipsum  Lorem Ipsum", price: 5000 }
-        ]
-    });
+    } catch (err) {
+        req.session.error = err.message;
+        res.redirect(`p/${req.body.id}`);
+    }
 });

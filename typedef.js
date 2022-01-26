@@ -25,6 +25,17 @@
  * @property {Param[]} params First 4 params of product
  */
 /** 
+ * @typedef  {Object} Product 
+ * @property {Number} id unique ID
+ * @property {Number} subcat_id Subcategory ID
+ * @property {String} name Product name
+ * @property {Number} price Product price
+ * @property {String} desc Product description
+ * @property {String} imgurl URL path to photos
+ * @property {String} brand Product brand
+ * @property {Param[]} params All params of product
+ */
+/** 
  * @typedef  {Object} Param 
  * @property {String} key Param name
  * @property {String} value Param value
