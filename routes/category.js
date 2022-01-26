@@ -10,6 +10,22 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
+    try {
+        res.render('products_list/products_list');
+    } catch (err) {
+        req.session.error = err.message;
+        res.redirect('/error');
+    }
+
+
+
+
+
+
+
+
+
+
     //strona kategorii
     /**
      * Tutaj powinno być wyświetlane określona liczba produktów z wybranej kategorii powiedzmy domyslnie 40 (możemy umożliwić userowi zmianę wtedy wysłaj w GET jakąś zmienną z taką daną)
@@ -25,12 +41,12 @@ router.get('/:id', async (req, res) => {
      *     proporties = zwraca własności po jakich może się odbywać sortowanie w tej kategorii do uzgodnienia z michałem
      */
 
-    const render_obj = {};
-    render_obj.product = await database.get_products_by_category(req.params.id);
-    render_obj.proporties = await database.get_proporties_by_subcategory(req.params.id);
-    //render_obj. ile na stronie = 40
-    //render_obj. reszta informacji po jakich było sortowanie i wyszukiwanie
-    res.send('kategoria o id:' + req.params.id);
+    // const render_obj = {};
+    // render_obj.product = await database.get_products_by_category(req.params.id);
+    // render_obj.proporties = await database.get_proporties_by_subcategory(req.params.id);
+    // //render_obj. ile na stronie = 40
+    // //render_obj. reszta informacji po jakich było sortowanie i wyszukiwanie
+    // res.send('kategoria o id:' + req.params.id);
 });
 
 //tu powinna być obsługa podkategorii

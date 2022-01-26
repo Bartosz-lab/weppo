@@ -32,6 +32,9 @@ router.get('/', function(req, res, next) {
     ]
   });
 });
+router.get('/error', function(req, res, next) {
+  res.send(res.locals.error);
+});
 
 router.get('/search', (req, res) => {
   res.render('products', { 
