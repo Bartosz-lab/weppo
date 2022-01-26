@@ -61,13 +61,15 @@
 
 <div class="contener">
     Polecamy również:<br><br>
-    <% for(let product of recommended) { 
-        product.mode = 0; %>
+    <% for(i in recommended) { 
+        recommended[i].mode = 0; %>
         <!-- do zmiany z wide-item na item dodałem tak bo wide-item ma już poprawnie zdefiniowane zmienne -->
-        <%- include('../products_list/wide-item', product) %>
+        <%- include('../components/item', recommended[i]) %>
+        <% if ( i%4 == 3 ) { %>
+            <div style="clear:both"></div>    
+        <% } %>
     <% } %>
 </div>
-
 <%- include('../template/footer') %>
 </body>
 </html>
