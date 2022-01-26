@@ -85,16 +85,6 @@
 
   <div class="contener">
     Polecamy również:<br><br>
-<<<<<<< HEAD
-    <% for(let product of recommended) { 
-        product.mode = 0; %>
-    <!-- do zmiany z wide-item na item dodałem tak bo wide-item ma już poprawnie zdefiniowane zmienne -->
-    <%- include('../products_list/wide-item', product) %>
-    <% } %>
-  </div>
-
-  <%- include('../template/footer') %>
-=======
     <% for(i in recommended) { 
         recommended[i].mode = 0; %>
         <!-- do zmiany z wide-item na item dodałem tak bo wide-item ma już poprawnie zdefiniowane zmienne -->
@@ -105,7 +95,6 @@
     <% } %>
 </div>
 <%- include('../template/footer') %>
->>>>>>> 9e56503b2650e9da7b479a6fe509ddf915a9f363
 </body>
 <% if(editable) { %>
 <script>
