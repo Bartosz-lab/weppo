@@ -26,14 +26,13 @@
                 <input type="submit" value= "Dodaj do Koszyka">
             </form>
         <% } else if ( mode == 1) { %>
-            <form>
-                Ilość: <input type="number" value="<%= quantity %>">
-                //aktualizacja wartości za pomocą AJAX, jeśli 0 to usuwa
-            </form>
-            <form>
-                <input type="submit" value="Usuń z koszyka">
-                //aktualizacja wartości za pomocą AJAX, wywołanie z 0
-            </form>
+            
+            Ilość: <input type="number" value="<%= quantity %>" onkeyup="AJAXset(/*ID, ilość*/)" onmouseup="AJAXset(/*ID, ilość*/)">
+            <!--aktualizacja wartości za pomocą AJAX, jeśli 0 to usuwa-->
+               
+            <input type="button" value="Usuń z koszyka" onclick="AJAXSET(/*ID, 0*/)">
+            <!--aktualizacja wartości za pomocą AJAX, wywołanie z 0-->
+            
         <% } else if ( mode == 2) { %>
             Ilość: <br><%= count %><br>
             Cena całkowita: <br><%- price * count %> PLN
