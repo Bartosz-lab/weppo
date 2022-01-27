@@ -1,28 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('../template/head') %>
+<link href="/stylesheets/role.css" rel="stylesheet" />
 <body>
 <div class ="contener"> 
     Witaj <%- name %> <%- surname %>. <br><br>
     Wybierz rolę z której chcesz skorzystać:<br><br>
     
     <form method="post">
-        <div style="text-align: left; padding-left: 30%;">
-            <% if(active[role.Admin]) {%> 
-                <input type="radio" style="width:100%;" name="user_role" id="Admin" value=" <%= role.Admin %>"> 
-                <label for="html">Administrator</label><br> 
-            <% } %> 
-            <% if(active[role.Seller]) {%> 
-                <input type="radio" style="width:100%;" name="user_role" id="Seller" value=" <%= role.Seller %>"> 
-                <label for="html">Sprzedawca</label><br> 
-            <% } %> 
-            <% if(active[role.Customer]) {%> 
-                <input type="radio" style="width:100%;" name="user_role" id="Customer" value=" <%= role.Customer %>"> 
-                <label for="html">Klient</label>
-            <% } %> 
+        <% if(active[role.Admin]) {%> 
+            <div class="input-group">
+                <label for="Admin">Administrator</label>
+                <input type="radio" name="user_role" id="Admin" value=" <%= role.Admin %>">
+            </div>
+        <% } %> 
+        <% if(active[role.Seller]) {%> 
+            <div class="input-group">
+                <label for="Seller">Sprzedawca</label>
+                <input type="radio" name="user_role" id="Seller" value=" <%= role.Seller %>"> 
         </div>
-        <br>
-        <input type = "submit" value="Zatwierdź">
+        <% } %> 
+        <% if(active[role.Customer]) {%> 
+            <div class="input-group">
+                <label for="Customer">Klient</label>
+                <input type="radio" name="user_role" id="Customer" value=" <%= role.Customer %>"> 
+            </div>
+        <% } %> 
+        <div class="input-group">
+            <input type = "submit" value="Zatwierdź">
+        </div>
     </form>
 </div>
 </body>
