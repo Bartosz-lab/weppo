@@ -15,7 +15,6 @@
  * @property {User_info} user_info information about user
  */
 
-
 /** 
  * @typedef  {Object} Product_for_basket 
  * @property {Number} id unique ID
