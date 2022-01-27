@@ -124,9 +124,9 @@ router.post('/register', (req, res) => {
             name: req.body.firstname,
             surname: req.body.lastname,
             phone: req.body.phone,
-            email: req.body.login,
+            email: req.body.email,
         };
-        auth.register(user_info, req.body.login, req.body.password);
+        auth.register(user_info, req.body.email, req.body.password);
 
         req.session.error = '0. Success';
         // redirect to url before logging
