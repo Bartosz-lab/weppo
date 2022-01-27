@@ -102,18 +102,14 @@ module.exports.check_user_role = check_user_role;
 /**
  * opis
  * @param {number} id user id in database
- * @return {Adress[]} 
+ * @return {Adress} 
  */
 async function get_adresses_by_user_id(id) {
-    return [{
-        ul: "Krakowska",
-        miasto: "Wroclaw"
-    },
-    {
-        ul: "Wroclawska",
-        miasto: "Krakow"
-    }]
-
+    return {
+        street: "Krakowska",
+        zipcode: "12-345",
+        city: "Wroclaw"
+    }
 }
 /**
  * opis
@@ -184,7 +180,7 @@ async function get_product_by_id(id) {
     Your vanity\n\
     With all consequences",
         imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.angrymetalguy.com%2Fwp-content%2Fuploads%2F2018%2F09%2FPress_Cover_01-1.jpg&f=1&nofb=1",
-        brand: "Kajko i Kokosz",
+        brand: "Riverside",
         params: [{ key: 'dysk', value: 100 }, { key: 'koło', value: 300 }]
     }
 }

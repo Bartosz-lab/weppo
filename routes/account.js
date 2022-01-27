@@ -45,3 +45,14 @@ router.post('/edit_password', upload.single(), auth.restrict_login, async (req, 
         res.end(err.message);
     }
 });
+
+router.post('/edit_adress', upload.single(), auth.restrict_login, async (req, res) => {
+    try {
+        console.log("Zmiana adresu: "+req.body.city+" "+req.body.zipcode+" "+req.body.street);
+        //await auth.password_validation(req.session.user, req.body.last_password);
+        //await auth.change_password(req.session.user, req.body.password);
+        res.end('0. Success');
+    } catch (err) {
+        res.end(err.message);
+    }
+});

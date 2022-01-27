@@ -3,10 +3,9 @@
 <%- include('./template/head') %>
 
 <body>
-    <%- include('./template/topbar') %>
+<%- include('./template/topbar') %>
 <div class="subcontener" style="float: left; width: auto; padding-left: 1em; padding-right: 1em;">
-    <!-- Lista z Linkami Zależnymi od rodzaju roli -->
-    <%- include('user_nav') %>
+<%- include('user_nav') %>
 
 </div>
 <div class="contener" style="float: left; width: 70%;">
@@ -38,7 +37,20 @@
     </div>
     <% if(user_role === role.Customer) { %> 
         <div class = "subcontener">
-            Adresy lub nie adresy
+            Adres<br>
+            <div class="column" >
+                Miasto:<br>
+                Kod Pocztowy:<br>
+                Ulica:<br>
+            </div>  
+            <div class="column" style="line-height: 1.4em;width: 50%">
+                <input type="text" style="width:100%;" name="city" id="city" value="<%- adress.city %>"><br>
+                <input type="text" style="width:100%;" name="zipcode" id="zipcode" value="<%- adress.zipcode %>"><br>
+                <input type="tel" style="width:100%;" name="street" id="street" value="<%- adress.street %>"><br>
+            </div>
+            <div style="clear:both"></div>
+            <button onclick="AJAXAdressEdit()">Zapisz</button>
+            <div class="info" id="adErr"></div>
         </div>
     <% } %> 
 
@@ -119,6 +131,25 @@
       req.send(form);
     }
 
+    // =========================== ADRESS ====================================
+    function AJAXAdressEdit() {
+      var req = new XMLHttpRequest();
+      req.open('post', '/account/edit_adress', true);
+      req.onreadystatechange = () => {
+        if(req.readyState == XMLHttpRequest.DONE) {
+            console.log(req.response)
+            if(req.response[0] != '0')
+            document.getElementById("adErr").innerHTML = req.responseText;
+        }
+      }
+      var form = new FormData();
+      form.append("city",      document.getElementById('city').value);
+      form.append("zipcode",       document.getElementById('zipcode').value);
+      form.append("street",    document.getElementById('street').value);
+      console.log("Form sent")
+      req.send(form);
+    }
+
     // =========================== EMAIL ====================================
     function AJAXEmEdit() {
         var req = new XMLHttpRequest();
@@ -166,6 +197,4 @@
         req.send(form);
     }
 </script>
-
-
 </html>
