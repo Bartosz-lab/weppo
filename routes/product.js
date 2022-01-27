@@ -18,7 +18,7 @@ router.get('/:id',  async (req, res) => {
             recommended: await database.get_recemended_products_in_subcategory(product.subcat_id),
             subcat_info: await database.get_position_of_subcategory(product.subcat_id)
         }
-        if(res.locals.user_role === Role.Admin){
+        if(res.locals.user_role === Role.Admin || true){
             render_obj.cats = await database.get_categories();
             render_obj.subcats = await database.get_subcategories();
         }

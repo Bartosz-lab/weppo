@@ -282,11 +282,13 @@ module.exports.get_categories = get_categories;
  * 
  */
  async function get_subcategories() {
-    tab =  [{id: 1, cat_id: 1, val: "hdd"},
-            {id: 3, cat_id: 2, val: "PC"},
-            {id: 2, cat_id: 1, val: "ssd"}, 
-            {id: 4, cat_id: 2, val: "Laptop"}];
+    tab =  [
+        {id: 1, cat_id: 1, val: "hdd"},
+        {id: 3, cat_id: 2, val: "PC"},
+        {id: 2, cat_id: 1, val: "ssd"}, 
+        {id: 4, cat_id: 2, val: "Laptop"}
+    ].sort((a, b) => (a.cat_id > b.cat_id) ? 1 : ((a.cat_id == b.cat_id) ? ((a.id > b.id) ? 1 : -1) : -1));
 
-    return tab.sort((a, b) => (a.cat_id > b.cat_id) ? 1 : ((a.cat_id == b.cat_id) ? ((a.id > b.id) ? 1 : -1) : -1));
+    return tab;
 }
 module.exports.get_subcategories = get_subcategories;

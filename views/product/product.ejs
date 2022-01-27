@@ -8,85 +8,92 @@
 
   <div class="contener">
     <% if(editable) { %>
-    <form method="POST" action="/p">
-      <% } %>
-      <div class="column" style="width:40%">
-        <% if(editable) { %>
+      <form method="POST" action="/p">
+    <% } %>
+    <div class="column" style="width:40%">
+      <% if(editable) { %>
         <input type="text" name="imgurl" value="<%= product.imgurl %>">
-        <% } %>
-        <img src="<%= product.imgurl %>">
-      </div>
+      <% } %>
+      <img src="<%= product.imgurl %>">
+    </div>
 
-      <div class="column" style="width:40%">
-        <div class="main-page-title">
-          <span id="product_id"><%= product.id %></span>:
+    <div class="column" style="width:40%">
+      <div class="main-page-title">
+        <span id="product_id"><%= product.id %></span>:
           <% if(editable) { %>
-          <input type="text" name="name" value="<%= product.name %>">
+            <input type="text" name="name" value="<%= product.name %>">
           <% } else { %>
-          <%= product.name %>
-          <% } %>
-        </div>
-        <br>
-
-        <% if(editable) { %>
-        Cena: <input type="number" name="price" value="<%= product.price %>">zł
-        <% } else { %>
-        Cena: <%= product.price %>zł
+        <%= product.name %>
         <% } %>
+      </div>
+      <br>
 
-        <% if(editable) { %>
+      <% if(editable) { %>
+        Producent: <input type="text" name="brand" value="<%= product.brand %>">
+      <% } else { %>
+        Producent: <%= product.brand %>
+      <% } %>
+      <br>
+
+      <% if(editable) { %>
+        Cena: <input type="number" name="price" value="<%= product.price %>">zł
+      <% } else { %>
+        Cena: <%= product.price %>zł
+      <% } %><br>
+
+      <% if(editable) { %>
         <div>
           <label for="subcat_id"> Kategoria</label>
           <select name="subcat_id" id="subcat_id">
             <% let last_cat = 0; %>
             <% for(const subcat of subcats) { %>
-            <% if(last_cat != subcat.cat_id) { %>
-            <% if(last_cat != 0) { %>
-            </optgroup>
-            <% } %>
-            <optgroup label="<%= cats[last_cat].id + '. ' + cats[last_cat++].val %>">
+              <% if(last_cat != subcat.cat_id) { %>
+                <% if(last_cat != 0) { %>
+                  </optgroup>
+                <% } %>
+              <optgroup label="<%= cats[last_cat].id + '. ' + cats[last_cat++].val %>">
               <% } %>
               <option value="<%= subcat.id %> "><%= subcat.id + '. ' + subcat.val %> </option>
-              <% } %>
+            <% } %>
             </optgroup>
           </select>
         </div>
-        <% } else { %>
-          Ilość: <input type="number" name="quantity" id="quantity" value=1>
+      <% } else { %>
+          Ilość: <input type="number" name="quantity" id="quantity" value=1><br>
           <input type="submit" value="Dodaj do koszyka" onclick="Add_to_basket()">
-        <% } %>
-        <br><br>
+      <% } %>
+      <br><br>
 
-        <% if(editable) { %>
+      <% if(editable) { %>
         <textarea rows="20" cols="50" name="desc"> <%= product.desc %> </textarea>
-        <% } else { %>
+      <% } else { %>
         <%= product.desc %>
-        <% } %>
-        <br>
+      <% } %>
+      <br>
 
-        <div id="params">
-          <% for(let param of product.params) { %>
+      <div id="params">
+        <% for(let param of product.params) { %>
           <div> <%= param.key %>: <%= param.value %> </div>
-          <% } %>
-        </div>
+        <% } %>
+      </div>
 
         <% if(editable) { %>
         <!-- Formularz zapisujący wysyłamy postem wysyła wszystkie info o produkcie jakie dostaje -->
         <!-- Przy zapisie dla admina trzeba wyłapytać errory czy zostało zapisane pomyślnie -->
 
         <input type="submit" value="Zapisz zmiany">
-    </form>
+      </form>
     <% } %>
 
-  </div>
-  <div style="clear:both"></div>
+    </div>
+      <div style="clear:both"></div>
+    </div>
   </div>
 
   <div class="contener">
     Polecamy również:<br><br>
     <% for(i in recommended) { 
         recommended[i].mode = 0; %>
-        <!-- do zmiany z wide-item na item dodałem tak bo wide-item ma już poprawnie zdefiniowane zmienne -->
         <%- include('../components/item', recommended[i]) %>
         <% if ( i%4 == 3 ) { %>
             <div style="clear:both"></div>    
