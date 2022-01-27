@@ -3,17 +3,21 @@
         Filtry <br><br>
 
         Cena:<br>
-        Od: <input type="number">
-        Do: <input type="number">
+        Od: <input type="number" name="price-min">
+        Do: <input type="number" name="price-max">
 
-        <i>Tu będzie tego więcej</i>
         <% for(filter of filters) { %>
             <%= filter.name %> <br>
 
             <% if( filter.type == "enum") { %>
                 <% for( opt of filter.options ) { %>
-                    <%= opt.name %><br>
+                    <input type="radio" id="<%= opt.name+filter.name %>" name="<%= filter.name %>" value="<%= opt.name %>">
+                    <label for="<%= opt.name+filter.name %>"><%= opt.name %></label><br>
                 <% } %>
+            <% } else { %>
+                Od: <input type="number" name="<%= filter.name+'-min' %>"><br>
+                Do: <input type="number" name="<%= filter.name+'-max' %>"><br>
+                
             <% } %>
         <% } %>   
         
@@ -35,6 +39,6 @@
         <!-- Wysyłane getem  jeśli filter jest enumem to ile wybranych wartości tyle razy go dodajesz, jeśli typu numerycznego to do nazwy doklejasz -min -max np. dla price  price-min=10&price-max=100-->
 
 
-        <br><br><input type="submit" value = "Filtruj">
+        <br><input type="submit" value = "Filtruj">
     </form>
   </div>
