@@ -43,7 +43,7 @@ router.get('/:id', async (req, res) => {
             subcat_info: await database.get_position_of_subcategory(req.params.id),
             recommended: await database.get_recemended_products_in_subcategory(req.params.id)
         };
-        res.render('products_list/products_list', render_obj);
+        res.render('products-list/products-list', render_obj);
     } catch (err) {
         req.session.error = err.message;
         res.redirect('/error');

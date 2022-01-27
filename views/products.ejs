@@ -32,7 +32,7 @@
 
 
   <% for( var i = 0; i < display.length; i++ ) { %> 
-    <%- include('products_list/wide-item', {href: display[i].href, name: display[i].name, price: display[i].price, imgurl: display[i].imgurl, desc: display[i].desc, mode: 0}) %>
+    <%- include('components/wide-item', {href: display[i].href, name: display[i].name, price: display[i].price, imgurl: display[i].imgurl, desc: display[i].desc, mode: 0}) %>
   <% } %>
   <div style="clear:both"></div>
 </div>

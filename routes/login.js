@@ -57,7 +57,7 @@ router.get('/role', auth.restrict_login, async (req, res) => {
 
         const number_of_roles = +usr_roles[role.Admin] + usr_roles[role.Seller] + usr_roles[role.Customer];
         if (number_of_roles >= 2) {
-            res.render('login/roleSwitch', {
+            res.render('login/role-switch', {
                 role: typedef.role,
                 active: usr_roles,
                 name: usr_info.name,

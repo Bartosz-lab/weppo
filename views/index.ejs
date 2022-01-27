@@ -10,7 +10,6 @@
     Polecamy:
   </div>
 
-
   <% for( var i = 0; i < display.length; i++ ) { %> 
     <%- include('./components/item', {href: display[i].href, name: display[i].name, price: display[i].price, imgurl: display[i].imgurl, desc: display[i].desc}) %>
     <% if( i % 4 == 3) { %>
