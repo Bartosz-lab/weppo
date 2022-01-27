@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-    <%- include('../template/head') %>
-    <body>
-        <div class="contener">
-            <h1> Rejestracja nowego użytkownika </h1><br>
+<%- include('../template/head') %>
+<body>
+<div class="contener">
+    <h1> Rejestracja nowego użytkownika </h1><br>
 
-            <a href="/">Powrót na stronę główną</a><br>
-            Masz konto? <a href="<%= (returnUrl != '/') ? `/login?returnUrl=${returnUrl}`: '/login'%>">Zaloguj się</a><br>
+    <a href="/">Powrót na stronę główną</a><br>
+    Masz konto? <a href="<%= (returnUrl != '/') ? `/login?returnUrl=${returnUrl}`: '/login'%>">Zaloguj się</a><br>
 
 
     <% if(error[0] != '0'){ %>
-        <% if( error[0] == '4' || error[0] == '1' ) { %>
+        <% if( error[0] == '4' || error[0] == '1' || error[0] == '7' ) { %>
             <div class="info"> Wystąpił problem z rejestracją. <br> 
                 Jeśli problem będzie się powtarzać, zalecamy skontaktowanie się z Obsługą Klienta.  </div>
         <% } %>
         <% if(error[0] == '5' ) { %>
             <div class="info"> Podane hasło jest za słabe. <br> 
-                </div>
+            </div>
         <% } %>
     <% } %>
 
@@ -44,9 +44,6 @@
             <div class="info" id = "info3"></div>
         </div>
         <div style="clear:both"></div> <br>
-        
-
-
 
         <div class="column" >
             Imię:<br>
@@ -61,62 +58,59 @@
         <div style="clear:both"></div>
         <input type="submit" value="zarejestruj się">
     </form>
-
-
-    <script>
-        mailInp = document.getElementById("email");
-        pass1Inp = document.getElementById("pass1");
-        pass2Inp = document.getElementById("pass2");
-
-        info1 = document.getElementById("info1");
-        info2 = document.getElementById("info2");
-        info3 = document.getElementById("info3");
-
-        var emailPattern = new RegExp('^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$', 'i');
-        function validateMail() { 
-            if(mailInp.value == "") {
-                info1.innerHTML = "";
-                return;
-            }
-
-            if(!emailPattern.test(mailInp.value)) {
-                info1.innerHTML = "To nie jest poprawny adres email.<br><br>";
-                return;
-            }
-
-            info1.innerHTML = "Email jest poprawny.<br><br>";
-        }
-
-        function validatePassword1() {
-            if( pass1Inp.value == "") {
-                info2.innerHTML = "";
-                return;
-            }
-
-            if(!/^(?=.*\d)(?=.*[a-zA-Z])(?!.*\s).{8,15}$/.test( pass1Inp.value) ) {
-                info2.innerHTML = "Hasło jest za słabe. <br> Hasło musi zawierać conajmniej 8 znaków, w tym jedną dużą i jedną małą literę oraz jedną cyfrę.<br><br>";
-                return;
-            }
-            info2.innerHTML = "Hasło jest mocne.<br><br>";
-        }
-
-        function validatePassword2() {
-            if( pass2Inp.value == "" || pass1Inp.value == "") {
-                info3.innerHTML = "";
-                return;
-            }
-
-            if(pass2Inp.value != pass1Inp.value ) {
-                info3.innerHTML = "Podane hasła nie są identyczne.<br><br>";
-                return;
-            }
-            info3.innerHTML = "Hasła się zgadzają.<br><br>";
-        }
-
-
-    </script>
-
 </div>
-</body>
 
+<script>
+    mailInp = document.getElementById("email");
+    pass1Inp = document.getElementById("pass1");
+    pass2Inp = document.getElementById("pass2");
+
+    info1 = document.getElementById("info1");
+    info2 = document.getElementById("info2");
+    info3 = document.getElementById("info3");
+
+    var emailPattern = new RegExp('^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$', 'i');
+    function validateMail() { 
+        if(mailInp.value == "") {
+            info1.innerHTML = "";
+            return;
+        }
+
+        if(!emailPattern.test(mailInp.value)) {
+            info1.innerHTML = "To nie jest poprawny adres email.<br><br>";
+            return;
+        }
+
+        info1.innerHTML = "Email jest poprawny.<br><br>";
+    }
+
+    function validatePassword1() {
+        if( pass1Inp.value == "") {
+            info2.innerHTML = "";
+            return;
+        }
+
+        if(!/^(?=.*\d)(?=.*[a-zA-Z])(?!.*\s).{8,15}$/.test( pass1Inp.value) ) {
+            info2.innerHTML = "Hasło jest za słabe. <br> Hasło musi zawierać conajmniej 8 znaków, w tym jedną dużą i jedną małą literę oraz jedną cyfrę.<br><br>";
+            return;
+        }
+        info2.innerHTML = "Hasło jest mocne.<br><br>";
+    }
+
+    function validatePassword2() {
+        if( pass2Inp.value == "" || pass1Inp.value == "") {
+            info3.innerHTML = "";
+            return;
+        }
+
+        if(pass2Inp.value != pass1Inp.value ) {
+            info3.innerHTML = "Podane hasła nie są identyczne.<br><br>";
+            return;
+        }
+        info3.innerHTML = "Hasła się zgadzają.<br><br>";
+    }
+
+
+</script>
+</body>
 </html>

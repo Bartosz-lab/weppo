@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-    <%- include('../template/head') %>
-    <body>
-        <div class="contener">
-            <h1> Zaloguj się do konta </h1><br>
+<%- include('../template/head') %>
+<body>
+<div class="contener">
+    <h1> Zaloguj się do konta </h1><br>
 
-            <a href="/">Powrót na stronę główną</a><br>
-            Nie masz konta? <a href="<%= (returnUrl != '/') ? `/register?returnUrl=${returnUrl}`: '/register'%>">Zarejestruj się</a><br><br>
+    <a href="/">Powrót na stronę główną</a><br>
+    Nie masz konta? <a href="<%= (returnUrl != '/') ? `/register?returnUrl=${returnUrl}`: '/register'%>">Zarejestruj się</a><br><br>
 
-            <% if(error[0] != '0'){ %>
-                <% if( error[0] == '4' ) { %>
-                    <div class="info"> Wystąpił problem z uzyskaniem dostępu do konta. <br> 
-                        Jeśli problem będzie się powtarzać, zalecamy skontaktowanie się z Obsługą Klienta.  </div>
-                <% } %>
-                <% if(error[0] == '2' || error[0] == '3' ) { /* Można to rozbić na 2 sytuacje, ale po co potencjalnym h@ckerom ułatwiać życie? */ %>
-                    <div class="info"> Niepoprawny login lub hasło.</div>
-                <% } %>
-            <% } %>
+    <% if(error[0] != '0'){ %>
+        <% if( error[0] == '4' ) { %>
+            <div class="info"> Wystąpił problem z uzyskaniem dostępu do konta. <br> 
+                Jeśli problem będzie się powtarzać, zalecamy skontaktowanie się z Obsługą Klienta.  </div>
+        <% } %>
+        <% if(error[0] == '2' || error[0] == '3' || error[0] == '8' ) { /* Można to rozbić na 2 sytuacje, ale po co potencjalnym h@ckerom ułatwiać życie? */ %>
+            <div class="info"> Niepoprawny login lub hasło.</div>
+        <% } %>
+    <% } %>
 
-            <form method="post">
-                <div class="column">
-                    Email:<br>
-                    Hasło:<br>
-                </div>
-                <div class="column" style="width:70%">
-                    <input type="text" style="width:100%" name="login"><br>
-                    <input type="password" style="width:100%" name="password"><br><br>
-                </div>
-                <div style="clear:both"></div>
-                <input type="submit" value="Zaloguj się">
-            </form>
+    <form method="post">
+        <div class="column">
+            Email:<br>
+            Hasło:<br>
         </div>
-    </body>
+        <div class="column" style="width:70%">
+            <input type="text" style="width:100%" name="login"><br>
+            <input type="password" style="width:100%" name="password"><br><br>
+        </div>
+        <div style="clear:both"></div>
+        <input type="submit" value="Zaloguj się">
+    </form>
+</div>
+</body>
 </html>
