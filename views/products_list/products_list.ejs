@@ -6,7 +6,12 @@
 
 <div class ="contener">
     <!-- kategoria -> subkategoria -> subsubkategoria -->
-    <%= JSON.stringify(subcat_info) %>
+    <!-- <%= JSON.stringify(subcat_info) %> -->
+    <!-- {"category_id":1,"category_name":"Podzespoły","id":"5","name":"Dyski"}  -->
+    <div style ="padding-left:4em; text-align: left;">
+        <%= subcat_info.category_name %> \ <%= subcat_info.name %> <br>
+    </div>
+
     <!-- Nazwa Kategorii -->
     <%- include('filters') %> 
 
