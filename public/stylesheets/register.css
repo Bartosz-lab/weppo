@@ -1,0 +1,60 @@
+#register-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.input-group {
+    margin: 10px;
+}
+
+.input-group label {
+    display: block;
+    margin: 5px;
+    text-align: left;
+}
+
+.input-group input {
+    height: 35px;
+    margin: 5px;
+    width: 100%;
+}
+
+.error-message {
+    color: #cc0033;
+    display: inline-block;
+}
+
+.input-group .error-message {
+    display: none;
+}
+
+
+/* Error Styling */
+
+.error label {
+    color: #cc0033;
+}
+
+.error input,
+.error input:focus {
+    background-color: #fce4e4;
+    border-color:#cc0033;
+}
+
+.error .error-message {
+    display: inline-block;
+}
+
+/* Correct Styling */
+
+.correct input,
+.correct input:focus {
+    border-color:#00b4b4;
+}
+
+.correct .error-message {
+    display: none;
+}

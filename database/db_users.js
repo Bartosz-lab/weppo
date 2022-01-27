@@ -66,6 +66,9 @@ module.exports.get_user_info_by_id = get_user_info_by_id
 async function add_user(user) {
   try {
     //tutaj potrzebne będzie sprawdzanie poprawności danych 
+
+    //SPRAWDZENIE CZY ISTNIEJE TAKI UŻYTKOWNIK I W RAZIE CZEGO ZWRÓCENIE 2. Invalid login
+
     // mejl zawiera malpe, phone ma 9 cyfr i 2 myslinki, 
     // imie i nazwisko z duzej litery sie zaczyna, reszta mala, nie pusty
     // zmienic phone na text w bazie

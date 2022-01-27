@@ -1,116 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('../template/head') %>
+<link href="/stylesheets/register.css" rel="stylesheet" />
 <body>
 <div class="contener">
     <h1> Rejestracja nowego użytkownika </h1><br>
 
     <a href="/">Powrót na stronę główną</a><br>
-    Masz konto? <a href="<%= (returnUrl != '/') ? `/login?returnUrl=${returnUrl}`: '/login'%>">Zaloguj się</a><br>
+    Masz konto? <a href="<%= (returnUrl != '/') ? `/login?returnUrl=${returnUrl}`: '/login'%>">Zaloguj się</a><br><br>
 
 
-    <% if(error[0] != '0'){ %>
-        <% if( error[0] == '4' || error[0] == '1' || error[0] == '7' ) { %>
-            <div class="info"> Wystąpił problem z rejestracją. <br> 
-                Jeśli problem będzie się powtarzać, zalecamy skontaktowanie się z Obsługą Klienta.  </div>
-        <% } %>
+    <% if(error[0] != '0' && error != ''){ %>
+        <div class="info">
         <% if(error[0] == '5' ) { %>
-            <div class="info"> Podane hasło jest za słabe. <br> 
-            </div>
+            Podane hasło jest za słabe.
+        <% }else if(error[0] == '2' ) { %>
+             Podane hasło jest za słabe.
+        <% } else { %>
+            Wystąpił problem z rejestracją. <br> 
+            Jeśli problem będzie się powtarzać, zalecamy skontaktowanie się z Obsługą Klienta.
         <% } %>
+        </div>
     <% } %>
 
-    <form method="post" style="line-height: 1.4em;">
+    <form method="post" id="register-form" onsubmit="return validateSubmit();">
 
-        <div class="column" style="width:15%">  Email:  </div>
-        <div class="column" style="line-height: 1.4em;width: 50%">
-            <input type="text" style="width:100%;" name="login" id="email" oninput="validateMail()"><br>
-            <div class="info" id = "info1"></div>
+        <div class="input-group" id="info1">
+            <label for="login">Email*</label>
+            <input type="text" name="login" id="email" onkeyup="validateMail()">
+            <div class="error-message">Podaj poprawny adres email</div>
         </div>
-        <div style="clear:both"></div>
         
-
-        <div class="column" style="width:15%"> Hasło: </div>
-        <div class="column" style="line-height: 1.4em;width: 50%">
-            <input type="password" style="width:100%;" name="password" id="pass1" onkeyup="validatePassword1()"><br>
-            <div class="info" id = "info2"></div>
+        <div class="input-group" id="info2">
+            <label for="password">Hasło*</label>
+            <input type="password" name="password" id="pass1" onkeyup="validatePassword1()">
+            <div class="error-message">Hasło musi zawierać conajmniej 8 znaków, w tym dużą i małą literę oraz cyfrę.</div>
         </div>
-        <div style="clear:both"></div>
-        
-
-        <div class="column" style="width:15%"> Powtórz hasło:  </div>
-        <div class="column" style="line-height: 1.4em;width: 50%">
-            <input type="password" style="width:100%;" name="password2" id="pass2" onkeyup="validatePassword2()"><br>
-            <div class="info" id = "info3"></div>
+        <div class="input-group" id="info3">
+            <label for="password2">Powtórz hasło*</label>
+            <input type="password" name="password2" id="pass2" onkeyup="validatePassword2()">
+            <div class="error-message">Podane hasła nie są identyczne.</div>
         </div>
-        <div style="clear:both"></div> <br>
-
-        <div class="column" >
-            Imię:<br>
-            Nazwisko:<br>
-            Numer telefonu:<br>
-        </div>  
-        <div class="column" style="line-height: 1.4em;width: 50%">
-            <input type="text" style="width:100%;" name="firstname" id="name"><br>
-            <input type="text" style="width:100%;" name="lastname" ><br>
-            <input type="tel" style="width:100%;" name="phone" ><br>
+        <div class="input-group" id="info4">
+            <label for="firstname">Imię*</label>
+            <input type="text" name="firstname" onkeyup="validateEmpty('info4')">
         </div>
-        <div style="clear:both"></div>
-        <input type="submit" value="zarejestruj się">
+        <div class="input-group" id="info5">
+            <label for="firstname">Nazwisko*</label>
+            <input type="text" name="lastname" onkeyup="validateEmpty('info5')">
+        </div>
+        <div class="input-group" id="info6">
+            <label for="phone">Telefon*</label>
+            <input type="tel" name="phone" id="phone" onkeyup="validatePhone()">
+            <div class="error-message">Podaj poprawny numer telefonu.</div>
+        </div>
+        <div class="input-group">
+            <input type="submit" value="Zarejestruj się">
+        </div>
     </form>
 </div>
-
-<script>
-    mailInp = document.getElementById("email");
-    pass1Inp = document.getElementById("pass1");
-    pass2Inp = document.getElementById("pass2");
-
-    info1 = document.getElementById("info1");
-    info2 = document.getElementById("info2");
-    info3 = document.getElementById("info3");
-
-    var emailPattern = new RegExp('^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$', 'i');
-    function validateMail() { 
-        if(mailInp.value == "") {
-            info1.innerHTML = "";
-            return;
-        }
-
-        if(!emailPattern.test(mailInp.value)) {
-            info1.innerHTML = "To nie jest poprawny adres email.<br><br>";
-            return;
-        }
-
-        info1.innerHTML = "Email jest poprawny.<br><br>";
-    }
-
-    function validatePassword1() {
-        if( pass1Inp.value == "") {
-            info2.innerHTML = "";
-            return;
-        }
-
-        if(!/^(?=.*\d)(?=.*[a-zA-Z])(?!.*\s).{8,15}$/.test( pass1Inp.value) ) {
-            info2.innerHTML = "Hasło jest za słabe. <br> Hasło musi zawierać conajmniej 8 znaków, w tym jedną dużą i jedną małą literę oraz jedną cyfrę.<br><br>";
-            return;
-        }
-        info2.innerHTML = "Hasło jest mocne.<br><br>";
-    }
-
-    function validatePassword2() {
-        if( pass2Inp.value == "" || pass1Inp.value == "") {
-            info3.innerHTML = "";
-            return;
-        }
-
-        if(pass2Inp.value != pass1Inp.value ) {
-            info3.innerHTML = "Podane hasła nie są identyczne.<br><br>";
-            return;
-        }
-        info3.innerHTML = "Hasła się zgadzają.<br><br>";
-    }
-
-
-</script>
+<script src="scripts/register.js"></script>
 </body>
 </html>

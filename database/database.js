@@ -35,7 +35,7 @@ async function get_adress_by_id(id) {
  * @return {Adress} user address
  */
  async function get_adresses_by_user_id(id) {
-    const result = await Pool.query(`SELECT * FROM addresses WHERE user_id ='${id}' DESC;`);
+    //const result = await Pool.query(`SELECT * FROM addresses WHERE user_id ='${id}' DESC;`);
     return {
         street: "Krakowska",
         zipcode: "12-345",
