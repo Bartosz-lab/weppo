@@ -18,9 +18,9 @@ const role = typedef.role;
 }
 
 /**
- * Get latest address by users id
+ * Get latest address by address id
  * @param {number} id address id in database
- * @return {Adress[]} 
+ * @return {Address} 
  */
 async function get_adress_by_id(id) {
     try {
@@ -44,16 +44,28 @@ async function get_adress_by_id(id) {
 }
 
 /**
- * do zmiany
+ * Get latest address of user by user id
  * @param {number} id user id 
- * @return {Adress} user address
+ * @return {Address} users address
  */
- async function get_adresses_by_user_id(id) {
-    //const result = await Pool.query(`SELECT * FROM addresses WHERE user_id ='${id}' DESC;`);
-    return {
-        street: "Krakowska",
-        zipcode: "12-345",
-        city: "Wroclaw"
+ async function get_adresses_by_user_id(user_id) {
+    try {
+        const result = await Pool.query(`SELECT * FROM addresses WHERE user_id = $1 ORDER BY id DESC;`, [user_id]);
+        if (result.rows[0]) {
+            return {
+                id: result.rows[0].id,
+                user_id: user_id,
+                street: result.rows[0].street,
+                nr_house: result.rows[0].nr_house,
+                nr_flat: result.rows[0].nr_flat,
+                zip_code: result.rows[0].zip_code,
+                city: result.rows[0].city,
+                country: result.rows[0].country
+            }
+        }
+        else throw new Error('7. Database Error');
+    } catch (err) {
+        throw_my_error(err);
     }
 }
 module.exports.get_adresses_by_user_id = get_adresses_by_user_id;

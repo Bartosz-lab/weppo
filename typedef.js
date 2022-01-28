@@ -111,14 +111,14 @@ module.exports.sort = sort;
 
 //Do Opisania
 /** 
- * @typedef  Adress 
+ * @typedef  Address 
  * @property {Number} id unique ID
  * @property {String} user_id
  * @property {String} street
  * @property {String} nr_house
  * @property {String} nr_flat
  * @property {String} zip_code
- * @property {String} street
+ * @property {String} city
  * @property {String} country
  */
 /** 
