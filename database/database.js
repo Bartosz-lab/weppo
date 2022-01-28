@@ -7,11 +7,12 @@ const Filter_type = typedef.filter_type;
 module.exports = {
     ...require('./db_users'),
     ...require('./db_products'),
+    ...require('./db_addresses'),
     //get_user_by_username: get_user_by_username,
     //get_id_of_user: get_id_of_user,
     //check_user_role: check_user_role,
-    get_adresses_by_user_id: get_adresses_by_user_id,
-    get_adress_by_id: get_adress_by_id,
+    //get_adresses_by_user_id: get_adresses_by_user_id,
+    //get_adress_by_id: get_adress_by_id,
 }
 //Uwaga nie wszustkie funkcje mają poprawnie opisane params i opisy tego co powinny robić.
 //W folderze database znajdują się tylko funkcje który mają poprawny opis (w sensie tego co robią [jeśli uważacie że moj styl opisu ich to opiszcie ładniej zachowójąc znaczenie])

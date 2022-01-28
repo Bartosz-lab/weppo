@@ -1,4 +1,4 @@
-
+const { text } = require('body-parser');
 const { max } = require('pg/lib/defaults');
 const Pool = require('../database/db_pool');
 const typedef = require('../typedef');
@@ -22,7 +22,7 @@ const role = typedef.role;
  * @param {number} id address id in database
  * @return {Address} 
  */
-async function get_adress_by_id(id) {
+async function get_address_by_id(id) {
     try {
         const result = await Pool.query(`SELECT * FROM addresses WHERE id = $1 ORDER BY id DESC;`, [id]);
         if (result.rows[0]) {
@@ -42,13 +42,15 @@ async function get_adress_by_id(id) {
         throw_my_error(err);
     }
 }
+module.exports.get_address_by_id = get_address_by_id;
+
 
 /**
  * Get latest address of user by user id
  * @param {number} id user id 
  * @return {Address} users address
  */
- async function get_adresses_by_user_id(user_id) {
+ async function get_adress_by_user_id(user_id) {
     try {
         const result = await Pool.query(`SELECT * FROM addresses WHERE user_id = $1 ORDER BY id DESC;`, [user_id]);
         if (result.rows[0]) {
@@ -68,4 +70,4 @@ async function get_adress_by_id(id) {
         throw_my_error(err);
     }
 }
-module.exports.get_adresses_by_user_id = get_adresses_by_user_id;
+module.exports.get_adress_by_user_id = get_adress_by_user_id;
