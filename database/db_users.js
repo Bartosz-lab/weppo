@@ -317,20 +317,3 @@ module.exports.get_user_by_id = get_user_by_id;
   return new Error("6 invalid data");
 }
 module.exports.get_id_of_user = get_id_of_user;
-
-
-
-
-// async function main () {
-//   try {
-//     Pool.connect ();
-//     const res = await check_user_role (31, role.Admin);
-//     console.log (res);
-//   }
-//   catch (err) {
-//     console.log (err.message);
-//   }
-// }
-
-
-// main ();

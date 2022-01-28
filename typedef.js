@@ -111,13 +111,15 @@ module.exports.sort = sort;
 
 //Do Opisania
 /** 
- * @typedef  Adress Michał powinien tu dokładny opis dać jak wygląda adres
+ * @typedef  Adress 
  * @property {Number} id unique ID
  * @property {String} user_id
  * @property {String} street
- * @property {String} home_number
- * @property {String} flat_number
- * itp tutaj trzeba opisać
+ * @property {String} nr_house
+ * @property {String} nr_flat
+ * @property {String} zip_code
+ * @property {String} street
+ * @property {String} country
  */
 /** 
  * @typedef  Product Michał powinien tu dokładny opis dać jak wygląda produkt
