@@ -62,25 +62,36 @@ async function get_products_by_category(id, number, start, type) {
  * @return {typedef.Product_for_list[]} list of products to display in list
  */
 async function get_product_by_subcategory(id, sort_by, per_page, page, min_price, max_price, producer, search_conds) {
-    console.log(min_price, max_price, producer, search_conds);
-    // funkcja pobiera id kategorii i wyszukuje w niej określoną liczbę produktów (per_page)
+    // funkcja pobiera id kategorii i wyszukuje w niej określoną liczbę produktów (per_page) 
     // uprzednio je sortując w odpowiednim typie i zwraca produkty na określoną stronę tzn.
     // page = 1 zwraca produkty 1-> per_page (zakładam liczenie od 1)
     // page = 2 zwraca produkty per_page+1-> 2*per_page (zakładam liczenie od 1)
-    return [
-        { id: 1, name: "Komp", imgurl: "images/test.png", price: 5000, params: [{ key: 'dysk', value: 100 }] },
-        { id: 2, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.AFt6jAmiSg_OdO67WkA0CgHaD3%26pid%3DApi&f=1", desc: "Lorem Ipsum", price: 5000, params: [] },
-        { id: 3, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
-        { id: 4, name: "Komp", imgurl: "images/test.png", price: 5000, params: [{ key: 'dysk', value: 100 }] },
-        { id: 5, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.progarchives.com%2Fwallpapers%2FRUSHCOLLAGE.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
-        { id: 6, name: "Komp", imgurl: "images/test.png", price: 5000, params: [{ key: 'dysk', value: 100 }] },
-        { id: 7, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.9y2kjK5P_qFYJq3CMIMCcgHaHa%26pid%3DApi&f=1", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
-        { id: 8, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
-        { id: 9, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.shortlist.com%2Fmedia%2Fimages%2F2019%2F05%2Fthe-50-greatest-rock-albums-ever-3-1556678339-s1A3-column-width-inline.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
-        { id: 10, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.redroll.com%2Fwp-content%2Fuploads%2F2018%2F07%2Fprogrock1.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
-        { id: 11, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
-        { id: 12, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] }
-    ]
+    // search conds to (id_filtra , jaka_ma_miec_wartosc)
+    if (min_price === undefined) min_price = 0;
+    if (max_price === undefined) max_price = 99999999;
+    if (per_page === undefined) per_page = 10;
+    if (page === undefined) page = 0;
+    if (brand === undefined) {
+        brand = (await Pool.query(`SELECT brand FROM products;`)).rows;
+        brand = brand.map(item => item.brand);
+    }
+    try {
+        //const result = await Pool.query(`SELECT * FROM products WHERE (subcat_id = $1) AND (price BETWEEN $2 AND $3) AND (brand = ANY ($4)) AND id IN (SELECT product_id FROM widok4 WHERE filter_id = $5 AND filter_option = $6) LIMIT $7 OFFSET $8;`, 
+      //                                  [subcat_id, min_price, max_price, brand, search_conds_filter_id,search_conds_filter_option, per_page, page * per_page]);
+         const result = await Pool.query(`SELECT * FROM products WHERE (subcat_id = $1)`, [subcat_id]);
+        let products_list = [];
+        for (let i = 0; i < result.rows.length; i++) {
+            products_list.push({
+                id : result.rows[i].id,
+                name : result.rows[i].name,
+                imgurl : result.rows[i].photo_url,
+                price : result.rows[i].price
+            });
+        }
+        return (products_list);
+    } catch (err) {
+        throw_my_error(err);
+    }
 }
 module.exports.get_product_by_subcategory = get_product_by_subcategory;
 
