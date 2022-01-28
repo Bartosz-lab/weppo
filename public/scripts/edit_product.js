@@ -9,27 +9,30 @@ async function postData(url = '', data = {}) {
     return response.json();
   }
   // =========================== params ====================================
+  let photo = document.getElementById('photo');
+  let imgurl = document.getElementById('imgurl');
+  let params = document.getElementById('params');
   let subcat = document.getElementById('subcat_id');
-  let product_id = document.getElementById('product_id');
-  let quantity = document.getElementById('quantity');
 
   subcat.onchange = _ => {
     postData('/p/params', {
       id: subcat.value
     }).then(data => {
-      console.log(data);
+      params.innerHTML = '';
+      for(let param of data) { 
+        params.innerHTML += 
+        `<div> 
+          <label for="${param.id}"> ${param.name}:</label>
+          <input type="text" name="${param.id}">
+        </div>`;
+      }
     });
   };
 
-  function Add_to_basket() {
-    console.log(product_id.innerText);
-    postData('/basket/update', {
-      id: product_id.innerText,
-      quantity: quantity.value
-    }).then(data => {
-      console.log(data);
-    });
-
+  function change_img() {
+    photo.src = imgurl.value;
   };
-  //tutaj jest przykład zgrabniejszego wykorzystania AJAX 
-  //trzeba jeszcze przekonwerować zwracane dane na wyświetlający się formularz
+  function form_submit() {
+    alert("Funkcja dostępna wkrótce");
+    return false;
+  };
