@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../template/head') %>
+
+<body id="body">
+  <%- include('../template/topbar') %>
+  <% const editable = user_role === role.Admin; %>
+
+  <div class="contener">
+    <% if(editable) { %>
+      <form method="POST" action="/p">
+    <% } %>
+    <div class="column" style="width:40%">
+      <% if(editable) { %>
+        <input type="text" name="imgurl" value="<%= product.imgurl %>">
+      <% } %>
+      <img src="<%= product.imgurl %>">
+    </div>
+
+    <div class="column" style="width:40%">
+      <div class="main-page-title">
+        <span id="product_id"><%= product.id %></span>:
+          <% if(editable) { %>
+            <input type="text" name="name" value="<%= product.name %>">
+          <% } else { %>
+        <%= product.name %>
+        <% } %>
+      </div>
+      <br>
+
+      <% if(editable) { %>
+        Producent: <input type="text" name="brand" value="<%= product.brand %>">
+      <% } else { %>
+        Producent: <%= product.brand %>
+      <% } %>
+      <br>
+
+      <% if(editable) { %>
+        Cena: <input type="number" name="price" value="<%= product.price %>">zł
+      <% } else { %>
+        Cena: <%= product.price %>zł
+      <% } %><br>
+
+      <% if(editable) { %>
+        <div>
+          <label for="subcat_id"> Kategoria</label>
+          <select name="subcat_id" id="subcat_id">
+            <% let last_cat = 0; %>
+            <% for(const subcat of subcats) { %>
+              <% if(last_cat != subcat.cat_id) { %>
+                <% if(last_cat != 0) { %>
+                  </optgroup>
+                <% } %>
+              <optgroup label="<%= cats[last_cat].id + '. ' + cats[last_cat++].val %>">
+              <% } %>
+              <option value="<%= subcat.id %> "><%= subcat.id + '. ' + subcat.val %> </option>
+            <% } %>
+            </optgroup>
+          </select>
+        </div>
+      <% } else { %>
+          Ilość: <input type="number" name="quantity" id="quantity" value=1><br>
+          <input type="submit" value="Dodaj do koszyka" onclick="Add_to_basket()">
+      <% } %>
+      <br><br>
+
+      <% if(editable) { %>
+        <textarea rows="20" cols="50" name="desc"> <%= product.desc %> </textarea>
+      <% } else { %>
+        <%= product.desc %>
+      <% } %>
+      <br>
+
+      <div id="params">
+        <% for(let param of product.params) { %>
+          <div> <%= param.key %>: <%= param.value %> </div>
+        <% } %>
+      </div>
+
+        <% if(editable) { %>
+        <!-- Formularz zapisujący wysyłamy postem wysyła wszystkie info o produkcie jakie dostaje -->
+        <!-- Przy zapisie dla admina trzeba wyłapytać errory czy zostało zapisane pomyślnie -->
+
+        <input type="submit" value="Zapisz zmiany">
+      </form>
+    <% } %>
+
+    </div>
+      <div style="clear:both"></div>
+    </div>
+  </div>
+
+  <div class="contener">
+    Polecamy również:<br><br>
+    <% for(i in recommended) { 
+        recommended[i].mode = 0; %>
+        <%- include('../components/item', recommended[i]) %>
+        <% if ( i%4 == 3 ) { %>
+            <div style="clear:both"></div>    
+        <% } %>
+    <% } %>
+</div>
+<%- include('../template/footer') %>
+</body>
+<% //if(editable) { %>
+<script>
+    async function postData(url = '', data = {}) {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      return response.json();
+    }
+  // =========================== params ====================================
+    let subcat = document.getElementById('subcat_id');
+    let product_id = document.getElementById('product_id');
+    let quantity = document.getElementById('quantity');
+
+    subcat.onchange = _ => {
+        postData('/p/params', {id: subcat.value}).then(data => {
+            console.log(data);
+        });
+    };
+    function Add_to_basket()  {
+      console.log(product_id.innerText);
+      postData('/basket/update', {id: product_id.innerText, quantity: quantity.value}).then(data => {
+            console.log(data);
+        });
+
+    };
+    //tutaj jest przykład zgrabniejszego wykorzystania AJAX 
+    //trzeba jeszcze przekonwerować zwracane dane na wyświetlający się formularz
+</script>
+<% //} %>
+
+</html>

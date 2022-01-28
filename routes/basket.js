@@ -53,7 +53,7 @@ router.post('/add', async (req, res) => {
       res.cookie('basket', products);
       console.log(req.cookies.basket);
     }
-    res.send(req.cookies.basket);
+    res.send({Response:'0. Success'});
   } catch (err) {
     req.session.error = err.message;
     res.redirect('/error');
