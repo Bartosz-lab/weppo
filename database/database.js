@@ -58,7 +58,7 @@ async function get_products_by_category(id, number, start, type) {
  * @param {Number} min_price Minimal Price
  * @param {Number} max_price Maximal Price
  * @param {(String[] | String)} producer Producer
- * @param {{id:Number, value: (String[] | String)}[]} search_conds Search contitionals
+ * @param {{id:Number, value: (String[] | String), type: typedef.Filter_type}[]} search_conds Search contitionals
  * @return {typedef.Product_for_list[]} list of products to display in list
  */
 async function get_product_by_subcategory(id, sort_by, per_page, page, min_price, max_price, producer, search_conds) {

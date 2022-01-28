@@ -23,14 +23,14 @@ router.get('/:id', async (req, res) => {
             if(filter.type === Filter_type.number) {
                 const min = filter.name + '-min';
                 if(req.query[min]) {
-                    search_conds.push({id: filter.id, value: req.query[min]});
+                    search_conds.push({id: filter.id, value: req.query[min], type: Filter_type.number_min});
                 } 
                 const max = filter.name + '-max';
                 if(req.query[max]) {
-                    search_conds.push({id: filter.id, value: req.query[max]});
+                    search_conds.push({id: filter.id, value: req.query[max], type: Filter_type.number_min});
                 } 
             } else if(req.query[filter.name]) {
-                search_conds.push({id: filter.id, value: req.query[filter.name]});
+                search_conds.push({id: filter.id, value: req.query[filter.name], type: Filter_type.other});
             } 
         }
         

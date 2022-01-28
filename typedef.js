@@ -70,7 +70,10 @@
 const filter_type = {
     bool: 'bool',
     enum: 'enum',
-    number: 'number'
+    number: 'number',
+    number_min: 'number-min',
+    number_max: 'number-max',
+    other: 'other',
 }
 module.exports.filter_type = filter_type;
 
