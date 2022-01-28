@@ -91,3 +91,67 @@ module.exports.get_product_by_subcategory = get_product_by_subcategory;
     }
 }
 module.exports.get_product_by_id = get_product_by_id;
+
+/**
+ * Add a new product
+ * @param {typedef.Product} Product object
+ * @return {} nothing
+ */
+ async function add_product (Product) {
+    try {
+        const result = await Pool.query(
+            `INSERT INTO products (id, name, subcat_id, price, descr, brand, photo_url) VALUES 
+            (DEFAULT, $1, $2, $3, $4, $5, $6) RETURNING id;`,
+            [Product.name, Product.subcat_id, Product.price, Product.descr, Product.brand, Product.photo_url]);
+        if (!result.rows[0]) throw new Error('7. Database Error');
+        else return ;
+    } catch (err) {
+        throw_my_error(err);
+    }
+}
+module.exports.add_product = add_product;
+
+/**
+ * Update product info
+ * @param {typedef.Product} product
+ */
+ async function update_product(Product) {
+    try {
+      const result = await Pool.query(`SELECT * FROM products WHERE id =$1;`, [Product.id]);
+      if (result.rows[0]) {
+        let query = 'UPDATE products SET';
+        let params = [Product.id];
+        let i = 2;
+        if (typeof Product.name === 'string') {
+          query += ` name=$${i++}`;
+          params.push(Product.new_name);
+        }
+        if (typeof Product.price === 'number') {
+          if (i > 2) query += ',';
+          query += ` price=$${i++}`;
+          params.push(Product.price);
+        }
+        if (typeof Product.descr === 'string') {
+          if (i > 2) query += ',';
+          query += ` descr=$${i++}`;
+          params.push(Product.descr);
+        }
+        if (typeof Product.brand === 'string') {
+          if (i > 2) query += ',';
+          query += ` brand=$${i++}`;
+          params.push(Product.brand);
+        }
+        if (typeof Product.photo_url === 'string') {
+          if (i > 2) query += ',';
+          query += ` photo_url=$${i++}`;
+          params.push(Product.photo_url);
+        }
+
+        query += ' WHERE id=$1;';
+        await Pool.query(query, params);
+      }
+    } catch {
+      throw new Error('7. Database Error');
+    }
+  }
+module.exports.update_product = update_product;
