@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./template/head') %>
+
+<body>
+<%- include('./template/topbar') %>
+
+<div class="contener" style="">
+    <h1> Panel Administracyjny </h1>
+    <a href="/">Powrót na stronę główną</a><br>
+    <a href="/logout">Wyloguj się</a>
+
+    <div class = "subcontener" style="text-align: left; padding-left: 3em;">
+        <a href="/users">Zalogowani użytkownicy</a><br>
+        <a href="/orders">Złożone zamówienia</a><br>
+        <a href="/">Dodaj nowy produkt</a>
+        <br><br>
+        Więcej w przyszłości
+    </div>
+
+</div>
+
+<%- include('./template/footer') %>
+</body>

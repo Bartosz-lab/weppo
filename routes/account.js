@@ -55,3 +55,7 @@ router.post('/edit_adress', upload.single(), auth.restrict_login, async (req, re
         res.end(err.message);
     }
 });
+
+router.get('/admin', auth.restrict_login, async (req, res) => {
+    res.render("admin-page")
+});
