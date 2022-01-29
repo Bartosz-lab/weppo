@@ -33,3 +33,17 @@
         <a href="">Historia zamówień</a>
     </div>
 <% } %> 
+<br>
+
+<% if( roles.length > 1) { %>
+    Obecna rola: <% if(user_role === role.Customer) { %> Kmieć <% } else if(user_role === role.Seller) { %> Sprzedawczyk <% } else { %> Admin <% } %> <br>
+    <div class="richbutton">
+        <a href="/role">Zmień rolę</a>
+    </div>
+<% } %>
+
+
+
+<div class="richbutton">
+    <a href="/logout">Wyloguj się</a>
+</div>

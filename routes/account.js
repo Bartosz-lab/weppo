@@ -12,7 +12,6 @@ router.get('/', auth.restrict_login, async (req, res) => {
         const render_obj = {
             user: await database.get_user_info_by_id(req.session.user),
             adress: await database.get_adresses_by_user_id(req.session.user)
-
         };
         res.render('account', render_obj);
     } catch (err) {
