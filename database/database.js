@@ -88,16 +88,17 @@ module.exports.get_products_to_basket = get_products_to_basket;
  * @return {typedef.Product_for_basket} 
  */
  async function get_product_to_basket(id) {
-    return { id: 1, name: "Komp", imgurl: "images/test.png", price: 5000 };
+    return { id: id, name: "Komp", imgurl: "images/test.png", price: 5000 };
 }
 module.exports.get_product_to_basket = get_product_to_basket;
+
 /**
- * add 
+ * update/add 
  * @param {Number} id product ID
  */
- async function add_product_to_basket(id) {
+ async function update_product_in_basket(user_id, product_id, quantity) {
 }
-module.exports.add_product_to_basket = add_product_to_basket;
+module.exports.update_product_in_basket = update_product_in_basket;
 /**
  * Update 
  * @param {typedef.Product} product

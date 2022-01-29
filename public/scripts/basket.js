@@ -12,20 +12,25 @@ async function postData(url = '', data = {}) {
 alertBox = document.getElementById('alert')
 alertBox.style.visibility = "hidden";
 
-function Add_to_basket() {
-    postData('/basket/add', {
-        id: +document.getElementById('product_id').value,
-        quantity: document.getElementById('quantity').value
+function update_product_in_basket(id, quantity) {
+    console.log(id + " " + quantity)
+    postData('/basket/update', {
+        id: id,
+        quantity: quantity
     }).then(data => {
         alertBox.style.visibility = "visible";
         alertBox.style.borderColor = (data.Response[0] == '0') ? "var(--green)" : "var(--red)";
         alertBox.innerHTML = (data.Response[0] == '0') ? 
-          "Poprawnie dodano wybrany produkt do koszyka" : 
+            ((quantity === 0) ? "Produkt Usunięty" :
+          "Poprawnie zaktualizowano wybrany produkt w koszyku") : 
           "Wystąpił problem z dodaniem produktu do koszyka";
 
         setTimeout(_ => {
           alertBox.style.visibility = "hidden";
-        }, 3000);
+          if(quantity === 0) {
+            window.location.reload(true);
+          }
+        }, 3000);    
     });
 
 };
