@@ -25,8 +25,8 @@
         <input type="submit" value="Dodaj do koszyka" onclick="Add_to_basket()">
       </div>
       <div id="params" style="margin: 30px 0;">
-        <% for(let param of product.params) { %>
-        <div> <%= param.key %>: <%= param.value %> </div>
+        <% for(var p in product.params) { %>
+        <div> <%= product.params[p].key %>: <%= product.params[p].value %> </div>
         <% } %>
       </div>
 
