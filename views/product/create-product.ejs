@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../template/head') %>
+<body id="body">
+  <%- include('../template/topbar') %>
+
+  <div class="contener">
+    <form method="post" action="/p/add">
+
+      <div class="column" style="width:40%">
+        <input type="text" name="imgurl" id="imgurl"  oninput="change_img()">
+        <img id="photo" >
+      </div>
+
+      <div class="column" style="width:40%">
+        <div class="main-page-title">
+          <span id="product_id">Dodaj nowy produkt</span>:<br>
+        </div>
+        Nazwa:<br> <input type="text" name="name" >
+        <input type="hidden" name="id">
+        
+        <br>
+        <label for="brand">Producent:</label>
+        <input type="text" name="brand">
+        <br>
+
+        Cena: <input type="number" name="price">zł
+
+        <div>
+          <label for="subcat_id"> Kategoria</label>
+          <select name="subcat_id" id="subcat_id">
+            <% let last_cat = 0; %>
+            <% for(const subcat of subcats) { %>
+            <% if(last_cat != subcat.cat_id) { %>
+            <% if(last_cat != 0) { %>
+            </optgroup>
+            <% } %>
+            <optgroup label="<%= cats[last_cat].id + '. ' + cats[last_cat++].val %>">
+              <% } %>
+              <option value="<%= subcat.id %> "><%= subcat.id + '. ' + subcat.val %> </option>
+              <% } %>
+            </optgroup>
+          </select>
+        </div>
+        <br><br>
+        <div id="params">
+          <% //for(let param in product.params) { %>
+          <div> 
+            <label for=" <%= //param.key %>"> <%= //param.key %>:</label>
+            <input type="text" name=" <%= //param.key %>" value="<%= //param.value %>">
+          </div>
+          <% //} %>
+        </div>
+        <br><br>
+        <textarea rows="20" cols="50" name="desc"> </textarea>
+        <br>
+
+        <input type="submit" value="Dodaj produkt">
+    </form>
+
+
+  </div>
+  <div style="clear:both"></div>
+  </div>
+  </div>
+  <div id="alert" class="alertBox"></div>
+  <%- include('../template/footer') %>
+
+</body>
+<script src="/scripts/create-product.js"></script>
+
+</html>

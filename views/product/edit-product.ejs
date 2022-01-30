@@ -64,21 +64,10 @@
   <div style="clear:both"></div>
   </div>
   </div>
-
-  <div class="contener">
-    Polecamy również:<br><br>
-    <% for(i in recommended) { 
-        recommended[i].mode = 0; %>
-    <%- include('../components/item', recommended[i]) %>
-    <% if ( i%4 == 3 ) { %>
-    <div style="clear:both"></div>
-    <% } %>
-    <% } %>
-  </div>
+  <div id="alert" class="alertBox"></div>
   <%- include('../template/footer') %>
 
-<div id="alert" class="alertBox"></div>
 </body>
-<script src="/scripts/edit_product.js"></script>
+<script src="/scripts/edit-product.js"></script>
 
 </html>

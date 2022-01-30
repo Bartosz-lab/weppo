@@ -11,6 +11,21 @@ router.get('/', (req, res) => {
     res.redirect('/');
 });
 
+// Dodawanie nowych produktów
+router.get('/create',  async (req, res) => {
+    render_obj = {};
+    try {
+        render_obj.cats = await database.get_categories();
+        render_obj.subcats = await database.get_subcategories();
+        res.render('product/create-product', render_obj);
+
+    } catch (err) {
+        req.session.error = err.message;
+        res.redirect('/error');
+    }
+});
+
+
 router.get('/:id',  async (req, res) => {
     try {
         const product = await database.get_product_by_id(req.params.id);
@@ -31,6 +46,7 @@ router.get('/:id',  async (req, res) => {
         res.redirect('/error');
     }
 });
+
 router.post('/',  auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
     try {
         const filters = await database.get_filters_by_subcategory(req.body.subcat_id);
@@ -61,6 +77,8 @@ router.post('/',  auth.restrict_login, auth.restrict_role(Role.Admin), async (re
         res.redirect(`p/${req.body.id}`);
     }
 });
+
+
 router.post('/add',  auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
     try {
         const filters = await database.get_filters_by_subcategory(req.body.subcat_id);
