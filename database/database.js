@@ -8,11 +8,6 @@ module.exports = {
     ...require('./db_users'),
     ...require('./db_products'),
     ...require('./db_addresses'),
-    //get_user_by_username: get_user_by_username,
-    //get_id_of_user: get_id_of_user,
-    //check_user_role: check_user_role,
-    get_adresses_by_user_id: get_adresses_by_user_id,
-    //get_adress_by_id: get_adress_by_id,
 }
 //Uwaga nie wszustkie funkcje mają poprawnie opisane params i opisy tego co powinny robić.
 //W folderze database znajdują się tylko funkcje który mają poprawny opis (w sensie tego co robią [jeśli uważacie że moj styl opisu ich to opiszcie ładniej zachowójąc znaczenie])
@@ -20,10 +15,6 @@ module.exports = {
 //ostatecznie w tym pliku nie powinna znaleść się zadna funkcja, ma to byćjedynie hub do połączenia róznych stron działania bazy
 
 //każda funkcja w bazie danych powinna zawierać weryfikacje poprawności danych.
-
-function get_adresses_by_user_id() {
-    
-}
 
 
 
@@ -56,9 +47,9 @@ async function get_position_of_subcategory(id) {
 module.exports.get_position_of_subcategory = get_position_of_subcategory;
 
 /**
- * Get 
+ * Return 4 products of type Product for list from table most reecommended products : subcat_id | product_id x 4  
  * @param {Number} id Subcategory ID
- * @param {{id:Number, value: (String[] | String)}[]} search_conds Search contitionals
+ * @param {Number} how_many nr of products to return, DEFAULT 4
  * @return {typedef.Product_for_list[]} list of products to display in list
  */
  async function get_recemended_products_in_subcategory(id) {
