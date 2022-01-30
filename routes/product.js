@@ -3,6 +3,7 @@ const router = express.Router();
 module.exports = router;
 
 const database = require('../database/database');
+const auth = require('../bin/auth');
 const typedef = require('../typedef');
 const Role = typedef.role;
 
@@ -30,16 +31,17 @@ router.get('/:id',  async (req, res) => {
         res.redirect('/error');
     }
 });
-router.post('/',  async (req, res) => {
+router.post('/',  auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
     try {
         const filters = await database.get_filters_by_subcategory(req.body.subcat_id);
         let params = [];
         for (const filter of filters) {
-            if(req.query[filter.name]) {
-                params.push({id: filter.id, value: req.query[filter.name]});
+            if(req.body[filter.name]) {
+                params.push({id: filter.id, value: req.body[filter.name]});
             } 
         }
-        
+        console.log(req.body);
+        console.log(params);
         const product = {
             id: req.body.id,
             subcat_id: req.body.subcat_id,
@@ -59,7 +61,37 @@ router.post('/',  async (req, res) => {
         res.redirect(`p/${req.body.id}`);
     }
 });
-router.post('/params',  async (req, res) => {
+router.post('/add',  auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
+    try {
+        const filters = await database.get_filters_by_subcategory(req.body.subcat_id);
+        let params = [];
+        for (const filter of filters) {
+            if(req.body[filter.name]) {
+                params.push({id: filter.id, value: req.body[filter.name]});
+            } 
+        }
+        console.log(req.body);
+        console.log(params);
+        const product = {
+            id: req.body.id,
+            subcat_id: req.body.subcat_id,
+            name: req.body.name,
+            price: req.query.price,
+            desc: req.body.desc,
+            imgurl: req.body.imgurl,
+            brand: req.query.brand,
+            params: params
+        }
+        await database.add_product(product);
+        req.session.error = '0. Success';
+        res.redirect(`p/${req.body.id}`);
+
+    } catch (err) {
+        req.session.error = err.message;
+        res.redirect(`/error`);
+    }
+});
+router.post('/params',  auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
     try {
         const filters = await database.get_filters_by_subcategory(req.body.id);
         let params = [];
@@ -73,5 +105,14 @@ router.post('/params',  async (req, res) => {
     } catch (err) {
         req.session.error = err.message;
         res.redirect('/error');
+    }
+});
+router.post('/:id/del',  auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
+    try {
+        await database.del_product(req.params.id);
+        res.send({Response:'0. Success'});
+    } catch (err) {
+        req.session.error = err.message;
+        res.redirect(`p/${req.params.id}`);
     }
 });

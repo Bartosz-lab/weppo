@@ -5,7 +5,7 @@
   <%- include('../template/topbar') %>
 
   <div class="contener">
-    <form method="POST" action="/p" onsubmit="return form_submit();">
+    <form method="POST" action="/p">
 
       <div class="column" style="width:40%">
         <input type="text" name="imgurl" id="imgurl" value="<%= product.imgurl %>" oninput="change_img()">
@@ -17,6 +17,7 @@
           <span id="product_id"><%= product.id %></span>:
 
           <input type="text" name="name" value="<%= product.name %>">
+          <input type="hidden" name="id" value="<%= product.id %>">
         </div>
         <br>
         <label for="brand">Producent:</label>
@@ -43,7 +44,7 @@
         </div>
         <br><br>
         <div id="params">
-          <% for(let param of product.params) { %>
+          <% for(let param in product.params) { %>
           <div> 
             <label for=" <%= param.key %>"> <%= param.key %>:</label>
             <input type="text" name=" <%= param.key %>" value="<%= param.value %>">
@@ -54,8 +55,10 @@
         <textarea rows="20" cols="50" name="desc"> <%= product.desc %> </textarea>
         <br>
 
-        <input type="submit" value="Zapisz zmiany"> Wkrótce Dostępne :) 
+        <input type="submit" value="Zapisz zmiany">
+        <input type="button" value="Usuń Produkt" onclick="dell_button();">
     </form>
+
 
   </div>
   <div style="clear:both"></div>
@@ -73,6 +76,8 @@
     <% } %>
   </div>
   <%- include('../template/footer') %>
+
+<div id="alert" class="alertBox"></div>
 </body>
 <script src="/scripts/edit_product.js"></script>
 

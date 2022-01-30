@@ -11,7 +11,7 @@ module.exports = {
     //get_user_by_username: get_user_by_username,
     //get_id_of_user: get_id_of_user,
     //check_user_role: check_user_role,
-    //get_adresses_by_user_id: get_adresses_by_user_id,
+    get_adresses_by_user_id: get_adresses_by_user_id,
     //get_adress_by_id: get_adress_by_id,
 }
 //Uwaga nie wszustkie funkcje mają poprawnie opisane params i opisy tego co powinny robić.
@@ -21,7 +21,9 @@ module.exports = {
 
 //każda funkcja w bazie danych powinna zawierać weryfikacje poprawności danych.
 
-
+function get_adresses_by_user_id() {
+    
+}
 
 
 
@@ -131,3 +133,17 @@ module.exports.get_categories = get_categories;
     return tab;
 }
 module.exports.get_subcategories = get_subcategories;
+/**
+ *  
+ * 
+ */
+ async function del_product() {
+}
+module.exports.del_product = del_product;
+/**
+ *  
+ * 
+ */
+ async function add_product() {
+}
+module.exports.add_product = add_product;
