@@ -22,7 +22,7 @@ router.get('/:id',  async (req, res) => {
         if(res.locals.user_role === Role.Admin){
             render_obj.cats = await database.get_categories();
             render_obj.subcats = await database.get_subcategories();
-            res.render('product/edit_product', render_obj);
+            res.render('product/edit-product', render_obj);
         } else {
             res.render('product/product', render_obj);
         }
