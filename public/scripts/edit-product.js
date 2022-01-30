@@ -41,17 +41,17 @@ function dell_button() {
   if (confirm('Czy jesteś pewien, usunięcia produktu?')) {
     postData(`/p/${product_id}/del`).then(data => {
       alertBox.style.visibility = "visible";
-        alertBox.style.borderColor = (data.Response[0] == '0') ? "var(--green)" : "var(--red)";
-        alertBox.innerHTML = (data.Response[0] == '0') ? 
-          "Usunięto" : 
-          "Wystąpił problem";
+      alertBox.style.borderColor = (data.Response[0] == '0') ? "var(--green)" : "var(--red)";
+      alertBox.innerHTML = (data.Response[0] == '0') ? 
+        "Usunięto" : 
+        "Wystąpił problem";
 
-        setTimeout(_ => {
-          alertBox.style.visibility = "hidden";
-          if (data.Response[0] == '0') {
-            window.location.replace('/');
-          }
-        }, 3000); 
+      setTimeout(_ => {
+        alertBox.style.visibility = "hidden";
+        if (data.Response[0] == '0') {
+          window.location.replace('/');
+        }
+      }, 3000); 
     });
   };
 };
