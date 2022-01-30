@@ -25,6 +25,11 @@ function update_product_in_basket(id, quantity) {
           "Poprawnie zaktualizowano wybrany produkt w koszyku") : 
           "Wystąpił problem z dodaniem produktu do koszyka";
 
+        // usuwanie elementu z widoku 
+        if(data.Response[0] == '0' && quantity == 0) {
+            document.getElementById("cont"+id).style.visibility = "hidden";
+        }
+        
         setTimeout(_ => {
           alertBox.style.visibility = "hidden";
           if(quantity === 0) {
