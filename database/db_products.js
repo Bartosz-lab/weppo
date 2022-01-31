@@ -98,14 +98,14 @@ module.exports.get_product_by_subcategory = get_product_by_subcategory;
  * @param {Number} id Product ID
  * @return {typedef.Product} Product object
  */
- async function get_product_by_id(id) {
-
+ async function get_product_by_id(id, params_nr) {
+    if (params_nr === undefined) params_nr = 999;
     try {
 
         const result_params = await Pool.query(`SELECT * FROM widok7 WHERE (product_id = $1)`, [id]);
         let params = [];
         let i = 0;
-        while (result_params.rows[i]) {
+        while (result_params.rows[i] && i < params_nr) {
             params.push (
                 {
                     key : result_params.rows[i].filter_name,
@@ -198,3 +198,22 @@ module.exports.add_product = add_product;
     }
   }
 module.exports.update_product = update_product;
+
+/**
+ * Return 4 products of type Product for list from table most reecommended products : subcat_id | product_id x 4  
+ * @param {Number} subcat_id Subcategory ID
+ * @param {Number} how_many nr of products to return, DEFAULT 4
+ * @return {typedef.Product_for_list[]} list of products to display in list
+ */
+ async function get_recemended_products_in_subcategory(subcat_id) {
+  how_many = 4;
+  let products_id = (await Pool.query(`SELECT id FROM products where subcat_id = $1 LIMIT $2;`, [subcat_id, how_many])).rows;
+  products_id = products_id.map(item => item.id);
+  let products_list = [];
+  for (let i = 0; i < how_many; i++) {
+    let product = await get_product_by_id (products_id[0]);
+    products_list.push (product);
+  }
+  return (products_list);
+}
+module.exports.get_recemended_products_in_subcategory = get_recemended_products_in_subcategory;

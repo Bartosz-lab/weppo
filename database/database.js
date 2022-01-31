@@ -46,21 +46,7 @@ async function get_position_of_subcategory(id) {
 }
 module.exports.get_position_of_subcategory = get_position_of_subcategory;
 
-/**
- * Return 4 products of type Product for list from table most reecommended products : subcat_id | product_id x 4  
- * @param {Number} id Subcategory ID
- * @param {Number} how_many nr of products to return, DEFAULT 4
- * @return {typedef.Product_for_list[]} list of products to display in list
- */
- async function get_recemended_products_in_subcategory(id) {
-    return [
-        { id: 1, name: "Komp", imgurl: "images/test.png", price: 5000, params: [{ key: 'dysk', value: 100 }] },
-        { id: 2, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.AFt6jAmiSg_OdO67WkA0CgHaD3%26pid%3DApi&f=1", desc: "Lorem Ipsum", price: 5000, params: [] },
-        { id: 3, name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000, params: [{ key: 'dysk', value: 100 }] },
-        { id: 4, name: "Komp", imgurl: "images/test.png", price: 5000, params: [{ key: 'dysk', value: 100 }] }
-    ]
-}
-module.exports.get_recemended_products_in_subcategory = get_recemended_products_in_subcategory;
+
 /**
  * Get 
  * @param {Number} id user ID
