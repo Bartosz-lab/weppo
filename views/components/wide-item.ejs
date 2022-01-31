@@ -22,9 +22,7 @@
 
     <div style="float:left; width: auto; padding-top: 3em;">
         <% if( mode == 0 ) { %>
-            <form>
-                <input type="submit" value= "Dodaj do Koszyka">
-            </form>
+                <input type="button" value= "Dodaj do Koszyka" onclick="Add_to_basket(<%= id %>)">
         <% } else if ( mode == 1) { %>
             
             Ilość: <input type="number" value="<%= quantity %>" onkeyup="update_product_in_basket(<%= id %>, this.value)" onmouseup="update_product_in_basket(<%= id %>, this.value)">
