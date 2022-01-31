@@ -45,7 +45,7 @@ const role = typedef.role;
         products_filtered = [];
         pf_i = 0;
         while (search_conds[pf_i]) {
-          result_filters = (await Pool.query(`SELECT product_id FROM widok7 WHERE (filter_id = $1) AND (option_value = $2)`, [search_conds[pf_i].id, search_conds[pf_i].option_value])).rows;
+          result_filters = (await Pool.query(`SELECT product_id FROM widok7 WHERE (filter_id = $1) AND (option_value = $2)`, [search_conds[pf_i].id, search_conds[pf_i].value])).rows;
           result_filters = result_filters.map(item => item.product_id);
           if (pf_i == 0) products_filtered = result_filters;
           products_filtered = products_filtered.filter(value => result_filters.includes(value));
@@ -92,6 +92,7 @@ const role = typedef.role;
     }
 }
 module.exports.get_product_by_subcategory = get_product_by_subcategory;
+
 
 /**
  * Get product
