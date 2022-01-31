@@ -209,9 +209,10 @@ module.exports.update_product = update_product;
   how_many = 4;
   let products_id = (await Pool.query(`SELECT id FROM products where subcat_id = $1 LIMIT $2;`, [subcat_id, how_many])).rows;
   products_id = products_id.map(item => item.id);
+ 
   let products_list = [];
-  for (let i = 0; i < how_many; i++) {
-    let product = await get_product_by_id (products_id[0]);
+  for (let i = 0; (i < how_many && i < products_id.length); i++) {
+    let product = await get_product_by_id (products_id[i]);
     products_list.push (product);
   }
   return (products_list);
