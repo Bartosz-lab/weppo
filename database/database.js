@@ -8,6 +8,7 @@ module.exports = {
     ...require('./db_users'),
     ...require('./db_products'),
     ...require('./db_addresses'),
+    ...require('./db_categories'),
 }
 //Uwaga nie wszustkie funkcje mają poprawnie opisane params i opisy tego co powinny robić.
 //W folderze database znajdują się tylko funkcje który mają poprawny opis (w sensie tego co robią [jeśli uważacie że moj styl opisu ich to opiszcie ładniej zachowójąc znaczenie])
@@ -23,19 +24,6 @@ async function get_products_by_category(id, number, start, type) {
     //kategoria, ile zwrócić, od jakiego zacząć, typ sortowania
 }
 
-
-
-/**
- * Get list of products
- * @param {Number} id Subcategory ID
- * @return {typedef.Filter[]} list of Filters with his options
- */
-async function get_filters_by_subcategory(id) {
-    // zwraca tablicę objektów filtrów dla danej podkategorii
-    return [{ id: 1, name: 'dysk', type: Filter_type.enum, options: [{ name: '100', sort_order: '1' }, { name: '200', sort_order: '2' }] },
-    { id: 2, name: 'koła', type: Filter_type.enum, options: [{ name: '100', sort_order: '1' }, { name: '200', sort_order: '2' }] }]
-}
-module.exports.get_filters_by_subcategory = get_filters_by_subcategory;
 /**
  * 
  * @param {Number} id Subcategory ID
@@ -87,29 +75,6 @@ module.exports.update_product_in_basket = update_product_in_basket;
 }
 module.exports.update_product = update_product;
 
-/**
- *  
- * 
- */
- async function get_categories() {
-    return [{id: 1, val: "dyski"},{id: 2, val: "komputery"},]
-}
-module.exports.get_categories = get_categories;
-/**
- *  
- * 
- */
- async function get_subcategories() {
-    tab =  [
-        {id: 1, cat_id: 1, val: "hdd"},
-        {id: 3, cat_id: 2, val: "PC"},
-        {id: 2, cat_id: 1, val: "ssd"}, 
-        {id: 4, cat_id: 2, val: "Laptop"}
-    ].sort((a, b) => (a.cat_id > b.cat_id) ? 1 : ((a.cat_id == b.cat_id) ? ((a.id > b.id) ? 1 : -1) : -1));
-
-    return tab;
-}
-module.exports.get_subcategories = get_subcategories;
 /**
  *  
  * 
