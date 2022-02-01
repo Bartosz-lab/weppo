@@ -56,6 +56,7 @@ router.get('/role', auth.restrict_login, async (req, res) => {
         const usr_info = await database.get_user_info_by_id(req.session.user);
 
         const number_of_roles = +usr_roles[role.Admin] + usr_roles[role.Seller] + usr_roles[role.Customer];
+        req.session.number_of_roles = number_of_roles;
         if (number_of_roles >= 2) {
             res.render('login/role-switch', {
                 role: typedef.role,

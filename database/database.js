@@ -16,7 +16,15 @@ module.exports = {
 //ostatecznie w tym pliku nie powinna znaleść się zadna funkcja, ma to byćjedynie hub do połączenia róznych stron działania bazy
 
 //każda funkcja w bazie danych powinna zawierać weryfikacje poprawności danych.
-
+/**
+ * 
+ * @param {Number} id Subcategory ID
+ * @return {{category_id: Number, category_name: String, id: Number, name: String}} list of Filters with his options
+ */
+ async function get_position_of_subcategory(id) {
+    
+}
+module.exports.get_position_of_subcategory = get_position_of_subcategory;
 
 
 module.exports.get_products_by_category = get_products_by_category;

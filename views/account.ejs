@@ -37,20 +37,7 @@
     </div>
     <% if(user_role === role.Customer) { %> 
         <div class = "subcontener">
-            Adres<br>
-            <div class="column" >
-                Miasto:<br>
-                Kod Pocztowy:<br>
-                Ulica:<br>
-            </div>  
-            <div class="column" style="line-height: 1.4em;width: 50%">
-                <input type="text" style="width:100%;" name="city" id="city" value="<%- adress.city %>"><br>
-                <input type="text" style="width:100%;" name="zipcode" id="zipcode" value="<%- adress.zipcode %>"><br>
-                <input type="tel" style="width:100%;" name="street" id="street" value="<%- adress.street %>"><br>
-            </div>
-            <div style="clear:both"></div>
-            <button onclick="AJAXAdressEdit()">Zapisz</button>
-            <div class="info" id="adErr"></div>
+            <%- include('./components/adress.ejs', adress) %> 
         </div>
     <% } %> 
 
@@ -106,7 +93,9 @@
 
 
 </div>
+<div id="alert" class="alertBox"></div>
 <div style="clear:both"></div>
+<script src="/scripts/adress.js"></script>
 </body>
 
 <%- include('./template/footer') %>

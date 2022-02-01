@@ -22,7 +22,9 @@ function change_img() {
 alertBox = document.getElementById('alert')
 alertBox.style.visibility = "hidden";
 
-subcat.onchange = edit_params();
+subcat.onchange = () => {
+  edit_params();
+};
 params.onload = edit_params();
 
 

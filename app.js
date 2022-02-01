@@ -8,7 +8,7 @@ const multer        = require('multer');
 var upload = multer();
 
 const typedef = require('./typedef');
-const role = typedef.role;
+const Role = typedef.role;
 
 const indexRouter   = require('./routes/index');
 const loginRouter   = require('./routes/login');
@@ -39,24 +39,30 @@ app.use(session({
   cookie: {maxAge: 1000 * 60 * 15} //15 min
 }));
 
-
-
-//testowo 
 app.use(function (req, res, next) {
-  var err = req.session.error;
-  var user_role = req.session.role;
+  const err = req.session.error;
   delete req.session.error;
-
   res.locals.error = '';
-  res.locals.user_role = undefined;
-  res.locals.role = role;
+  if (err) {
+    res.locals.error = err;
+  }
+
+  res.locals.role = Role;
+
+  const user_role = req.session.role;
+  res.locals.user_role = user_role;
+
+  const number_of_roles = req.session.number_of_roles;
+  res.locals.number_of_roles = number_of_roles;
+  
+
   res.locals.orders = [
     { date: "12-01-2022", price: "200" },
     { date: "13-02-2077", price: "1337" }
 ];;
   
-  if (err) res.locals.error = err;
-  if (user_role != undefined) res.locals.user_role = user_role;
+  
+  
   next();
 });
 
