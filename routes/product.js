@@ -88,10 +88,7 @@ router.post('/add',  auth.restrict_login, auth.restrict_role(Role.Admin), async 
                 params.push({id: filter.id, value: req.body[filter.name]});
             } 
         }
-        console.log(req.body);
-        console.log(params);
         const product = {
-            id: req.body.id,
             subcat_id: req.body.subcat_id,
             name: req.body.name,
             price: req.query.price,
@@ -100,9 +97,9 @@ router.post('/add',  auth.restrict_login, auth.restrict_role(Role.Admin), async 
             brand: req.query.brand,
             params: params
         }
-        await database.add_product(product);
+        const prod_id = await database.add_product(product);
         req.session.error = '0. Success';
-        res.redirect(`p/${req.body.id}`);
+        res.redirect(`/p/${prod_id}`);
 
     } catch (err) {
         req.session.error = err.message;

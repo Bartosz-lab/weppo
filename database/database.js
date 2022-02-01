@@ -82,10 +82,3 @@ module.exports.update_product = update_product;
  async function del_product() {
 }
 module.exports.del_product = del_product;
-/**
- *  
- * 
- */
- async function add_product() {
-}
-module.exports.add_product = add_product;

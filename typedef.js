@@ -124,12 +124,15 @@ module.exports.sort = sort;
 /** 
  * @typedef  Product Michał powinien tu dokładny opis dać jak wygląda produkt
  * @property {Number} id unique ID
+ * @property {Number} subcat_id unique ID
  * @property {String} name
- * @property {Object} proporties
- * @property {String} description
+ * @property {Object} params
+ * @property {String} desc
+ * @property {String} brand
+ * @property {String} imgurl
  * @property {String} price
- * itp tutaj trzeba opisać
  */
+
 /** 
  * @typedef  Orders 
  * @property {Number} id unique ID
