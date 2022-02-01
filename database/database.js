@@ -17,14 +17,13 @@ module.exports = {
 
 //każda funkcja w bazie danych powinna zawierać weryfikacje poprawności danych.
 /**
- * 
- * @param {Number} id Subcategory ID
- * @return {{category_id: Number, category_name: String, id: Number, name: String}} list of Filters with his options
+
  */
- async function get_position_of_subcategory(id) {
+ async function save_user_adress(id) {
+    //Proszę tworząc tą funkc
     
 }
-module.exports.get_position_of_subcategory = get_position_of_subcategory;
+module.exports.save_user_adress = save_user_adress;
 
 
 module.exports.get_products_by_category = get_products_by_category;
