@@ -86,7 +86,8 @@ module.exports.get_products_to_basket = get_products_to_basket;
  * @return {typedef.Product_for_basket} 
  */
 async function get_product_to_basket(id) {
-    return { id: id, name: "Komp", imgurl: "images/test.png", price: 5000 };
+    return require('./db_products').get_product_by_id(id);
+    //return { id: id, name: "Komp", imgurl: "images/test.png", price: 5000 };
 }
 module.exports.get_product_to_basket = get_product_to_basket;
 

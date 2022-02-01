@@ -8,9 +8,7 @@ const database = require('../database/database');
 router.get('/', async (req, res) => {
   try {
     let products = [];
-    if (req.session.user) {
-      products = await database.get_products_to_basket(req.session.user);
-    } else if (req.cookies.basket) {
+    if (req.cookies.basket) {
       for (info of req.cookies.basket) {
         let product = await database.get_product_to_basket(info.id);
         product.quantity = info.quantity;
@@ -28,26 +26,22 @@ router.get('/', async (req, res) => {
 })
 router.post('/add', async (req, res) => {
   try {
-    if (req.session.user) {
-      await database.update_product_in_basket(req.session.user, req.body.id, req.body.quantity);
-    } else {
-      let products = [];
-      let found = false;
-      if (req.cookies.basket) {
-        for (info of req.cookies.basket) {
-          if (info.id === req.body.id) {
-            found = true;
-            info.quantity = +info.quantity + +req.body.quantity;
-          }
-          products.push(info);
+    let products = [];
+    let found = false;
+    if (req.cookies.basket) {
+      for (info of req.cookies.basket) {
+        if (info.id === req.body.id) {
+          found = true;
+          info.quantity = +info.quantity + +req.body.quantity;
         }
+        products.push(info);
       }
-      if (!found) {
-        products.push({ id: req.body.id, quantity: req.body.quantity });
-      }
-      res.cookie('basket', products);
     }
-    res.send({Response:'0. Success'});
+    if (!found) {
+      products.push({ id: req.body.id, quantity: req.body.quantity });
+    }
+    res.cookie('basket', products);
+    res.send({ Response: '0. Success' });
   } catch (err) {
     req.session.error = err.message;
     res.redirect('/error');
@@ -64,14 +58,14 @@ router.post('/update', async (req, res) => {
           if (info.id === req.body.id) {
             info.quantity = +req.body.quantity;
           }
-          if( info.quantity != 0) {
+          if (info.quantity != 0) {
             products.push(info);
           }
         }
       }
       res.cookie('basket', products);
     }
-    res.send({Response:'0. Success'});
+    res.send({ Response: '0. Success' });
   } catch (err) {
     req.session.error = err.message;
     res.redirect('/error');
