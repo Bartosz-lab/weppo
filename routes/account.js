@@ -29,6 +29,12 @@ router.get('/', auth.restrict_login, async (req, res) => {
 
 router.get('/admin', auth.restrict_login, auth.restrict_role(Role.Admin),  async (req, res) => {
     res.render("admin-page")
+    try {
+        res.render("admin-page")
+    } catch (err) {
+        req.session.error = err.message;
+        res.redirect('/error');
+    }
 });
 
 router.post('/edit_user', upload.single(), auth.restrict_login, async (req, res) => {

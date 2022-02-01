@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 module.exports = router;
 const auth = require('../bin/auth');
-const role = require('../bin/role');
+const typedef = require('../typedef');
+const role = typedef.role;
 
 
 router.get('/', auth.restrict_login, (req, res) => {

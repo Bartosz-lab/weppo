@@ -19,11 +19,35 @@ module.exports = {
 /**
 
  */
- async function save_user_adress(id) {
+async function save_user_adress(id) {
     //Proszę tworząc tą funkc
-    
+
 }
 module.exports.save_user_adress = save_user_adress;
+/**
+
+ */
+ const Pool = require('../database/db_pool');
+async function get_users() {
+    try {
+        const result = await Pool.query(`SELECT firstname, lastname, phone, email FROM users`);
+        let users = [];
+        for (const row of result.rows) {
+            const user = {
+                name: row.firstname,
+                surname: row.lastname,
+                phone: row.phone,
+                email: row.email
+            }
+        users.push(user);
+    }
+        return users;
+} catch (err) {
+    throw err;
+}
+    
+}
+module.exports.get_users = get_users;
 
 
 module.exports.get_products_by_category = get_products_by_category;
@@ -47,7 +71,7 @@ module.exports.get_position_of_subcategory = get_position_of_subcategory;
  * @param {Number} id user ID
  * @return {typedef.Product_for_basket[]} list of products to display in list
  */
- async function get_products_to_basket(id) {
+async function get_products_to_basket(id) {
     return [
         { id: 1, name: "Komp", imgurl: "images/test.png", price: 5000, quantity: 3 },
         { id: 2, name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.AFt6jAmiSg_OdO67WkA0CgHaD3%26pid%3DApi&f=1", desc: "Lorem Ipsum", price: 5000, quantity: 2 },
@@ -61,7 +85,7 @@ module.exports.get_products_to_basket = get_products_to_basket;
  * @param {Number} id product ID
  * @return {typedef.Product_for_basket} 
  */
- async function get_product_to_basket(id) {
+async function get_product_to_basket(id) {
     return { id: id, name: "Komp", imgurl: "images/test.png", price: 5000 };
 }
 module.exports.get_product_to_basket = get_product_to_basket;
@@ -70,14 +94,14 @@ module.exports.get_product_to_basket = get_product_to_basket;
  * update/add 
  * @param {Number} id product ID
  */
- async function update_product_in_basket(user_id, product_id, quantity) {
+async function update_product_in_basket(user_id, product_id, quantity) {
 }
 module.exports.update_product_in_basket = update_product_in_basket;
 /**
  * Update 
  * @param {typedef.Product} product
  */
- async function update_product(product) {
+async function update_product(product) {
 
 }
 module.exports.update_product = update_product;
@@ -86,6 +110,6 @@ module.exports.update_product = update_product;
  *  
  * 
  */
- async function del_product() {
+async function del_product() {
 }
 module.exports.del_product = del_product;

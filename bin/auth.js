@@ -1,6 +1,7 @@
 const hasher = require('../bin/hasher');
 const database = require('../database/database');
-const role = require('../bin/role');
+const typedef = require('../typedef');
+const role = typedef.role;
 
 /**
  * password validation

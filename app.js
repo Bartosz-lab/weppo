@@ -16,7 +16,6 @@ const accRouter     = require('./routes/account');
 const productRouter = require('./routes/product');
 const categoryRouter = require('./routes/category');
 const orderRouter   = require('./routes/order');
-const adressRouter  = require('./routes/adress');
 const userRouter    = require('./routes/user');
 const basketRouter    = require('./routes/basket');
 
@@ -72,9 +71,8 @@ app.use('/', indexRouter);
 app.use('/account', accRouter);
 app.use('/p', productRouter);
 app.use('/c', categoryRouter);
-app.use('/order', orderRouter);
-app.use('/adress', adressRouter);
-app.use('/user', userRouter);
+app.use('/orders', orderRouter);
+app.use('/users', userRouter);
 app.use('/basket', basketRouter);
 
 // catch 404 and forward to error handler
