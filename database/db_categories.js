@@ -14,7 +14,7 @@ const role = typedef.role; //czy jest używane?
  */
 async function get_categories() {
     //OK zamiast * można wybrać tylko odpowiednie kolumny (ale nie wiem co jest wydajniejsze więc twoja wola)
-    // czemu robisz iterator za pomocą while zamiast użyć for of
+    // czemu robisz iterator za pomocą while zamiast użyć for of // bo lubie
     try {
         const result = await Pool.query(`SELECT * FROM categories;`);
         let categories = [];
