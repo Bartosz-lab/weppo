@@ -1,27 +1,20 @@
-<div class = "subcontener">
-    <span>Adres</span> <br><br>
-    <label for="street">Ulica</label>
-    <input type="text" name="street" id="street" value="<%= street %>">
-    <br>
 
-    <label for="nr_house">Nr Domu</label>
-    <input type="text" name="nr_house" id="nr_house" value="<%= nr_house %>">
-    <br>
-
-    <label for="nr_flat">Nr mieszkania</label>
-    <input type="text" name="nr_flat"  id="nr_flat" value="<%= nr_flat %>">
-    <br>
-
-    <label for="zip_code">Kod pocztowy</label>
-    <input type="text" name="zip_code" id="zip_code" value="<%= zip_code %>">
-    <br>
-
-    <label for="city">Ulica</label>
-    <input type="text" name="city" id="city" value="<%= city %>">
-    <br>
-
-    <label for="country">Kraj</label>
-    <input type="text" name="country" name="id" value="<%= country %>">
-    <br>
-    <input type="button" onclick="adress_Edit()" value="Zapisz">
+<span>Adres:</span> <br>
+<div class="column">
+    Ulica:<br>
+    Numer Domue:<br>
+    Numer Mieszkania:<br>
+    Kod Pocztowy:<br>
+    Miasto:<br>
+    Kraj:<br>
 </div>
+<div class="column" style="width:60%">
+    <input type="text" style="width:100%;" name="street" id="street" value="<%= street %>"><br>
+    <input type="text" style="width:100%;" name="nr_house" id="nr_house" value="<%= nr_house %>"><br>
+    <input type="text" style="width:100%;" name="nr_flat"  id="nr_flat" value="<%= nr_flat %>"><br>
+    <input type="text" style="width:100%;" name="zip_code" id="zip_code" value="<%= zip_code %>"><br>
+    <input type="text" style="width:100%;" name="city" id="city" value="<%= city %>"><br>
+    <input type="text" style="width:100%;" name="country" name="id" value="<%= country %>"><br>
+</div>
+<div style="clear:both"></div>
+<input type="button" onclick="adress_Edit()" value="Zapisz">
