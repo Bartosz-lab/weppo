@@ -142,6 +142,9 @@ module.exports.get_product_by_id = get_product_by_id;
  * @return {} nothing
  */
  async function add_product (Product) {
+   //zaobserwowane problemy
+      //1. Przypisywanie do błędnej kategorii(zawsze przypisuje do 1)
+      //2. W momencie gdy wysyłane są parametry to wyskakuje błą bazy 
    try {
         const result = await Pool.query(
             `INSERT INTO products (id, name, subcat_id, price, descr, brand, photo_url) VALUES 
