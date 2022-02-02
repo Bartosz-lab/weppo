@@ -109,7 +109,6 @@ const sort = {
 module.exports.sort = sort;
 
 
-//Do Opisania
 /** 
  * @typedef  Address 
  * @property {Number} id unique ID
@@ -120,17 +119,6 @@ module.exports.sort = sort;
  * @property {String} zip_code
  * @property {String} city
  * @property {String} country
- */
-/** 
- * @typedef  Product Michał powinien tu dokładny opis dać jak wygląda produkt
- * @property {Number} id unique ID
- * @property {Number} subcat_id unique ID
- * @property {String} name
- * @property {Object} params
- * @property {String} desc
- * @property {String} brand
- * @property {String} imgurl
- * @property {String} price
  */
 
 /** 
