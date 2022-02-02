@@ -57,15 +57,6 @@ async function get_products_by_category(id, number, start, type) {
     //kategoria, ile zwrócić, od jakiego zacząć, typ sortowania
 }
 
-/**
- * 
- * @param {Number} id Subcategory ID
- * @return {{category_id: Number, category_name: String, id: Number, name: String}} list of Filters with his options
- */
-async function get_position_of_subcategory(id) {
-    return { category_id: 1, category_name: "Podzespoły", id: id, name: "Dyski" };
-}
-module.exports.get_position_of_subcategory = get_position_of_subcategory;
 
 
 /**

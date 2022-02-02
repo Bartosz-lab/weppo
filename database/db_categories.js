@@ -1,12 +1,17 @@
-const { text } = require('body-parser'); //czym jest to i czy jest używane?
-const { max } = require('pg/lib/defaults'); //czym jest to i czy jest używane?
 const Pool = require('../database/db_pool');
-const throw_my_error = require('../database/throw_error');
 const typedef = require('../typedef'); 
-const role = typedef.role; //czy jest używane?
 
-
-
+/**
+ * Throwing errors 
+ * @param {Error} err error
+ */
+ function throw_my_error(err) {
+    if(+err.message[0] >= 0 && +err.message[0] <= 10){
+      throw err;
+    } else {
+      throw new Error('7. Database Error');
+    }
+}
 
 /**
  *  Get all categories of products
@@ -99,3 +104,25 @@ async function get_filters_by_subcategory(subcat_id) {
 }
 module.exports.get_filters_by_subcategory = get_filters_by_subcategory;
 
+
+/**
+ * 
+ * @param {Number} subcat_id Subcategory ID
+ * @return {{category_id: Number, category_name: String, id: Number, name: String}} list of Filters with his options
+ */
+ async function get_position_of_subcategory(subcat_id) {
+    try {
+        const result = await Pool.query(`SELECT * FROM widok12 WHERE subcat_id = $1;`, [subcat_id]);
+        if (!result.rows[0].subcat_id) throw new Error('7. Database Error');
+        return { 
+            category_id: result.rows[0].cat_id, 
+            category_name:  result.rows[0].cat_name, 
+            id: subcat_id, 
+            name:  result.rows[0].subcat_name
+        };
+    } catch (err) {
+        throw_my_error(err);
+    }
+
+}
+module.exports.get_position_of_subcategory = get_position_of_subcategory;
