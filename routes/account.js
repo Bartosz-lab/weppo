@@ -64,8 +64,17 @@ router.post('/edit_password', upload.single(), auth.restrict_login,   async (req
 });
 
 router.post('/edit_adress', auth.restrict_login, async (req, res) => {
+    console.log("edit")
     try {
-        await database.save_user_adress(req.body);
+        await database.save_user_adress(
+            req.session.user, 
+            req.body.street,
+            req.body.nr_house,
+            req.body.nr_flat,
+            req.body.zip_code,
+            req.body.city,
+            req.body.country
+        );
         res.send({Response: '0. Success'});
     } catch (err) {
         res.end(err.message);

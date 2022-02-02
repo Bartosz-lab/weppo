@@ -19,10 +19,11 @@ module.exports = {
 /**
 
  */
-async function save_user_adress(id) {
-    //Proszę tworząc tą funkc
-
+async function save_user_adress(user_id, street, nr_house, nr_flat, zip_code, city, country) {
+    console.log("SET ADRESS NOT IMPLEMENTED");
+    console.log(`Data: id: ${user_id} st: ${street} nr h: ${nr_house} nr f: ${nr_flat} zip: ${zip_code} city: ${city} counry: ${country}`);
 }
+
 module.exports.save_user_adress = save_user_adress;
 /**
 
