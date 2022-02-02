@@ -37,6 +37,16 @@ router.get('/admin', auth.restrict_login, auth.restrict_role(Role.Admin),  async
     }
 });
 
+router.get('/users', auth.restrict_login, auth.restrict_role(Role.Admin),  async (req, res) => {
+    res.render("users-administration")
+    try {
+        res.render("admin-page")
+    } catch (err) {
+        req.session.error = err.message;
+        res.redirect('/error');
+    }
+});
+
 router.post('/edit_user', upload.single(), auth.restrict_login, async (req, res) => {
     try {
         await database.change_user_data(req.session.user, req.body.firstname, req.body.lastname, req.body.phone);

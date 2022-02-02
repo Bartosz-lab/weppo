@@ -11,7 +11,7 @@ const Role = typedef.role;
 router.get('/', auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
     try {
         const users = await database.get_users();
-        res.send(users);
+        res.render('users-administration', {users: users});
 
     } catch (err) {
         req.session.error = err.message;

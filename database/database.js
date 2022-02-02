@@ -31,10 +31,11 @@ module.exports.save_user_adress = save_user_adress;
  const Pool = require('../database/db_pool');
 async function get_users() {
     try {
-        const result = await Pool.query(`SELECT firstname, lastname, phone, email FROM users`);
+        const result = await Pool.query(`SELECT id, firstname, lastname, phone, email FROM users`);
         let users = [];
         for (const row of result.rows) {
             const user = {
+                id: row.id,
                 name: row.firstname,
                 surname: row.lastname,
                 phone: row.phone,
