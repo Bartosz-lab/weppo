@@ -10,4 +10,4 @@
         throw new Error('7. Database Error');
     }
 }
-module.exports.throw_my_error = throw_my_error;
+module.exports = throw_my_error;

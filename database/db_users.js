@@ -1,19 +1,9 @@
 const Pool = require('../database/db_pool');
+const throw_my_error = require('../database/throw_error');
 const typedef = require('../typedef');
-const role = typedef.role;
+const Role = typedef.role;
 
 
-/**
- * Throwing errors 
- * @param {Error} err error
- */
- function throw_my_error(err) {
-  if(+err.message[0] >= 0 && +err.message[0] <= 10){
-    throw err;
-  } else {
-    throw new Error('7. Database Error');
-  }
-}
 /**
  * Finding password by User ID
  * @param {number} id user ID
@@ -140,9 +130,9 @@ module.exports.check_user_role = check_user_role;
     }
 
     let ret_obj = {};
-    ret_obj[role.Admin] = roles.includes(role.Admin);
-    ret_obj[role.Seller] = roles.includes(role.Seller);
-    ret_obj[role.Customer] = roles.includes(role.Customer);
+    ret_obj[Role.Admin] = roles.includes(Role.Admin);
+    ret_obj[Role.Seller] = roles.includes(Role.Seller);
+    ret_obj[Role.Customer] = roles.includes(Role.Customer);
   
     return ret_obj;
   } catch (err) {
@@ -175,21 +165,6 @@ module.exports.check_user_roles = check_user_roles;
 module.exports.get_user_password = get_user_password;
 
 /**
- * Finding user id by username function
- * @param {string} username username
- * @return {number | null} user id or null if user is not found
- */
-async function get_id_of_user(username) {
-  //nie jestem pewny będę sprawdzał
-  const result = await Pool.query(`SELECT * FROM users WHERE username = $1;` , [username]);
-  if (result.rows[0]) {
-    return result.rows[0].id;
-  }
-  return new Error("6 invalid data");
-}
-module.exports.get_id_of_user = get_id_of_user;
-
-/**
  * Change user name / surname / phone / password / email
  * @param {number} id user id in database
  * @param {string} new_name User Firstname
@@ -200,7 +175,7 @@ module.exports.get_id_of_user = get_id_of_user;
  * @param {string} new_salt User salt for Password
  */
 async function change_user_data(id, new_name, new_lastname, new_phone, new_email, new_hash, new_salt) {
-  //Nie jestem pewien będę analizował
+  //OK
   //brakuje lepszego sprawdzenia czy parametr ma być przesłany
   try {
     const result = await Pool.query(`SELECT * FROM roles WHERE user_id=$1;`, [id]);
@@ -245,66 +220,3 @@ async function change_user_data(id, new_name, new_lastname, new_phone, new_email
   }
 }
 module.exports.change_user_data = change_user_data;
-
-/**
- * Finding user by username function
- * @param {string} name username
- * @return {User} user object or undefined if user is not found
- */
- async function get_user_by_username(name) {
-   //nie jestem pewny będę sprawdzał
-  const result = await Pool.query(`SELECT * FROM USERS WHERE USERNAME='${name}';`);
-  if (result.rows[0]) {
-    return {
-      id : result.rows[0].id,
-      username : result.rows[0].username,
-      hash : result.rows[0].hash,
-      salt : result.rows[0].salt,
-      name : result.rows[0].firstname,
-      surname : result.rows[0].lastname,
-      phone : result.rows[0].phone,
-      email : result.rows[0].email,
-    }
-  }
-  return undefined;
-}
-module.exports.get_user_by_username = get_user_by_username;
-
-/**
- * Finding user by id function
- * @param {number} id user ID
- * @return {{name: string, pass: string, salt: string}} user object or undefined if user is not found
- */
- async function get_user_by_id(id) {
-   //nie jestem pewny będę sprawdzał
-  const result = await Pool.query(`SELECT * FROM USERS WHERE id ='${id}';`);
-  if (result.rows[0]) {
-    return {
-      id : result.rows[0].id,
-      username : result.rows[0].username,
-      hash : result.rows[0].hash,
-      salt : result.rows[0].salt,
-      name : result.rows[0].firstname,
-      surname : result.rows[0].lastname,
-      phone : result.rows[0].phone,
-      email : result.rows[0].email,
-    }
-  }
-  return undefined;
-}
-module.exports.get_user_by_id = get_user_by_id;
-
-/**
- * Finding user id by username function
- * @param {string} username username
- * @return {number | null} user id or null if user is not found
- */
- async function get_id_of_user(username) {
-   //nie jestem pewny będę sprawdzał
-  const result = await Pool.query(`SELECT * FROM users WHERE username ='${username}';`);
-  if (result.rows[0]) {
-      return result.rows[0].id;
-  }
-  return new Error("6 invalid data");
-}
-module.exports.get_id_of_user = get_id_of_user;

@@ -1,20 +1,6 @@
 const Pool = require('../database/db_pool');
-//const throw_my_error = require('../database/throw_error');
+const throw_my_error = require('../database/throw_error');
 const typedef = require('../typedef');
-
-
-/**
- * Throwing errors 
- * @param {Error} err error
- */
- function throw_my_error(err) {
-  if(+err.message[0] >= 0 && +err.message[0] <= 10){
-    throw err;
-  } else {
-    throw new Error('7. Database Error');
-  }
-}
-
 
 /**
  * Get list of products
@@ -29,7 +15,9 @@ const typedef = require('../typedef');
  * @return {typedef.Product_for_list[]} list of products to display in list
  */
 async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, min_price, max_price, brand, search_conds) {
-  //Ok chyba
+  //Ok pamiętaj o sort by
+  //jednak nie ok przy przekazaniu parametrów
+  //kompletnie nie rozumiem co tu się dzieje, więc nie bardzo mogę pomóc
   if (min_price === undefined) min_price = 0;
   if (max_price === undefined) max_price = 99999999;
   if (per_page === undefined) per_page = 10;
@@ -40,8 +28,8 @@ async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, mi
   }
 
   try {
-    products_filtered = [];
-    pf_i = 0;
+    let products_filtered = [];
+    let pf_i = 0;
     while (search_conds[pf_i]) {
       result_filters = (await Pool.query(`SELECT product_id FROM widok7 WHERE (filter_id = $1) AND (option_value = $2)`, [search_conds[pf_i].id, search_conds[pf_i].value])).rows;
       result_filters = result_filters.map(item => item.product_id);
@@ -137,8 +125,10 @@ module.exports.get_product_by_id = get_product_by_id;
 /**
  * Add a new product
  * @param {typedef.Product} Product object
+ * @returns {Number} Product ID
  */
 async function add_product(Product) {
+  //OK
   try {
     const result = await Pool.query(
       `INSERT INTO products (id, name, subcat_id, price, descr, brand, photo_url) VALUES 
@@ -161,28 +151,6 @@ async function add_product(Product) {
   }
 }
 module.exports.add_product = add_product;
-
-async function main () {
-  try {
-    Pool.connect ();
-        product_to_add = {
-      subcat_id : 1,
-      name : "test5",
-      price : 999,
-      desc : "heASDDASjo",
-      imgurl : "",
-      brand : "ADIDAS",
-      params : [{id : 3, value : "106"}]
-    }
-    const res = await add_product (product_to_add);
-    console.log (res);
-  }
-  catch (err) {
-    console.log (err.message);
-  }
-}
-
-main ();
 
 /**
  * Update product info

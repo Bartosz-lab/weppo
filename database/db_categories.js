@@ -63,6 +63,7 @@ module.exports.get_subcategories = get_subcategories;
  */
 async function get_filters_by_subcategory(subcat_id) {
     //OK, ale pamiętaj o kolejności sortowania
+    // parametry option są tylko dla enumu, dla numberu nie sa potrzebne
     try {
         const result = await Pool.query(`SELECT * FROM widok9 WHERE subcat_id = $1 ORDER BY filter_id;`, [subcat_id]);
         let filter_list = [];
@@ -101,9 +102,10 @@ module.exports.get_filters_by_subcategory = get_filters_by_subcategory;
  * @return {{category_id: Number, category_name: String, id: Number, name: String}} list of Filters with his options
  */
 async function get_position_of_subcategory(subcat_id) {
+    //OK
     try {
         const result = await Pool.query(`SELECT * FROM widok12 WHERE subcat_id = $1;`, [subcat_id]);
-        if (!result.rows[0].subcat_id) throw new Error('7. Database Error');
+        if (!result.rows[0]) throw new Error('7. Database Error');
         return {
             category_id: result.rows[0].cat_id,
             category_name: result.rows[0].cat_name,

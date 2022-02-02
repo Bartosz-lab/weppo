@@ -13,6 +13,7 @@ router.get('/', (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {   
+        console.log(req.query);
         const sort_by = (req.query.sort_by) ? req.query.sort_by : Sort.price_asc;
         const per_page = (req.query.per_page) ? req.query.per_page : 30;
         const page = (req.query.page) ? req.query.page : 1;
@@ -33,7 +34,6 @@ router.get('/:id', async (req, res) => {
                 search_conds.push({id: filter.id, value: req.query[filter.name], type: Filter_type.other});
             } 
         }
-        
         const render_obj = {
             sort_by: sort_by,
             per_page: per_page,

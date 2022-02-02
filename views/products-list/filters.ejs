@@ -5,13 +5,15 @@
         Cena:<br>
         Od: <input type="number" name="price-min">
         Do: <input type="number" name="price-max">
+        Producent: 
+        <input type="text" name="producer">
 
         <% for(filter of filters) { %>
             <%= filter.name %> <br>
 
             <% if( filter.type == "enum") { %>
                 <% for( opt of filter.options ) { %>
-                    <input type="radio" id="<%= opt.name+filter.name %>" name="<%= filter.name %>" value="<%= opt.name %>">
+                    <input type="checkbox" id="<%= opt.name+filter.name %>" name="<%= filter.name %>" value="<%= opt.name %>">
                     <label for="<%= opt.name+filter.name %>"><%= opt.name %></label><br>
                 <% } %>
             <% } else { %>
