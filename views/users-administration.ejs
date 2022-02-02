@@ -9,8 +9,17 @@
     <h1> Użytkownicy serwisu: </h1>
 
     <% for( var user in users ) { %>
-        <div class="prodcontener" style="text-align:left ;">
-            ID: <%= users[user].id %><br><%= users[user].name %> <%= users[user].surname %> <br><%= users[user].email %> <%= users[user].phone %>
+        <div class="prodcontener" style="text-align:left">
+            <div class="column" style ="float: left" onclick="location.href = '/users/<%= users[user].id %>'">
+                ID: <%= users[user].id %><br><%= users[user].name %> <%= users[user].surname %> <br><%= users[user].email %> <%= users[user].phone %>
+            </div>
+            <div class="column" style ="float: right">
+                <form method="post" action="/users/promote">
+                    <input type="hidden" value="<%= users[user].id %>" name="id">
+                    <input type="submit" value="Mianuj administratorem">
+                </form>
+            </div>
+            <div style="clear: both"></div>
         </div>
     <% } %>
 </div>
