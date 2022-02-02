@@ -7,6 +7,7 @@ const session       = require('express-session');
 const multer        = require('multer');
 var upload = multer();
 
+const database = require('./database/database');
 const typedef = require('./typedef');
 const Role = typedef.role;
 
@@ -18,6 +19,7 @@ const categoryRouter = require('./routes/category');
 const orderRouter   = require('./routes/order');
 const userRouter    = require('./routes/user');
 const basketRouter    = require('./routes/basket');
+
 
 
 const app = express();
@@ -38,7 +40,7 @@ app.use(session({
   cookie: {maxAge: 1000 * 60 * 15} //15 min
 }));
 
-app.use(function (req, res, next) {
+app.use(async (req, res, next) => {
   const err = req.session.error;
   delete req.session.error;
   res.locals.error = '';
@@ -46,6 +48,7 @@ app.use(function (req, res, next) {
     res.locals.error = err;
   }
 
+  //navbar
   res.locals.role = Role;
 
   const user_role = req.session.role;
@@ -53,7 +56,9 @@ app.use(function (req, res, next) {
 
   const number_of_roles = req.session.number_of_roles;
   res.locals.number_of_roles = number_of_roles;
-  
+
+  res.locals.cats = await database.get_categories();
+  res.locals.subcats = await database.get_subcategories();
 
   res.locals.orders = [
     { date: "12-01-2022", price: "200" },
