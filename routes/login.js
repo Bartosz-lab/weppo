@@ -4,7 +4,7 @@ module.exports = router;
 
 const auth = require('../bin/auth');
 const typedef = require('../typedef');
-const role = typedef.role;
+const Role = typedef.role;
 const database = require('../database/database');
 
 //logut path
@@ -38,12 +38,10 @@ router.post('/login', async (req, res) => {
             res.redirect(returnUrl);
         });
     } catch (err) {
-        console.log(err.message);
-        if (err.message[0] === '2' || err.message[0] === '3') {
-            req.session.error = err.message;
+        req.session.error = err.message;
+        if (err.message[0] === '2' || err.message[0] === '3') { 
             res.redirect(req.url);
         } else {
-            req.session.error = err.message;
             res.redirect('/error');
         }
     }
@@ -55,7 +53,7 @@ router.get('/role', auth.restrict_login, async (req, res) => {
         const usr_roles = await database.check_user_roles(req.session.user);
         const usr_info = await database.get_user_info_by_id(req.session.user);
 
-        const number_of_roles = +usr_roles[role.Admin] + usr_roles[role.Seller] + usr_roles[role.Customer];
+        const number_of_roles = +usr_roles[Role.Admin] + usr_roles[Role.Seller] + usr_roles[Role.Customer];
         req.session.number_of_roles = number_of_roles;
         if (number_of_roles >= 2) {
             res.render('login/role-switch', {
@@ -65,12 +63,12 @@ router.get('/role', auth.restrict_login, async (req, res) => {
                 surname: usr_info.surname
             });
         } else if (number_of_roles > 0) {
-            if (usr_roles[role.Admin]) {
-                req.session.role = role.Admin;
-            } else if (usr_roles[role.Seller]) {
-                req.session.role = role.Seller;
-            } else if (usr_roles[role.Customer]) {
-                req.session.role = role.Customer;
+            if (usr_roles[Role.Admin]) {
+                req.session.role = Role.Admin;
+            } else if (usr_roles[Role.Seller]) {
+                req.session.role = Role.Seller;
+            } else if (usr_roles[Role.Customer]) {
+                req.session.role = Role.Customer;
             }
             const returnUrl = req.query.returnUrl ? req.query.returnUrl : '/';
             res.redirect(returnUrl);
@@ -89,14 +87,14 @@ router.post('/role', auth.restrict_login, async (req, res) => {
         const usr_roles = await database.check_user_roles(req.session.user);
         let usr_role;
         switch (selected_role) {
-            case role.Admin:
-                usr_role = role.Admin;
+            case Role.Admin:
+                usr_role = Role.Admin;
                 break;
-            case role.Seller:
-                usr_role = role.Seller;
+            case Role.Seller:
+                usr_role = Role.Seller;
                 break;
-            case role.Customer:
-                usr_role = role.Customer;
+            case Role.Customer:
+                usr_role = Role.Customer;
                 break;
         }
         if (usr_roles[usr_role]) {

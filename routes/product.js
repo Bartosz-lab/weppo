@@ -12,7 +12,6 @@ router.get('/', (req, res) => {
 });
 
 router.get('/create', auth.restrict_login, auth.restrict_role(Role.Admin), (req, res) => {
-    //OK
     try {
         res.render('product/create-product');
 
@@ -23,7 +22,6 @@ router.get('/create', auth.restrict_login, auth.restrict_role(Role.Admin), (req,
 });
 
 router.get('/:id',  async (req, res) => {
-    //OK
     try {
         const product = await database.get_product_by_id(req.params.id);
         let render_obj = {
@@ -44,7 +42,6 @@ router.get('/:id',  async (req, res) => {
 
 
 router.post('/',  auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
-    //OK
     try {
         const filters = await database.get_filters_by_subcategory(req.body.subcat_id);
         let params = [];
@@ -75,7 +72,6 @@ router.post('/',  auth.restrict_login, auth.restrict_role(Role.Admin), async (re
 
 
 router.post('/add',  auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
-    //OK
     try {
         const filters = await database.get_filters_by_subcategory(req.body.subcat_id);
         let params = [];
@@ -103,7 +99,6 @@ router.post('/add',  auth.restrict_login, auth.restrict_role(Role.Admin), async 
     }
 });
 router.post('/params',  auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
-    //OK
     try {
         const filters = await database.get_filters_by_subcategory(req.body.id);
         res.send(filters);
@@ -114,7 +109,6 @@ router.post('/params',  auth.restrict_login, auth.restrict_role(Role.Admin), asy
     }
 });
 router.post('/:id/del',  auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
-    //OK
     try {
         await database.del_product(req.params.id);
         res.send({Response:'0. Success'});

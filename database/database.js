@@ -25,6 +25,7 @@ async function save_user_adress(user_id, street, nr_house, nr_flat, zip_code, ci
 }
 
 module.exports.save_user_adress = save_user_adress;
+
 /**
 
  */
@@ -79,23 +80,8 @@ module.exports.get_products_to_basket = get_products_to_basket;
  * @return {typedef.Product_for_basket} 
  */
 async function get_product_to_basket(id) {
+    //zdecydowanie potrzebne 
     return require('./db_products').get_product_by_id(id);
     //return { id: id, name: "Komp", imgurl: "images/test.png", price: 5000 };
 }
 module.exports.get_product_to_basket = get_product_to_basket;
-
-/**
- * update/add 
- * @param {Number} id product ID
- */
-async function update_product_in_basket(user_id, product_id, quantity) {
-}
-module.exports.update_product_in_basket = update_product_in_basket;
-/**
- * Update 
- * @param {typedef.Product} product
- */
-async function update_product(product) {
-
-}
-module.exports.update_product = update_product;

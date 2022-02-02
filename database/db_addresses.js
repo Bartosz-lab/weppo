@@ -51,6 +51,7 @@ module.exports.get_address_by_id = get_address_by_id;
  * @return {Address} users address
  */
  async function get_adress_by_user_id(user_id) {
+     //OK
     try {
         const result = await Pool.query(`SELECT * FROM addresses WHERE user_id = $1 ORDER BY id DESC;`, [user_id]);
         if (result.rows[0]) {

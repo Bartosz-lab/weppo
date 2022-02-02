@@ -20,6 +20,7 @@ const role = typedef.role;
  * @return {{hash: string, salt: string}} User password
  */
 async function get_password_by_user_id(id) {
+  //OK
   try {
     const result = await Pool.query(`SELECT hash, salt FROM users WHERE ID=$1;`, [id]);
     if (result.rows[0]) {
@@ -39,6 +40,7 @@ module.exports.get_password_by_user_id = get_password_by_user_id;
  * @return {typedef.User_info}  User_info object
  */
 async function get_user_info_by_id(id) {
+  //OK
   try {
     const result = await Pool.query(`SELECT firstname, lastname, phone, email FROM users WHERE ID=$1;`, [id]);
     if (result.rows[0]) {
@@ -64,14 +66,8 @@ module.exports.get_user_info_by_id = get_user_info_by_id
  * @return {number} user ID
  */
 async function add_user(user) {
+  //OK
   try {
-    //tutaj potrzebne będzie sprawdzanie poprawności danych 
-
-    //SPRAWDZENIE CZY ISTNIEJE TAKI UŻYTKOWNIK I W RAZIE CZEGO ZWRÓCENIE 2. Invalid login
-
-    // mejl zawiera malpe, phone ma 9 cyfr i 2 myslinki, 
-    // imie i nazwisko z duzej litery sie zaczyna, reszta mala, nie pusty
-    // zmienic phone na text w bazie
     const result = await Pool.query(
       `INSERT INTO users (id, username, hash, salt, firstname, lastname, phone, email) VALUES 
       (DEFAULT, $1, $2, $3, $4, $5, $6, $7 ) RETURNING id;`,
@@ -94,6 +90,7 @@ module.exports.add_user = add_user;
  * @param {typedef.Role} role role of user from typedef.role
  */
 async function add_role_to_user(id, role) {
+  //OK
   try {
     if (await check_user_role(id, role)) {
       throw new Error('9. User have this role');
@@ -112,6 +109,7 @@ module.exports.add_role_to_user = add_role_to_user;
  * @return {bool} true if user have this role
  */
 async function check_user_role(id, role) {
+  //OK
   try {
     const result = await Pool.query(`SELECT role FROM roles WHERE user_id =$1;`, [id]);
     let roles = [];
@@ -132,6 +130,7 @@ module.exports.check_user_role = check_user_role;
  * @return {Object} Object with key named by Role.role and bool value
  */
  async function check_user_roles(id) {
+   //OK
   try {
     const result = await Pool.query(`SELECT role FROM roles WHERE user_id =$1;`, [id]);
     let roles = [];
@@ -158,6 +157,7 @@ module.exports.check_user_roles = check_user_roles;
  * @return {{id: int, hash: string, salt: string}} object with id, hash and salt
  */
  async function get_user_password(login) {
+   //OK
   try {
     const result = await Pool.query(`SELECT id, hash, salt FROM users WHERE username=$1;`, [login]);
     if (!result.rows[0]) {
@@ -180,6 +180,7 @@ module.exports.get_user_password = get_user_password;
  * @return {number | null} user id or null if user is not found
  */
 async function get_id_of_user(username) {
+  //nie jestem pewny będę sprawdzał
   const result = await Pool.query(`SELECT * FROM users WHERE username = $1;` , [username]);
   if (result.rows[0]) {
     return result.rows[0].id;
@@ -187,19 +188,6 @@ async function get_id_of_user(username) {
   return new Error("6 invalid data");
 }
 module.exports.get_id_of_user = get_id_of_user;
-
-/**
- * Finding username by id function
- * @param {number} id ID
- * @return {string | null} username or null if user is not found
- */
-async function get_id_of_user(id) {
-  const result = await Pool.query(`SELECT * FROM users WHERE id ='${id}';`);
-  if (result.rows[0]) {
-    return result.rows[0].username;
-  }
-  return new Error("6 invalid data");
-}
 
 /**
  * Change user name / surname / phone / password / email
@@ -212,8 +200,8 @@ async function get_id_of_user(id) {
  * @param {string} new_salt User salt for Password
  */
 async function change_user_data(id, new_name, new_lastname, new_phone, new_email, new_hash, new_salt) {
-  //brakuje lepszego sprawdzenia czy parametr ma być przesłany, a jeśli tak to czy jest on poprawny
-  //proponuję stworzenie osobnego pliku z funkcjami sprawdź czy poprawe imie, nazwisko, telefon itp.
+  //Nie jestem pewien będę analizował
+  //brakuje lepszego sprawdzenia czy parametr ma być przesłany
   try {
     const result = await Pool.query(`SELECT * FROM roles WHERE user_id=$1;`, [id]);
     if (result.rows[0]) {
@@ -264,6 +252,7 @@ module.exports.change_user_data = change_user_data;
  * @return {User} user object or undefined if user is not found
  */
  async function get_user_by_username(name) {
+   //nie jestem pewny będę sprawdzał
   const result = await Pool.query(`SELECT * FROM USERS WHERE USERNAME='${name}';`);
   if (result.rows[0]) {
     return {
@@ -287,6 +276,7 @@ module.exports.get_user_by_username = get_user_by_username;
  * @return {{name: string, pass: string, salt: string}} user object or undefined if user is not found
  */
  async function get_user_by_id(id) {
+   //nie jestem pewny będę sprawdzał
   const result = await Pool.query(`SELECT * FROM USERS WHERE id ='${id}';`);
   if (result.rows[0]) {
     return {
@@ -310,6 +300,7 @@ module.exports.get_user_by_id = get_user_by_id;
  * @return {number | null} user id or null if user is not found
  */
  async function get_id_of_user(username) {
+   //nie jestem pewny będę sprawdzał
   const result = await Pool.query(`SELECT * FROM users WHERE username ='${username}';`);
   if (result.rows[0]) {
       return result.rows[0].id;

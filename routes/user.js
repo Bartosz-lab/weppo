@@ -9,9 +9,10 @@ const Role = typedef.role;
 
 
 router.get('/', auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
+    //OK
     try {
         const users = await database.get_users();
-        res.render('users-administration', {users: users});
+        res.render('users-administration', { users: users });
 
     } catch (err) {
         req.session.error = err.message;
@@ -20,11 +21,10 @@ router.get('/', auth.restrict_login, auth.restrict_role(Role.Admin), async (req,
 });
 
 router.post('/promote', auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
-    try {    
-        await database.add_role_to_user(req.body.id, req.body.role == '1' ? Role.Seller : Role.Admin);
-        const users = await database.get_users();
-        res.render('users-administration', {users: users});
-
+    //OK
+    try {
+        await database.add_role_to_user(req.body.id, +req.body.role);
+        res.redirect('/users');
     } catch (err) {
         req.session.error = err.message;
         res.redirect('/error');
@@ -32,12 +32,16 @@ router.post('/promote', auth.restrict_login, auth.restrict_role(Role.Admin), asy
 });
 
 router.get('/:id', auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
+    //zmiana na render
     try {
-        const user = await database.get_user_info_by_id(req.params.id);
-        res.send(user);
+        const render_obj = {
+            user: await database.get_user_info_by_id(req.params.id),
+            adress: await database.get_adress_by_user_id(req.params.id)
+        }
+        res.send(render_obj);
 
-    } catch (err) {
-        req.session.error = err.message;
-        res.redirect('/error');
-    }
-});
+        } catch (err) {
+            req.session.error = err.message;
+            res.redirect('/error');
+        }
+    });

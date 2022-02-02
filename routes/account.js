@@ -13,7 +13,6 @@ router.get('/', auth.restrict_login, async (req, res) => {
     try {
         let adress = undefined;
         if(req.session.role === Role.Customer) {
-            console.log("adress");
             adress = await database.get_adress_by_user_id(req.session.user);
         }
         const render_obj = {
