@@ -1,6 +1,19 @@
 const Pool = require('../database/db_pool');
-const throw_my_error = require('../database/throw_error');
+//const throw_my_error = require('../database/throw_error');
 const typedef = require('../typedef');
+
+
+/**
+ * Throwing errors 
+ * @param {Error} err error
+ */
+ function throw_my_error(err) {
+  if(+err.message[0] >= 0 && +err.message[0] <= 10){
+    throw err;
+  } else {
+    throw new Error('7. Database Error');
+  }
+}
 
 
 /**
@@ -126,8 +139,6 @@ module.exports.get_product_by_id = get_product_by_id;
  * @param {typedef.Product} Product object
  */
 async function add_product(Product) {
-  //zaobserwowane problemy
-  //2. W momencie gdy wysyłane są parametry to wyskakuje błą bazy 
   try {
     const result = await Pool.query(
       `INSERT INTO products (id, name, subcat_id, price, descr, brand, photo_url) VALUES 
@@ -136,17 +147,13 @@ async function add_product(Product) {
     if (!result.rows[0]) throw new Error('7. Database Error');
 
     for (let param of Product.params) {
-      //w tej pętli dla każdego parametru pobierasz jego id
-      //jeśli istnieje dodajesz relację miedzy nim a produktem
-      //A CO JEŚLI NIE ISTNIEJE??? może warto wtedy go dodać?
       const param_result = await Pool.query(`SELECT option_id FROM widok11 where filter_id = $1 AND option_value = $2;`, [param.id, param.value])
       let filter_option_id = (param_result.rows[0]) ? param_result.rows[0].option_id : undefined;
       if (!filter_option_id) {
-        //tutaj dodaję opcję filtera bo jej nie było 
-        //filter_option_id = await Pool.query(``, [])
+        filter_option_id = await Pool.query (`INSERT INTO filters_options (filter_id, option_value) VALUES ($1, $2) RETURNING id;`, [param.id, param.value]);
+        filter_option_id = filter_option_id.rows[0].id;
       }
-      //wykomentowane bo narazie nie dodajemy opcji filtra
-      //await Pool.query(`INSERT INTO products_to_filters (product_id, filter_option_id) VALUES ($1,$2);`, [result.rows[0].id, filter_option_id]);
+      const result2 = await Pool.query (`INSERT INTO products_to_filters (product_id, filter_option_id) VALUES ($1, $2);`, [result.rows[0].id, filter_option_id]);
     }
     return result.rows[0].id;
   } catch (err) {
@@ -154,6 +161,28 @@ async function add_product(Product) {
   }
 }
 module.exports.add_product = add_product;
+
+async function main () {
+  try {
+    Pool.connect ();
+        product_to_add = {
+      subcat_id : 1,
+      name : "test5",
+      price : 999,
+      desc : "heASDDASjo",
+      imgurl : "",
+      brand : "ADIDAS",
+      params : [{id : 3, value : "106"}]
+    }
+    const res = await add_product (product_to_add);
+    console.log (res);
+  }
+  catch (err) {
+    console.log (err.message);
+  }
+}
+
+main ();
 
 /**
  * Update product info
