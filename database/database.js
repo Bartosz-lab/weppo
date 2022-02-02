@@ -108,11 +108,3 @@ async function update_product(product) {
 
 }
 module.exports.update_product = update_product;
-
-/**
- *  
- * 
- */
-async function del_product() {
-}
-module.exports.del_product = del_product;

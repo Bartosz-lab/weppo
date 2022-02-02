@@ -82,3 +82,15 @@ module.exports.get_address_by_id = get_address_by_id;
     }
 }
 module.exports.get_adress_by_user_id = get_adress_by_user_id;
+
+/**
+ * Save users address
+ * @param {Address} users_address
+ * @return 
+ */
+async function save_user_adress(user_id, street, nr_house, nr_flat, zip_code, city, country) {
+    console.log("SET ADRESS NOT IMPLEMENTED");
+    console.log(`Data: id: ${user_id} st: ${street} nr h: ${nr_house} nr f: ${nr_flat} zip: ${zip_code} city: ${city} counry: ${country}`);
+}
+
+module.exports.save_user_adress = save_user_adress;
