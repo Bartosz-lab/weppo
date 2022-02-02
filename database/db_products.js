@@ -236,3 +236,22 @@ async function get_recemended_products_in_subcategory(subcat_id) {
   }
 }
 module.exports.get_recemended_products_in_subcategory = get_recemended_products_in_subcategory;
+
+
+
+/**
+ * Delet a product by his id 
+ * @param {Number} prod_id Products id
+ * @return 
+ */
+async function del_product(prod_id) {
+  try {
+    let result1 = await Pool.query ('DELETE FROM products_to_filters WHERE product_id = $1;', [prod_id]);
+    let result2 = await Pool.query ('DELETE FROM products WHERE id = $1 RETURNING id;', [prod_id]);
+    if (!result2.rows[0].id) throw new Error('7. Database Error');
+   return;
+  } catch (err) {
+    throw_my_error(err);
+  }
+}
+module.exports.del_product = del_product;
