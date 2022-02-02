@@ -11,7 +11,19 @@ router.get('/', (req, res) => {
     res.redirect('/');
 });
 
+router.get('/create', auth.restrict_login, auth.restrict_role(Role.Admin), (req, res) => {
+    //OK
+    try {
+        res.render('product/create-product');
+
+    } catch (err) {
+        req.session.error = err.message;
+        res.redirect('/error');
+    }
+});
+
 router.get('/:id',  async (req, res) => {
+    //OK
     try {
         const product = await database.get_product_by_id(req.params.id);
         let render_obj = {
@@ -20,8 +32,6 @@ router.get('/:id',  async (req, res) => {
             subcat_info: await database.get_position_of_subcategory(product.subcat_id)
         }
         if(res.locals.user_role === Role.Admin){
-            render_obj.cats = await database.get_categories();
-            render_obj.subcats = await database.get_subcategories();
             res.render('product/edit-product', render_obj);
         } else {
             res.render('product/product', render_obj);
@@ -32,18 +42,6 @@ router.get('/:id',  async (req, res) => {
     }
 });
 
-router.get('/create', auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
-    render_obj = {};
-    try {
-        render_obj.cats = await database.get_categories();
-        render_obj.subcats = await database.get_subcategories();
-        res.render('product/create-product', render_obj);
-
-    } catch (err) {
-        req.session.error = err.message;
-        res.redirect('/error');
-    }
-});
 
 router.post('/',  auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
     try {
@@ -78,6 +76,7 @@ router.post('/',  auth.restrict_login, auth.restrict_role(Role.Admin), async (re
 
 
 router.post('/add',  auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
+    //OK
     try {
         const filters = await database.get_filters_by_subcategory(req.body.subcat_id);
         let params = [];
@@ -87,12 +86,12 @@ router.post('/add',  auth.restrict_login, auth.restrict_role(Role.Admin), async 
             } 
         }
         const product = {
-            subcat_id: req.body.subcat_id,
+            subcat_id: +req.body.subcat_id,
             name: req.body.name,
-            price: req.query.price,
+            price: req.body.price,
             desc: req.body.desc,
             imgurl: req.body.imgurl,
-            brand: req.query.brand,
+            brand: req.body.brand,
             params: params
         }
         const prod_id = await database.add_product(product);
@@ -105,14 +104,9 @@ router.post('/add',  auth.restrict_login, auth.restrict_role(Role.Admin), async 
     }
 });
 router.post('/params',  auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
+    //OK
     try {
         const filters = await database.get_filters_by_subcategory(req.body.id);
-        let params = [];
-        for (const filter of filters) {
-            if(req.query[filter.name]) {
-                params.push({id: filter.id, value: req.query[filter.name]});
-            } 
-        }
         res.send(filters);
 
     } catch (err) {
@@ -121,6 +115,7 @@ router.post('/params',  auth.restrict_login, auth.restrict_role(Role.Admin), asy
     }
 });
 router.post('/:id/del',  auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
+    //OK
     try {
         await database.del_product(req.params.id);
         res.send({Response:'0. Success'});
