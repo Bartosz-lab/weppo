@@ -1,21 +1,6 @@
-const { text } = require('body-parser');
-const { max } = require('pg/lib/defaults');
 const Pool = require('../database/db_pool');
+const throw_my_error = require('../database/throw_error');
 const typedef = require('../typedef');
-const role = typedef.role;
-
-
-/**
- * Throwing errors 
- * @param {Error} err error
- */
-function throw_my_error(err) {
-  if (+err.message[0] >= 0 && +err.message[0] <= 10) {
-    throw err;
-  } else {
-    throw new Error('7. Database Error');
-  }
-}
 
 
 /**
@@ -31,7 +16,7 @@ function throw_my_error(err) {
  * @return {typedef.Product_for_list[]} list of products to display in list
  */
 async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, min_price, max_price, brand, search_conds) {
-
+  //Ok chyba
   if (min_price === undefined) min_price = 0;
   if (max_price === undefined) max_price = 99999999;
   if (per_page === undefined) per_page = 10;
@@ -139,7 +124,6 @@ module.exports.get_product_by_id = get_product_by_id;
 /**
  * Add a new product
  * @param {typedef.Product} Product object
- * @return {} nothing
  */
 async function add_product(Product) {
   //zaobserwowane problemy
@@ -151,16 +135,18 @@ async function add_product(Product) {
       [Product.name, Product.subcat_id, Product.price, Product.desc, Product.brand, Product.imgurl]);
     if (!result.rows[0]) throw new Error('7. Database Error');
 
-    let i = 0;
-    while (Product.params[i]) {
-      filter_id = Product.params[i].id;
-      option_value = Product.params[i].value;
-      const filter_option_id = await Pool.query(`SELECT option_id FROM widok11 where filter_id = $1 AND option_value = $2;`, [filter_id, option_value])
-
-      if (filter_option_id.rows[0].option_id) {
-        const result2 = await Pool.query(`INSERT INTO products_to_filters (product_id, filter_option_id) VALUES ($1,$2);`, [result.rows[0].id, filter_option_id.rows[0].option_id]);
+    for (let param of Product.params) {
+      //w tej pętli dla każdego parametru pobierasz jego id
+      //jeśli istnieje dodajesz relację miedzy nim a produktem
+      //A CO JEŚLI NIE ISTNIEJE??? może warto wtedy go dodać?
+      const param_result = await Pool.query(`SELECT option_id FROM widok11 where filter_id = $1 AND option_value = $2;`, [param.id, param.value])
+      let filter_option_id = (param_result.rows[0]) ? param_result.rows[0].option_id : undefined;
+      if (!filter_option_id) {
+        //tutaj dodaję opcję filtera bo jej nie było 
+        //filter_option_id = await Pool.query(``, [])
       }
-      i++;
+      //wykomentowane bo narazie nie dodajemy opcji filtra
+      //await Pool.query(`INSERT INTO products_to_filters (product_id, filter_option_id) VALUES ($1,$2);`, [result.rows[0].id, filter_option_id]);
     }
     return result.rows[0].id;
   } catch (err) {
@@ -174,42 +160,35 @@ module.exports.add_product = add_product;
  * @param {typedef.Product} product
  */
 async function update_product(Product) {
+  //Nie zapomnij o edycji parametrów
   try {
-    const result = await Pool.query(`SELECT * FROM products WHERE id =$1;`, [Product.id]);
-    if (result.rows[0]) {
-      let query = 'UPDATE products SET';
-      let params = [Product.id];
-      let i = 2;
-      if (typeof Product.name === 'string') {
-        query += ` name=$${i++}`;
-        params.push(Product.new_name);
-      }
-      if (typeof Product.price === 'number') {
-        if (i > 2) query += ',';
-        query += ` price=$${i++}`;
-        params.push(Product.price);
-      }
-      if (typeof Product.descr === 'string') {
-        if (i > 2) query += ',';
-        query += ` descr=$${i++}`;
-        params.push(Product.descr);
-      }
-      if (typeof Product.brand === 'string') {
-        if (i > 2) query += ',';
-        query += ` brand=$${i++}`;
-        params.push(Product.brand);
-      }
-      if (typeof Product.photo_url === 'string') {
-        if (i > 2) query += ',';
-        query += ` photo_url=$${i++}`;
-        params.push(Product.photo_url);
-      }
+    const test = await Pool.query(`SELECT * FROM products WHERE id =$1;`, [Product.id]);
+    if (test.rows[0]) {
+      // const result = await Pool.query(
+      //   `INSERT INTO products (id, name, subcat_id, price, descr, brand, photo_url) VALUES 
+      //         (DEFAULT, $1, $2, $3, $4, $5, $6) RETURNING id;`,
+      //   [Product.name, Product.subcat_id, Product.price, Product.desc, Product.brand, Product.imgurl]);
+      // if (!result.rows[0]) throw new Error('7. Database Error');
 
-      query += ' WHERE id=$1;';
-      await Pool.query(query, params);
+      // for (let param of Product.params) {
+      //   //w tej pętli dla każdego parametru pobierasz jego id
+      //   //jeśli istnieje dodajesz relację miedzy nim a produktem
+      //   //A CO JEŚLI NIE ISTNIEJE??? może warto wtedy go dodać?
+      //   const param_result = await Pool.query(`SELECT option_id FROM widok11 where filter_id = $1 AND option_value = $2;`, [param.id, param.value])
+      //   let filter_option_id = (param_result.rows[0]) ? param_result.rows[0].option_id : undefined;
+      //   if (!filter_option_id) {
+      //     //tutaj dodaję opcję filtera bo jej nie było 
+      //     //filter_option_id = await Pool.query(``, [])
+      //   }
+      //   //wykomentowane bo narazie nie dodajemy opcji filtra
+      //   //await Pool.query(`INSERT INTO products_to_filters (product_id, filter_option_id) VALUES ($1,$2);`, [result.rows[0].id, filter_option_id]);
+      // }
+      // return result.rows[0].id;
+    } else {
+      throw new Error('7. Database Error');
     }
-  } catch {
-    throw new Error('7. Database Error');
+  } catch (err) {
+    throw_my_error(err);
   }
 }
 module.exports.update_product = update_product;
@@ -223,6 +202,7 @@ module.exports.update_product = update_product;
  * @return {typedef.Product_for_list[]} list of products to display in list
  */
 async function get_recemended_products_in_subcategory(subcat_id) {
+  //OK
   try {
     how_many = 4;
     let products_id = (await Pool.query(`SELECT id FROM products where subcat_id = $1 LIMIT $2;`, [subcat_id, how_many])).rows;
@@ -241,19 +221,16 @@ async function get_recemended_products_in_subcategory(subcat_id) {
 }
 module.exports.get_recemended_products_in_subcategory = get_recemended_products_in_subcategory;
 
-
-
 /**
- * Delet a product by his id 
+ * Delete a product by his id 
  * @param {Number} prod_id Products id
- * @return 
  */
 async function del_product(prod_id) {
+  //OK
   try {
-    let result1 = await Pool.query('DELETE FROM products_to_filters WHERE product_id = $1;', [prod_id]);
-    let result2 = await Pool.query('DELETE FROM products WHERE id = $1 RETURNING id;', [prod_id]);
-    if (!result2.rows[0].id) throw new Error('7. Database Error');
-    return;
+    await Pool.query('DELETE FROM products_to_filters WHERE product_id = $1;', [prod_id]);
+    const result = await Pool.query('DELETE FROM products WHERE id = $1 RETURNING id;', [prod_id]);
+    if (!result.rows[0].id) throw new Error('7. Database Error');
   } catch (err) {
     throw_my_error(err);
   }

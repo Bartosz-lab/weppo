@@ -44,6 +44,7 @@ router.get('/:id',  async (req, res) => {
 
 
 router.post('/',  auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
+    //OK
     try {
         const filters = await database.get_filters_by_subcategory(req.body.subcat_id);
         let params = [];
@@ -52,16 +53,14 @@ router.post('/',  auth.restrict_login, auth.restrict_role(Role.Admin), async (re
                 params.push({id: filter.id, value: req.body[filter.name]});
             } 
         }
-        console.log(req.body);
-        console.log(params);
         const product = {
-            id: req.body.id,
-            subcat_id: req.body.subcat_id,
+            id: +req.body.id,
+            subcat_id: +req.body.subcat_id,
             name: req.body.name,
-            price: req.query.price,
+            price: req.body.price,
             desc: req.body.desc,
             imgurl: req.body.imgurl,
-            brand: req.query.brand,
+            brand: req.body.brand,
             params: params
         }
         await database.update_product(product);
