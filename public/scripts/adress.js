@@ -14,7 +14,14 @@ async function postData(url = '', data = {}) {
   alertBox.style.visibility = "hidden";
   
   function adress_Edit() {
-    postData('/account/edit_adress').then(data => {
+    postData('/account/edit_adress', {
+      street: document.getElementById('street').value,
+      nr_house: document.getElementById('nr_house').value,
+      nr_flat: document.getElementById('nr_flat').value,
+      zip_code: document.getElementById('zip_code').value,
+      city: document.getElementById('city').value,
+      country: document.getElementById('country').value,
+    }).then(data => {
         alertBox.style.visibility = "visible";
         alertBox.style.borderColor = (data.Response[0] == '0') ? "var(--green)" : "var(--red)";
         alertBox.innerHTML = (data.Response[0] == '0') ? 
