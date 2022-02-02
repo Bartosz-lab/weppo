@@ -67,7 +67,7 @@ module.exports.get_subcategories = get_subcategories;
  * @return {typedef.Filter[]} list of Filters with his options
  */
 async function get_filters_by_subcategory(subcat_id) {
-    //jeszcze nie sprawdziłem
+    //OK, ale pamiętaj o kolejności sortowania
     try {
         const result = await Pool.query(`SELECT * FROM widok9 WHERE subcat_id = $1 ORDER BY filter_id;`, [subcat_id]);
         let filter_list = [];
