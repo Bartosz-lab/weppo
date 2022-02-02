@@ -28,7 +28,6 @@ router.get('/', auth.restrict_login, async (req, res) => {
 });
 
 router.get('/admin', auth.restrict_login, auth.restrict_role(Role.Admin),  async (req, res) => {
-    res.render("admin-page")
     try {
         res.render("admin-page")
     } catch (err) {
@@ -38,9 +37,8 @@ router.get('/admin', auth.restrict_login, auth.restrict_role(Role.Admin),  async
 });
 
 router.get('/users', auth.restrict_login, auth.restrict_role(Role.Admin),  async (req, res) => {
-    res.render("users-administration")
     try {
-        res.render("admin-page")
+        res.render("users-administration")
     } catch (err) {
         req.session.error = err.message;
         res.redirect('/error');

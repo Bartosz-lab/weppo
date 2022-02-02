@@ -16,7 +16,14 @@
             <div class="column" style ="float: right">
                 <form method="post" action="/users/promote">
                     <input type="hidden" value="<%= users[user].id %>" name="id">
+                    <input type="hidden" value="2" name="role">
                     <input type="submit" value="Mianuj administratorem">
+                </form>
+
+                <form method="post" action="/users/promote">
+                    <input type="hidden" value="<%= users[user].id %>" name="id">
+                    <input type="hidden" value="1" name="role">
+                    <input type="submit" value="Mianuj sprzedawcą">
                 </form>
             </div>
             <div style="clear: both"></div>
