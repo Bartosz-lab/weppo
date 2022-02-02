@@ -142,7 +142,7 @@ module.exports.get_product_by_id = get_product_by_id;
  * @return {} nothing
  */
  async function add_product (Product) {
-   try {
+  try {
         const result = await Pool.query(
             `INSERT INTO products (id, name, subcat_id, price, descr, brand, photo_url) VALUES 
             (DEFAULT, $1, $2, $3, $4, $5, $6) RETURNING id;`,
@@ -151,9 +151,9 @@ module.exports.get_product_by_id = get_product_by_id;
 
         let i = 0;
         while (Product.params[i]) {
-          filter_name = Product.params[i].key;
+          filter_id = Product.params[i].key;
           option_value = Product.params[i].value;
-          const filter_option_id = await Pool.query (`SELECT option_id FROM widok11 where filter_name = $1 AND option_value = $2;`, [filter_name, option_value])
+          const filter_option_id = await Pool.query (`SELECT option_id FROM widok11 where filter_id = $1 AND option_value = $2;`, [filter_id, option_value])
           
           if (filter_option_id.rows[0].option_id) {
             const result2 = await Pool.query (`INSERT INTO products_to_filters (product_id, filter_option_id) VALUES ($1,$2);`,[result.rows[0].id, filter_option_id.rows[0].option_id]);
@@ -164,7 +164,7 @@ module.exports.get_product_by_id = get_product_by_id;
     } catch (err) {
         throw_my_error(err);
     }
-}
+ }
 module.exports.add_product = add_product;
 
 /**
@@ -211,6 +211,8 @@ module.exports.add_product = add_product;
     }
   }
 module.exports.update_product = update_product;
+
+
 
 /**
  * Return 4 products of type Product for list ideally from table most reecommended products : subcat_id | product_id x 4  
