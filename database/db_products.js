@@ -157,39 +157,44 @@ module.exports.add_product = add_product;
  * @param {typedef.Product} product
  */
 async function update_product(Product) {
-  //Nie zapomnij o edycji parametrów
   try {
-    const test = await Pool.query(`SELECT * FROM products WHERE id =$1;`, [Product.id]);
+    const test = await Pool.query(`SELECT * FROM products WHERE id = $1;`, [Product.id]);
     if (test.rows[0]) {
-      // const result = await Pool.query(
-      //   `INSERT INTO products (id, name, subcat_id, price, descr, brand, photo_url) VALUES 
-      //         (DEFAULT, $1, $2, $3, $4, $5, $6) RETURNING id;`,
-      //   [Product.name, Product.subcat_id, Product.price, Product.desc, Product.brand, Product.imgurl]);
-      // if (!result.rows[0]) throw new Error('7. Database Error');
 
-      // for (let param of Product.params) {
-      //   //w tej pętli dla każdego parametru pobierasz jego id
-      //   //jeśli istnieje dodajesz relację miedzy nim a produktem
-      //   //A CO JEŚLI NIE ISTNIEJE??? może warto wtedy go dodać?
-      //   const param_result = await Pool.query(`SELECT option_id FROM widok11 where filter_id = $1 AND option_value = $2;`, [param.id, param.value])
-      //   let filter_option_id = (param_result.rows[0]) ? param_result.rows[0].option_id : undefined;
-      //   if (!filter_option_id) {
-      //     //tutaj dodaję opcję filtera bo jej nie było 
-      //     //filter_option_id = await Pool.query(``, [])
-      //   }
-      //   //wykomentowane bo narazie nie dodajemy opcji filtra
-      //   //await Pool.query(`INSERT INTO products_to_filters (product_id, filter_option_id) VALUES ($1,$2);`, [result.rows[0].id, filter_option_id]);
-      // }
-      // return result.rows[0].id;
-    } else {
-      throw new Error('7. Database Error');
-    }
+      const result = await Pool.query(
+        `UPDATE products SET name = $1, subcat_id = $2, price = $3, descr = $4, brand = $5, photo_url = $6 WHERE id = $7 RETURNING id;`,
+        [Product.name, Product.subcat_id, Product.price, Product.desc, Product.brand, Product.imgurl, Product.id]);
+
+      if (!result.rows[0]) throw new Error('7. Database Error');
+
+      for (let param of Product.params) {
+        const product_has_this_filter = await Pool.query(`SELECT * FROM widok9 WHERE (product_id = $1) AND (filter_id = $2);`, [test.rows[0].id, param.id]);
+        const product_has_this_filter_and_option = await Pool.query(`SELECT * FROM widok9 WHERE (product_id = $1) AND (filter_id = $2) AND (option_value = $3);`, [test.rows[0].id, param.id, param.value]);
+        if (product_has_this_filter_and_option.rows[0]) continue;
+        if (product_has_this_filter.rows[0] && param.value == undefined) {
+          const remove_filter_from_product = await Pool.query(`DELETE FROM products_to_filters WHERE product_id = $1 AND filter_option_id = $2;`, [test.rows[0].id, product_has_this_filter.rows[0].filter_option]);
+          continue;
+        }
+        const param_result = await Pool.query(`SELECT * FROM widok11 WHERE filter_id = $1 AND option_value = $2;`, [param.id, param.value]);
+        if (!param_result.rows[0]) {
+          filter_option_id = await Pool.query (`INSERT INTO filters_options (filter_id, option_value) VALUES ($1, $2) RETURNING id;`, [param.id, param.value]);
+          filter_option_id = filter_option_id.rows[0].id;
+        }
+        else filter_option_id = param_result.rows[0].option_id;
+
+        if (product_has_this_filter.rows[0]) {
+          const update_product_with_existing_option =  await Pool.query(`UPDATE products_to_filters SET filter_option_id = $1 WHERE (product_id = $2 AND filter_option_id = $3);`, [filter_option_id, test.rows[0].id, product_has_this_filter.rows[0].filter_option]);
+          continue;
+        }
+        const result2 = await Pool.query (`INSERT INTO products_to_filters (product_id, filter_option_id) VALUES ($1, $2);`, [result.rows[0].id, filter_option_id]);
+      }
+        return result.rows[0].id;
+      }
   } catch (err) {
-    throw_my_error(err);
+    console.log (err.message);
   }
 }
 module.exports.update_product = update_product;
-
 
 
 /**
