@@ -29,19 +29,57 @@
 
     <div id="links">
         <ol>
-              <% let last_cat = 0; %>
-              <% for(const subcat of subcats) { %>
-              <% if(last_cat != subcat.cat_id) { %>
-              <% if(last_cat != 0) { %>
-              </ol></li>
-              <% } %>
-              <li><%= cats[last_cat++].val %><ol>
-
-              
-                <% } %>
-                <li><a href="/c/<%= subcat.id %>"><%= subcat.val %></a></li>
-                <% } %>
-            </ol></li>
+            <li>
+                <div class="dropdown">
+                    <a class="btn" id="button1" href="/c/1">Komputery i laptopy</a>
+                    <div class="dropdown-content" style="font-size: 1.2em; transform: translateX(-100px);">
+                        <a href="/c/1">Laptopy gamingowe</a><br>
+                        <a href="/c/2">Laptopy biznesowe</a><br>
+                        <a href="/c/3">Laptopy 2 w 1</a><br>
+                        <a href="/c/4">Komputery stacjonarne</a><br>
+                        <a href="/c/5">Laptopy gamingowe</a><br>
+                        <a href="/c/6">Etui na laptopa</a>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="dropdown">
+                    <a class="btn" id="button1" href="/c/7">Smartfony</a>
+                    <div class="dropdown-content" style="font-size: 1.2em; transform: translateX(-100px);">
+                        <a href="/c/7">Smartfony</a><br>
+                        <a href="/c/8">Etui na smartfona</a><br>
+                        <a href="/c/9">Ładowarki do smartfona</a><br>
+                        <a href="/c/10">Tablety</a>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="dropdown">
+                    <a class="btn" id="button1" href="/c/11">Peryferia</a>
+                    <div class="dropdown-content" style="font-size: 1.2em; transform: translateX(-100px);">
+                        <a href="/c/11">Monitory</a><br>
+                        <a href="/c/12">Drukarki</a><br>
+                        <a href="/c/13">Myszki</a><br>
+                        <a href="/c/14">Klawiatury</a><br>
+                        <a href="/c/15">Słuchawki i głośniki</a><br>
+                        <a href="/c/16">Mikrofony i kamerki</a>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="dropdown">
+                    <a class="btn" id="button1" href="/c/17">Podzespoły</a>
+                    <div class="dropdown-content" style="font-size: 1.2em; transform: translateX(-100px);">
+                        <a href="/c/17">Karty graficzne</a><br>
+                        <a href="/c/18">Procesory</a><br>
+                        <a href="/c/19">Płyty główne</a><br>
+                        <a href="/c/20">Zasilacze</a><br>
+                        <a href="/c/21">Obudowy</a><br>
+                        <a href="/c/22">Pamięć RAM</a><br>
+                        <a href="/c/23">Chłodzenie</a>
+                    </div>
+                </div>
+            </li>
         </ol>
     </div>
 </div>
