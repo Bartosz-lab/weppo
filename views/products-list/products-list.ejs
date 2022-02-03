@@ -7,6 +7,18 @@
 <div class ="contener">
     <%- include('../components/link.ejs', subcat_info)  %> 
 
+    <br>
+    <div class="column">Strona: <%= page %></div>
+    <% if (page != 1) { %>
+      <div class="column">
+        <form><input type="hidden" name="page" value="<%- +page-1 %>"><input type="submit" value="Poprzednia strona"></form>
+      </div>
+    <% } %>
+    <div class="column">
+      <form><input type="hidden" name="page" value="<%- +page+1 %>"><input type="submit" value="Następna strona"></form>
+    </div>
+    <div style="clear:both"></div>
+
     <!-- Nazwa Kategorii -->
     <%- include('filters') %> 
 
@@ -15,6 +27,21 @@
         <%- include('../components/wide-item', product) %>
     <% } %>
   <div style="clear:both"></div>
+
+  <br><br>
+  <div class="column">Strona: <%= page %></div>
+  <% if (page != 1) { %>
+    <div class="column">
+      <form><input type="hidden" name="page" value="<%- +page-1 %>"><input type="submit" value="Poprzednia strona"></form>
+    </div>
+  <% } %>
+  <div class="column">
+    <form><input type="hidden" name="page" value="<%- +page+1 %>"><input type="submit" value="Następna strona"></form>
+  </div>
+  <div style="clear:both"></div>
+  <br>
+
+
 </div>
 <div id="alert" class="alertBox"></div>
 

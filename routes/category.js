@@ -36,6 +36,7 @@ router.get('/:id', async (req, res) => {
         }
         const render_obj = {
             sort_by: sort_by,
+            sort_opt: Sort,
             per_page: per_page,
             page: page,
             products: await database.get_product_by_subcategory(req.params.id,sort_by, per_page, page, req.query['price-min'], req.query['price-max'], req.query['producer'], search_conds),
