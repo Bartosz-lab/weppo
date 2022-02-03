@@ -6,10 +6,26 @@
 
 <div class ="contener">
 
+  <% if ( products.length == 0 ) { %>
+    <div class = "main-page-title">Koszyk jest obecnie pusty.</div><br><br>
+    Zapraszamy na zakupy.  
+  <% } %>
+
   <% for(let product of products) { 
     product.mode = 1; %>
     <%- include('./components/wide-item', product) %>
-<% } %>
+  <% } %>
+
+
+  <% if ( products.length != 0 ) { %>
+    <br><br>
+    <form method="post" action="/order">
+        <input type="submit" value="Złóż zamówienie">
+    </form>
+    <br>
+  <% } %>
+
+
 </div>
 <div id="alert" class="alertBox"></div>
 </body>
