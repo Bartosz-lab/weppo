@@ -208,11 +208,13 @@ body {
     background-color: var(--bg0);
     width: 10%;
     top: 15%;
+    max-height: 70%;
     padding: 1em;
     text-align: left;
     border: 1px solid black;
     border-radius: 0 1em 1em 0;
-
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 /*eksperymentalne chowanie informacji o jakości hasła*/
