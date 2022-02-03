@@ -1,3 +1,14 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./template/head') %>
+
+<body id="body">
+  <%- include('./template/topbar') %>
+
+  <div class="contener">
+    <h1><%= error %></h1>
+  </div>
+
+</body>
+
+</html>
