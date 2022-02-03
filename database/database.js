@@ -18,15 +18,6 @@ async function get_products_by_category(id, number, start, type) {
     console.log('ok');
 }
 
-module.exports.add_order = add_order;
-/**
- * Hej Opisz Mnie i przenieś
- */
- async function get_product_price(id) {
-    return 10;
-}
-
-module.exports.get_product_price = get_product_price;
 /**
  * Hej Opisz Mnie i przenieś
  */

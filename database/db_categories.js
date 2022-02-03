@@ -8,8 +8,6 @@ const typedef = require('../typedef');
  *  @return {{id: Number, val: String}[]} table of object with {cat_id, cat_name}
  */
 async function get_categories() {
-    //OK zamiast * można wybrać tylko odpowiednie kolumny (ale nie wiem co jest wydajniejsze więc twoja wola)
-    // czemu robisz iterator za pomocą while zamiast użyć for of // bo lubie
     try {
         const result = await Pool.query(`SELECT * FROM categories;`);
         let categories = [];
@@ -33,8 +31,6 @@ module.exports.get_categories = get_categories;
  * @return {{id: Number, cat_id: Number, val: String}[]} table of object with {subcat_id, cat_id, subcat_name}
  */
 async function get_subcategories() {
-    //OK zamiast * można wybrać tylko odpowiednie kolumny (ale nie wiem co jest wydajniejsze więc twoja wola)
-    // czemu robisz iterator za pomocą while zamiast użyć for of
     try {
         const result = await Pool.query(`SELECT * FROM subcategories;`);
         let subcategories = [];
