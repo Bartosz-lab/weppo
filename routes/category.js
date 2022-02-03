@@ -33,10 +33,10 @@ router.get('/:id', async (req, res) => {
             } else if(req.query[filter.name]) {
                 // search_conds.push({id: filter.id, value: req.query[filter.name], type: Filter_type.other});
 
-                /* Rozbij na osobne wyraz rodzielone plusem i dodaj każdy z wyrazów do filtrów */
+                /* Rozbij na osobne wyrazy rozsdzielone plusem i dodaj każdy z wyrazów do filtrów */
                 req.query[filter.name].split('+').forEach(opt => {
                     search_conds.push({id: filter.id, value: opt, type: Filter_type.other});
-                });s
+                });
             } 
         }
         const render_obj = {
