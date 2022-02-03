@@ -44,41 +44,41 @@ async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, mi
 
     const result = await Pool.query(`SELECT * FROM products WHERE (subcat_id = $1) AND (price BETWEEN $2 AND $3) AND (brand = ANY ($4)) AND (id = ANY ($5)) LIMIT $6 OFFSET $7;`,
       [subcat_id, min_price, max_price, brand, products_filtered, per_page, (page - 1) * per_page]);
-
+    console.log( result.rows);
     let products_list = [];
     for (let i = 0; i < result.rows.length; i++) {
-      const result_params = await Pool.query(`SELECT * FROM widok7 WHERE (product_id = $1)`, [result.rows[i].id]);
+      //const result_params = await Pool.query(`SELECT * FROM widok7 WHERE (product_id = $1)`, [result.rows[i].id]);
       let params = [];
-      let j = 0;
-      while (result_params.rows[j] && j < 4) {
-        params.push(
-          {
-            key: result_params.rows[j].filter_name,
-            value: result_params.rows[j].option_value
-          }
-        )
-        j++;
-      }
+      // let j = 0;
+      // while (result_params.rows[j] && j < 4) {
+      //   params.push(
+      //     {
+      //       id: result_params.rows[j].filter_id,
+      //       value: result_params.rows[j].option_value
+      //     }
+      //   )
+      //   j++;
+      // }
 
       products_list.push({
         id: result.rows[i].id,
         name: result.rows[i].name,
-        brand: result.rows[i].brand,
+        //brand: result.rows[i].brand,
         imgurl: result.rows[i].photo_url,
         price: result.rows[i].price,
-        desc: result.rows[i].descr,
+        //desc: result.rows[i].descr,
         params: params
       }
       );
 
     }
+ 
     return (products_list);
   } catch (err) {
     throw_my_error(err);
   }
 }
 module.exports.get_product_by_subcategory = get_product_by_subcategory;
-
 
 /**
  * Get product
@@ -190,6 +190,7 @@ async function update_product(Product) {
       }
         return result.rows[0].id;
       }
+    else throw new Error('7. Database Error');
   } catch (err) {
     console.log (err.message);
   }
@@ -238,3 +239,56 @@ async function del_product(prod_id) {
   }
 }
 module.exports.del_product = del_product;
+
+/**
+ * Get product for a basket by products id
+ * @param {Number} id product ID
+ * @return {typedef.Product_for_basket} 
+ */
+ async function get_product_to_basket(prod_id) {
+    try {
+      const result = await Pool.query('SELECT * FROM products WHERE id = $1;', [prod_id]);
+      if (result.rows[0]) {
+        return ({
+          id : result.rows[0].id, 
+          name : result.rows[0].name, 
+          imgurl : result.rows[0].photo_url, 
+          price : result.rows[0].price, 
+          quantity : 1
+        })
+      }
+      else throw new Error('7. Database Error');
+    } catch (err) {
+      throw_my_error(err);
+    }
+
+}
+module.exports.get_product_to_basket = get_product_to_basket;
+
+
+/**
+ * Find products in search bar
+ */
+ async function find_products(search, sort_by, per_page, page, price_min, price_max, brands) {
+  return await require('./db_products').get_product_by_subcategory(1,sort_by, per_page, page, price_min, price_max, brands, []);
+}
+
+module.exports.find_products = find_products;
+
+/**
+ * Find products price by his id
+ * @param {Number} id product ID
+ * @return {Number} Products price
+ */
+ async function get_product_price(prod_id) {
+  try {
+    const result = await Pool.query('SELECT * FROM products WHERE id = $1;', [prod_id]);
+    if (result.rows[0]) {
+      return (result.rows[0].price);
+    }
+    else throw new Error('7. Database Error');
+  } catch (err) {
+    throw_my_error(err);
+  }
+}
+module.exports.get_product_price = get_product_price;

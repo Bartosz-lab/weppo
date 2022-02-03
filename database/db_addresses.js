@@ -90,8 +90,21 @@ module.exports.get_adress_by_user_id = get_adress_by_user_id;
  * @return 
  */
 async function save_user_adress(user_id, street, nr_house, nr_flat, zip_code, city, country) {
-    console.log("SET ADRESS NOT IMPLEMENTED");
-    console.log(`Data: id: ${user_id} st: ${street} nr h: ${nr_house} nr f: ${nr_flat} zip: ${zip_code} city: ${city} counry: ${country}`);
+    try {
+        const result = await Pool.query(`SELECT * FROM addresses WHERE user_id = $1;`, [user_id]);
+        if (result.rows[0]) {
+            const edit_address = await Pool.query(`UPDATE addresses SET street = $1, nr_house = $2, nr_flat = $3, zip_code = $4, city = $5, country = $6 WHERE user_id = $7;`, [street, nr_house, nr_flat, zip_code, city, country, user_id]);
+        }
+        else {
+            const save_new_address = await Pool.query(`INSERT INTO addresses (user_id, street, nr_house, nr_flat, zip_code, city, country) VALUES ($1, $2, $3, $4, $5, $6, $7);`, [user_id, street, nr_house, nr_flat, zip_code, city, country]);
+        }
+        return;
+    }
+    catch (err) {
+        throw_my_error(err);
+    }
+
 }
 
 module.exports.save_user_adress = save_user_adress;
+  

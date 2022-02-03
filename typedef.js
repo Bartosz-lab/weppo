@@ -20,7 +20,6 @@
  * @property {String} name Product name
  * @property {String} imgurl URL path to photos
  * @property {Number} price Product price
- * @property {Number} quantity quantity of product
  */
 /** 
  * @typedef  {Object} Product_for_list

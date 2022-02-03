@@ -25,6 +25,32 @@ async function get_password_by_user_id(id) {
 module.exports.get_password_by_user_id = get_password_by_user_id;
 
 /**
+ * Get a list of all users with their info
+ * @return {{id : number, firstname : string, lastname : string, phone : string, email : string}[]} All users with their info
+ */
+ async function get_users() {
+     try {
+         const result = await Pool.query(`SELECT id, firstname, lastname, phone, email FROM users`);
+         let users = [];
+         for (const row of result.rows) {
+             const user = {
+                 id: row.id,
+                 name: row.firstname,
+                 surname: row.lastname,
+                 phone: row.phone,
+                 email: row.email
+             }
+         users.push(user);
+     }
+         return users;
+ } catch (err) {
+     throw err;
+ }
+     
+ }
+ module.exports.get_users = get_users;
+
+/**
  * Finding User information by User ID
  * @param {number} id user ID
  * @return {typedef.User_info}  User_info object
