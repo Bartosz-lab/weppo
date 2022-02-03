@@ -123,10 +123,12 @@ module.exports.sort = sort;
  * @typedef  Order 
  * @property {Number} id unique ID
  * @property {Number} user_id user id
+ * @property {Number} price end price
  * @property {{id: Number, price: Number, quantity: Number}[]} products id price and quantity of products
  * @property {User_info} user_info information about user
  * @property {Address} address delivery adress
  * @property {Order_status} status status of order
+ * @property {Date} date date of order
  */
 /**
  * @typedef {String} Order_status
