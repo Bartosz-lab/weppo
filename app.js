@@ -27,12 +27,12 @@ const app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   resave: false, // don't save session if unmodified
   saveUninitialized: false, // don't create session until something stored
@@ -60,13 +60,6 @@ app.use(async (req, res, next) => {
   res.locals.cats = await database.get_categories();
   res.locals.subcats = await database.get_subcategories();
 
-  res.locals.orders = [
-    { date: "12-01-2022", price: "200" },
-    { date: "13-02-2077", price: "1337" }
-];;
-  
-  
-  
   next();
 });
 

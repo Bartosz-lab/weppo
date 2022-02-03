@@ -5,7 +5,6 @@ module.exports = router;
 const database = require('../database/database');
 const typedef = require('../typedef');
 const Sort = typedef.sort;
-const Filter_type = typedef.filter_type;
 
 router.get('/', (req, res) => {
   res.render('index');
