@@ -58,3 +58,12 @@ async function get_product_to_basket(id) {
     //return { id: id, name: "Komp", imgurl: "images/test.png", price: 5000 };
 }
 module.exports.get_product_to_basket = get_product_to_basket;
+
+/**
+ * Hej Opisz Mnie i przenieś
+ */
+ async function find_products(search, sort_by, per_page, page, price_min, price_max, brands) {
+    return await require('./db_products').get_product_by_subcategory(1,sort_by, per_page, page, price_min, price_max, brands, []);
+}
+
+module.exports.find_products = find_products;

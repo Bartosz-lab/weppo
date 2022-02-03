@@ -1,54 +1,38 @@
 const express = require('express');
-const { user } = require('pg/lib/defaults');
 const router = express.Router();
-
-
 module.exports = router;
 
+const database = require('../database/database');
+const typedef = require('../typedef');
+const Sort = typedef.sort;
+const Filter_type = typedef.filter_type;
 
-// Potrzebne do testowania EJS w index.ejs
-display = [
-  { href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum Lorem Ipsum  Lorem Ipsum", price: 5000 },
-  { href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.AFt6jAmiSg_OdO67WkA0CgHaD3%26pid%3DApi&f=1", desc: "Lorem Ipsum", price: 5000 },
-  { href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000 },
-  { href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum Lorem Ipsum  Lorem Ipsum", price: 5000 },
-  { href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.progarchives.com%2Fwallpapers%2FRUSHCOLLAGE.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000 },
-  { href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum Lorem Ipsum  Lorem Ipsum", price: 5000 },
-  { href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.9y2kjK5P_qFYJq3CMIMCcgHaHa%26pid%3DApi&f=1", desc: "Lorem Ipsum", price: 5000 },
-  { href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000 },
-  { href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.shortlist.com%2Fmedia%2Fimages%2F2019%2F05%2Fthe-50-greatest-rock-albums-ever-3-1556678339-s1A3-column-width-inline.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000 },
-  { href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.redroll.com%2Fwp-content%2Fuploads%2F2018%2F07%2Fprogrock1.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000 },
-  { href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000 },
-  { href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000 }
-] 
-
-
-router.get('/', function(req, res, next) {
-  res.render('index', {
-    orders: null,
-    display: display,
-    name: 'Jan',
-    surname: 'Kowalski',
-    roles: [
-      "Administrator",
-      "Klient"
-    ]
-  });
+router.get('/', (req, res) => {
+  res.render('index');
 });
-router.get('/error', function(req, res, next) {
-  res.send(res.locals.error);
+router.get('/error', (req, res) => {
+  res.render('./error');
 });
 
-router.get('/search', (req, res) => {
-  res.render('products', { 
-    display: display,
-    name: 'Jan',
-    surname: 'Kowalski',
-    roles: [
-      "Administrator",
-      "Klient"
-    ]
-  });
+router.get('/search', async (req, res) => {
+  try {   
+    const sort_by = (req.query.sort_by) ? req.query.sort_by : Sort.price_asc;
+    const per_page = (req.query.per_page) ? req.query.per_page : 30;
+    const page = (req.query.page) ? req.query.page : 1;
+
+    const render_obj = {
+        sort_by: sort_by,
+        per_page: per_page,
+        page: page,
+        products: await database.find_products(req.query.search, sort_by, per_page, page,req.query['price-min'], req.query['price-max'], req.query['producer']),
+        filters: [],
+        price_min: req.query['price-min'],
+        price_max: req.query['price-max'],
+        producer: req.query['producer']
+    };
+    res.render('products-list/products-search', render_obj);
+} catch (err) {
+    req.session.error = err.message;
+    res.redirect('/error');
+}
 })
-
-module.exports = router;
