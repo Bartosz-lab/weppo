@@ -38,7 +38,7 @@
             <% } %>
             <optgroup label="<%= cats[last_cat].id + '. ' + cats[last_cat++].val %>">
               <% } %>
-              <option value="<%= subcat.id %> "><%= subcat.id + '. ' + subcat.val %> </option>
+              <option value="<%= subcat.id %>" <% if(subcat.id == product.subcat_id) { %> selected <% } %> ><%= subcat.id + '. ' + subcat.val %> </option>
               <% } %>
             </optgroup>
           </select>
