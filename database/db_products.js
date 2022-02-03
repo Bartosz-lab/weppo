@@ -16,71 +16,74 @@ const typedef = require('../typedef');
  */
 async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, min_price, max_price, brand, search_conds) {
   //Ok pamiętaj o sort by
-  //jednak nie ok przy przekazaniu parametrów
-  //kompletnie nie rozumiem co tu się dzieje, więc nie bardzo mogę pomóc
-  if (min_price === undefined) min_price = 0;
-  if (max_price === undefined) max_price = 99999999;
+  if (min_price === undefined || min_price == "") min_price = 0;
+  if (max_price === undefined || max_price == "") max_price = 99999999;
   if (per_page === undefined) per_page = 10;
   if (page === undefined) page = 1;
-  if (brand === undefined) {
-    brand = (await Pool.query(`SELECT brand FROM products;`)).rows;
-    brand = brand.map(item => item.brand);
-  }
+  if (brand === undefined || brand == "") brand = ' IS NOT NULL';
+  else brand = "= " + "'"  + brand + "'"; 
 
-  try {
-    let products_filtered = [];
-    let pf_i = 0;
-    while (search_conds[pf_i]) {
-      result_filters = (await Pool.query(`SELECT product_id FROM widok7 WHERE (filter_id = $1) AND (option_value = $2)`, [search_conds[pf_i].id, search_conds[pf_i].value])).rows;
+  let products_list = [];
+  let products_filtered = [];
+  let pf_i = 0;
+  while (search_conds[pf_i]) {
+    if (search_conds[pf_i].type = typedef.filter_type.number_min) {
+      min = search_conds[pf_i].value;
+      max = search_conds[pf_i + 1].value;
+      if (max === undefined || max == "") max = 999999;
+      var result_filters = (await Pool.query(`SELECT product_id FROM widok7 WHERE (filter_id = $1) AND (option_value BETWEEN $2 AND $3);`, [search_conds[pf_i].id, min, max])).rows;
+      result_filters = result_filters.map(item => item.product_id);
+      if (pf_i == 0) products_filtered = result_filters;
+      pf_i++;
+    }
+    else {
+      var result_filters = (await Pool.query(`SELECT product_id FROM widok7 WHERE (filter_id = $1) AND (option_value = $2);`, [search_conds[pf_i].id, search_conds[pf_i].value])).rows;
       result_filters = result_filters.map(item => item.product_id);
       if (pf_i == 0) products_filtered = result_filters;
       products_filtered = products_filtered.filter(value => result_filters.includes(value));
-      pf_i++;
     }
-    if (pf_i == 0) {
-      products_filtered = (await Pool.query(`SELECT id FROM products;`)).rows;
-      products_filtered = products_filtered.map(item => item.id);
-    }
+    pf_i++;
+  }
 
-    const result = await Pool.query(`SELECT * FROM products WHERE (subcat_id = $1) AND (price BETWEEN $2 AND $3) AND (brand = ANY ($4)) AND (id = ANY ($5)) LIMIT $6 OFFSET $7;`,
-      [subcat_id, min_price, max_price, brand, products_filtered, per_page, (page - 1) * per_page]);
-    console.log( result.rows);
-    let products_list = [];
+  if (pf_i == 0) {
+    products_filtered = (await Pool.query(`SELECT id FROM products;`)).rows;
+    products_filtered = products_filtered.map(item => item.id);
+  }
+
+
+  const result = await Pool.query(`SELECT * FROM products WHERE (subcat_id = $1) AND (price BETWEEN $2 AND $3) AND brand IN (SELECT brand from products WHERE brand ${brand}) AND (id = ANY ($4)) LIMIT $5 OFFSET $6;`,
+      [subcat_id, min_price, max_price, products_filtered, per_page,(page - 1) * per_page] );
+
     for (let i = 0; i < result.rows.length; i++) {
-      //const result_params = await Pool.query(`SELECT * FROM widok7 WHERE (product_id = $1)`, [result.rows[i].id]);
+      const result_params = await Pool.query(`SELECT * FROM widok7 WHERE (product_id = $1);`, [result.rows[i].id]);
       let params = [];
-      // let j = 0;
-      // while (result_params.rows[j] && j < 4) {
-      //   params.push(
-      //     {
-      //       id: result_params.rows[j].filter_id,
-      //       value: result_params.rows[j].option_value
-      //     }
-      //   )
-      //   j++;
-      // }
+      let j = 0;
+      while (result_params.rows[j] && j < 4) {
+        params.push(
+          {
+            key : result_params.rows[j].filter_name,
+            value: result_params.rows[j].option_value
+          }
+        )
+        j++;
+      }
 
       products_list.push({
         id: result.rows[i].id,
         name: result.rows[i].name,
-        //brand: result.rows[i].brand,
+        brand: result.rows[i].brand,
         imgurl: result.rows[i].photo_url,
         price: result.rows[i].price,
-        //desc: result.rows[i].descr,
+        desc: result.rows[i].descr,
         params: params
       }
       );
-
     }
- 
     return (products_list);
-  } catch (err) {
-    throw_my_error(err);
-  }
 }
 module.exports.get_product_by_subcategory = get_product_by_subcategory;
 
-/**
+/*
  * Get product
  * @param {Number} id Product ID
  * @return {typedef.Product} Product object
@@ -95,7 +98,7 @@ async function get_product_by_id(id, params_nr) {
     while (result_params.rows[i] && i < params_nr) {
       params.push(
         {
-          key: result_params.rows[i].filter_name,
+          id: result_params.rows[i].filter_name,
           value: result_params.rows[i].option_value
         }
       )

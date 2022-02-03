@@ -42,7 +42,7 @@
  */
 /** 
  * @typedef  {Object} Param 
- * @property {String} key Param name
+ * @property {String} id Param name
  * @property {String} value Param value
  */
 
