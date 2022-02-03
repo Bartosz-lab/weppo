@@ -1,4 +1,3 @@
-//Poprawnie Opisane
 /**
  * @typedef {Object} User_info
  * @property {String} name name of user
