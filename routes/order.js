@@ -9,19 +9,30 @@ const Order_status = typedef.order_status;
 const database = require('../database/database');
 
 
-router.get('/', auth.restrict_login, (req, res) => {
-    switch (req.session.role) {
-        case Role.Admin:
-            res.send('lista zamówień Admin');
-            break;
-        case Role.Seller:
-            res.send('lista zamówień sprzedawca');
-            break;
-        case Role.Customer:
-            res.send('lista zamówień koń');
-            break;
-        default:
-            res.send('Error');
+router.get('/', auth.restrict_login, async (req, res) => {
+    try {
+        
+        switch (req.session.role) {
+            case Role.Admin:
+                await seller_function();
+                break;
+            case Role.Seller:
+                await seller_function();
+                break;
+            case Role.Customer:
+                const orders = await database.get_user_orders(req.session.user);
+                res.render('orders', {orders: orders});
+                break;
+            default:
+                throw new Error('4. Something went wrong');
+        }
+    } catch (err) {
+        req.session.error = err.message;
+        res.redirect('/error');
+    }
+    async function seller_function() {
+        const orders = await database.get_uncomplited_orders();
+        res.render('orders-admin', {orders: orders});
     }
 });
 
@@ -53,12 +64,14 @@ router.post('/new', auth.restrict_login, auth.restrict_role(Role.Customer), asyn
             throw new Error('4. Something went wrong');
         }
         let products = [];
+        let price = 0;
         for (info of req.cookies.basket) {
             const product = {
                 id: info.id,
                 price: await database.get_product_price(info.id),
                 quantity: info.quantity
             }
+            price += product.price * product.quantity;
             products.push(product);
         }
         const order = {
@@ -78,7 +91,9 @@ router.post('/new', auth.restrict_login, auth.restrict_role(Role.Customer), asyn
                 city: req.body.city,
                 country: req.body.country
             },
-            status: Order_status.new
+            status: Order_status.new,
+            price: price,
+            date: new Date()
         }
         await database.add_order(order);
         res.redirect('/order/folded');
@@ -94,10 +109,36 @@ router.get('/folded', auth.restrict_login, auth.restrict_role(Role.Customer), as
 router.get('/:id', auth.restrict_login, async (req, res) => {
     try {
         const order = await database.get_order_by_id(req.params.id);
-        if(req.session.user != order.user_id) {
+        switch (req.session.role) {
+            case Role.Admin:
+                res.render('order-admin', {order: order, Order_status: Order_status});
+                break;
+            case Role.Seller:
+                res.render('order-admin', {order: order, Order_status: Order_status});
+                break;
+            case Role.Customer:
+                if(req.session.user != order.user_id) {
+                    throw new Error('1. Access deined');
+                } 
+                res.render('order', {order: order});
+                break;
+            default:
+                throw new Error('4. Something went wrong');
+        }
+    } catch (err) {
+        req.session.error = err.message;
+        res.redirect('/error');
+    }
+});
+router.post('/:id', auth.restrict_login, async (req, res) => {
+    try {
+        const order = await database.get_order_by_id(req.params.id);
+        if (!(req.session.role != Role.Admin) && !(req.session.role != Role.Seller)) {
             throw new Error('1. Access deined');
-        } 
-        res.render('order', {order: order});
+        }
+        await database.update_order_status(id, req.body.status);
+        req.session.error = '0. Success';
+        res.redirect(`order/${req.params.id}`);
     } catch (err) {
         req.session.error = err.message;
         res.redirect('/error');

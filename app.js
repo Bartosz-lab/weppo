@@ -56,8 +56,9 @@ app.use(async (req, res, next) => {
   res.locals.cats = await database.get_categories();
   res.locals.subcats = await database.get_subcategories();
 
-
-  res.locals.orders = [];//await database.get_subcategories();
+  if(user_role === Role.Customer) {
+    res.locals.orders = await database.get_user_orders_info();
+  }
 
   next();
 });
