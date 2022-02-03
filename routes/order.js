@@ -5,18 +5,19 @@ module.exports = router;
 const auth = require('../bin/auth');
 const typedef = require('../typedef');
 const Role = typedef.role;
+const Order_status = typedef.order_status;
 const database = require('../database/database');
 
 
 router.get('/', auth.restrict_login, (req, res) => {
     switch (req.session.role) {
-        case role.Admin:
+        case Role.Admin:
             res.send('lista zamówień Admin');
             break;
-        case role.Seller:
+        case Role.Seller:
             res.send('lista zamówień sprzedawca');
             break;
-        case role.Customer:
+        case Role.Customer:
             res.send('lista zamówień koń');
             break;
         default:
@@ -61,11 +62,11 @@ router.post('/new', auth.restrict_login, auth.restrict_role(Role.Customer), asyn
             products.push(product);
         }
         const order = {
-            products: products,
             user_id: req.session.user,
+            products: products,
             user_info: {
-                name: req.body.firstname, 
-                surname: req.body.lastname, 
+                name: req.body.firstname,
+                surname: req.body.lastname,
                 phone: req.body.phone,
                 email: req.body.email,
             },
@@ -76,7 +77,8 @@ router.post('/new', auth.restrict_login, auth.restrict_role(Role.Customer), asyn
                 zip_code: req.body.zip_code,
                 city: req.body.city,
                 country: req.body.country
-            }
+            },
+            status: Order_status.new
         }
         await database.add_order(order);
         res.redirect('/order/folded');
@@ -89,12 +91,15 @@ router.get('/folded', auth.restrict_login, auth.restrict_role(Role.Customer), as
     res.render('./new_order_folded');
 });
 
-router.get('/:id', auth.restrict_login, (req, res) => {
-    //strona zamówienia potrzebna weryfkacja czy zamówienie jest tego użytkownika
-    res.render('order', {
-        orders: null,
-        id: req.params.id,
-        items: items,
-
-    })
+router.get('/:id', auth.restrict_login, async (req, res) => {
+    try {
+        const order = await database.get_order_by_id(req.params.id);
+        if(req.session.user != order.user_id) {
+            throw new Error('1. Access deined');
+        } 
+        res.render('order', {order: order});
+    } catch (err) {
+        req.session.error = err.message;
+        res.redirect('/error');
+    }
 });

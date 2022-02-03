@@ -121,15 +121,13 @@ module.exports.sort = sort;
  */
 
 /** 
- * @typedef  Orders 
+ * @typedef  Order 
  * @property {Number} id unique ID
  * @property {Number} user_id user id
  * @property {{id: Number, price: Number, quantity: Number}[]} products id price and quantity of products
  * @property {User_info} user_info information about user
  * @property {Address} address delivery adress
- * @property {Order_status} status 
- * itp tutaj trzeba opisać
- * rezygnujemy z typów dostawy w bazie możesz zostawić i zawsze nadawać ten sam
+ * @property {Order_status} status status of order
  */
 /**
  * @typedef {String} Order_status
@@ -138,6 +136,11 @@ module.exports.sort = sort;
  * @enum {Order_status}
  */
  const order_status = {
-    //tu trzeba wpisać statusy
+    new: 'new',
+    in_realisation: 'in_realistaion',
+    to_send: 'to-send',
+    sended: 'sended',
+    complited: 'complited'
+
 }
 module.exports.order_status = order_status;

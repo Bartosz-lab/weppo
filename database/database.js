@@ -84,3 +84,11 @@ module.exports.add_order = add_order;
 }
 
 module.exports.get_product_price = get_product_price;
+/**
+ * Hej Opisz Mnie i przenieś
+ */
+ async function get_order_by_id(id) {
+    return {order: "order"};
+}
+
+module.exports.get_order_by_id = get_order_by_id;

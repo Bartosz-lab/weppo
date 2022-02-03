@@ -5,20 +5,8 @@
 <%- include('./template/topbar') %>
 
 <div class ="contener">
+  <%= JSON.stringify(order) %> 
 
-ID zamówienia: <%- id %><br>
-
-  <% for( var i = 0; i < items.length; i++ ) { %> 
-    <%- include('wide-item', {
-      href: items[i].href, 
-      name: items[i].name, 
-      price: items[i].price, 
-      imgurl: items[i].imgurl, 
-      desc: items[i].desc, 
-      count: items[i].count, 
-      mode: 2}) %>
-    <% } %>
-  <div style="clear:both"></div>
 </div>
 
 </body>
