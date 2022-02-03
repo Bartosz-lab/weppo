@@ -18,8 +18,6 @@ const orderRouter    = require('./routes/order');
 const userRouter     = require('./routes/user');
 const basketRouter   = require('./routes/basket');
 
-
-
 const app = express();
 
 // view engine setup
@@ -58,6 +56,9 @@ app.use(async (req, res, next) => {
   res.locals.cats = await database.get_categories();
   res.locals.subcats = await database.get_subcategories();
 
+
+  res.locals.orders = [];//await database.get_subcategories();
+
   next();
 });
 
@@ -66,7 +67,7 @@ app.use('/', indexRouter);
 app.use('/account', accRouter);
 app.use('/p', productRouter);
 app.use('/c', categoryRouter);
-app.use('/orders', orderRouter);
+app.use('/order', orderRouter);
 app.use('/users', userRouter);
 app.use('/basket', basketRouter);
 
@@ -75,8 +76,9 @@ app.use((req, res, next) =>{
   next(createError(404));
 });
 // error handler
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   res.locals.error = err.message
-  res.render('error');
+  res.status(err.status || 500);
+  res.render('./error');
 });
 module.exports = app;

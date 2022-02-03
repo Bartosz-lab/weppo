@@ -1,41 +1,93 @@
 const express = require('express');
 const router = express.Router();
 module.exports = router;
+
 const auth = require('../bin/auth');
 const typedef = require('../typedef');
-const role = typedef.role;
+const Role = typedef.role;
+const database = require('../database/database');
 
 
 router.get('/', auth.restrict_login, (req, res) => {
     switch (req.session.role) {
-        case role.Admin: 
+        case role.Admin:
             res.send('lista zamówień Admin');
             break;
-        case role.Seller: 
+        case role.Seller:
             res.send('lista zamówień sprzedawca');
             break;
-        case role.Customer: 
-            res.send('lista zamówień klient');
+        case role.Customer:
+            res.send('lista zamówień koń');
             break;
         default:
             res.send('Error');
     }
 });
 
-items = [
-    { count: 1, href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum Lorem Ipsum  Lorem Ipsum", price: 5000 },
-    { count: 1, href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.AFt6jAmiSg_OdO67WkA0CgHaD3%26pid%3DApi&f=1", desc: "Lorem Ipsum", price: 5000 },
-    { count: 2, href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000 },
-    { count: 3, href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum Lorem Ipsum  Lorem Ipsum", price: 5000 },
-    { count: 1, href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.progarchives.com%2Fwallpapers%2FRUSHCOLLAGE.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000 },
-    { count: 1, href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum Lorem Ipsum  Lorem Ipsum", price: 5000 },
-    { count: 5, href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.9y2kjK5P_qFYJq3CMIMCcgHaHa%26pid%3DApi&f=1", desc: "Lorem Ipsum", price: 5000 },
-    { count: 1, href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000 },
-    { count: 1, href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.shortlist.com%2Fmedia%2Fimages%2F2019%2F05%2Fthe-50-greatest-rock-albums-ever-3-1556678339-s1A3-column-width-inline.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000 },
-    { count: 2, href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.redroll.com%2Fwp-content%2Fuploads%2F2018%2F07%2Fprogrock1.jpg&f=1&nofb=1", desc: "Lorem Ipsum", price: 5000 },
-    { count: 1, href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000 },
-    { count: 1, href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", name: "Komp", imgurl: "images/test.png", desc: "Lorem Ipsum", price: 5000 }
-  ] 
+
+router.get('/new', auth.restrict_login, auth.restrict_role(Role.Customer), async (req, res) => {
+    try {
+        let products = [];
+        if (req.cookies.basket) {
+            for (info of req.cookies.basket) {
+                let product = await database.get_product_to_basket(info.id);
+                product.quantity = info.quantity;
+                products.push(product);
+            }
+        }
+        const render_obj = {
+            products: products,
+            user: await database.get_user_info_by_id(req.session.user),
+            adress: await database.get_adress_by_user_id(req.session.user)
+        }
+        res.render('./new_order', render_obj);
+    } catch (err) {
+        req.session.error = err.message;
+        res.redirect('/error');
+    }
+});
+router.post('/new', auth.restrict_login, auth.restrict_role(Role.Customer), async (req, res) => {
+    try {
+        if (!req.cookies.basket) {
+            throw new Error('4. Something went wrong');
+        }
+        let products = [];
+        for (info of req.cookies.basket) {
+            const product = {
+                id: info.id,
+                price: await database.get_product_price(info.id),
+                quantity: info.quantity
+            }
+            products.push(product);
+        }
+        const order = {
+            products: products,
+            user_id: req.session.user,
+            user_info: {
+                name: req.body.firstname, 
+                surname: req.body.lastname, 
+                phone: req.body.phone,
+                email: req.body.email,
+            },
+            address: {
+                street: req.body.street,
+                nr_house: req.body.nr_house,
+                nr_flat: req.body.nr_flat,
+                zip_code: req.body.zip_code,
+                city: req.body.city,
+                country: req.body.country
+            }
+        }
+        await database.add_order(order);
+        res.redirect('/order/folded');
+    } catch (err) {
+        req.session.error = err.message;
+        res.redirect('/error');
+    }
+});
+router.get('/folded', auth.restrict_login, auth.restrict_role(Role.Customer), async (req, res) => {
+    res.render('./new_order_folded');
+});
 
 router.get('/:id', auth.restrict_login, (req, res) => {
     //strona zamówienia potrzebna weryfkacja czy zamówienie jest tego użytkownika

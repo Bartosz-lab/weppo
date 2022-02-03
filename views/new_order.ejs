@@ -16,10 +16,17 @@
     <%- include('./components/wide-item', product) %>
   <% } %>
 
+  
+  Tu powinien być formularz z danymi do uzupełnienia tzn imie nazwisko telefon adres itp
+
+  Wysyłane na ten sam adres POST
+
+  <%= JSON.stringify(user) %>
+  <%= JSON.stringify(adress) %>
 
   <% if ( products.length != 0 ) { %>
     <br><br>
-    <form method="GET" action="/order/new">
+    <form method="post" action="/order/new">
         <input type="submit" value="Złóż zamówienie">
     </form>
     <br>

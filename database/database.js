@@ -67,3 +67,20 @@ module.exports.get_product_to_basket = get_product_to_basket;
 }
 
 module.exports.find_products = find_products;
+
+/**
+ * Hej Opisz Mnie i przenieś
+ */
+ async function add_order(order) {
+    console.log('ok');
+}
+
+module.exports.add_order = add_order;
+/**
+ * Hej Opisz Mnie i przenieś
+ */
+ async function get_product_price(id) {
+    return 10;
+}
+
+module.exports.get_product_price = get_product_price;
