@@ -1,6 +1,21 @@
 <div class="filter-bar">
-    <form>
+    <form method="get">
         Filtry <br><br>
+
+        Sortowanie: 
+        <select name="sort_by">
+            <option value="<%= sort_opt.price_asc %>"   <% if(sort_by == sort_opt.price_asc) {%> selected="selected" <% } %> >Cena rosnąco</option>
+            <option value="<%= sort_opt.price_desc %>"  <% if(sort_by == sort_opt.price_desc) {%> selected="selected" <% } %>>Cena malejąco</option>
+            <option value="<%= sort_opt.name_asc %>"    <% if(sort_by == sort_opt.name_asc) {%> selected="selected" <% } %>>Alfabetycznie rosnąco</option>
+            <option value="<%= sort_opt.name_desc %>"   <% if(sort_by == sort_opt.name_desc) {%> selected="selected" <% } %>>Alfabetycznie malejąco</option>
+        </select>
+
+        Ilość elementów na stronie:
+        <select name="per_page">
+            <option value="15" <% if(15 == per_page) {%> selected="selected" <% } %>>15</option>
+            <option value="30" <% if(30 == per_page) {%> selected="selected" <% } %>>30</option>
+            <option value="45" <% if(45 == per_page) {%> selected="selected" <% } %>>45</option>
+        </select>
 
         Cena:<br>
         Od: <input type="number" name="price-min">
@@ -22,21 +37,6 @@
                 
             <% } %>
         <% } %>   
-        
-        <!--
-            {"id":1,
-            "name":"dysk",
-            "type":"enum",
-            "options":[
-            {"name":"100","sort_order":"1"},
-            {"name":"200","sort_order":"2"}]} 
-            {"id":2,
-            "name":"koła","
-            type":"enum",
-            "options":[
-            {"name":"100","sort_order":"1"},
-            {"name":"200","sort_order":"2"}]}
-        -->
 
         <!-- Wysyłane getem  jeśli filter jest enumem to ile wybranych wartości tyle razy go dodajesz, jeśli typu numerycznego to do nazwy doklejasz -min -max np. dla price  price-min=10&price-max=100-->
 

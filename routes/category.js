@@ -31,11 +31,17 @@ router.get('/:id', async (req, res) => {
                     search_conds.push({id: filter.id, value: req.query[max], type: Filter_type.number_min});
                 } 
             } else if(req.query[filter.name]) {
-                search_conds.push({id: filter.id, value: req.query[filter.name], type: Filter_type.other});
+                // search_conds.push({id: filter.id, value: req.query[filter.name], type: Filter_type.other});
+
+                /* Rozbij na osobne wyrazy rozsdzielone plusem i dodaj każdy z wyrazów do filtrów */
+                req.query[filter.name].split('+').forEach(opt => {
+                    search_conds.push({id: filter.id, value: opt, type: Filter_type.other});
+                });
             } 
         }
         const render_obj = {
             sort_by: sort_by,
+            sort_opt: Sort,
             per_page: per_page,
             page: page,
             products: await database.get_product_by_subcategory(req.params.id,sort_by, per_page, page, req.query['price-min'], req.query['price-max'], req.query['producer'], search_conds),
