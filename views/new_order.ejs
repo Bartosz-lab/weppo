@@ -36,20 +36,24 @@
         Nazwisko:<br>
         Numer telefonu:<br>
         Email:<br>
-        <br>
-        Ulica:<br>
-        Numer domu:<br>
-        Numer mieszkania:<br>
-        Kod pocztowy:<br>
-        Miasto:<br>
-        Kraj:<br>
       </div>
       <div class="column" style="width:60%">
         <input type="text" name="name" value="<%- user.name %>">
         <input type="text" name="surname" value="<%- user.surname %>">
         <input type="text" name="phone" value="<%- user.phone %>">
         <input type="text" name="email" value="<%- user.email %>">
-        <br><br>
+      </div>
+      <div style="clear:both"></div>
+      <br><br>
+      <div class="column">
+        Ulica:<br>
+        Numer domu:<br>
+        Numer mieszkania:<br>
+        Kod pocztowy:<br>
+        Miasto:<br>
+        Kraj:<br>
+      </div>    
+      <div class="column" style="width:60%">
         <input type="text" name="street" value="<%- adress.street %>">
         <input type="text" name="nr_house" value="<%- adress.nr_house %>">
         <input type="text" name="nr_flat" value="<%- adress.nr_flat %>">
