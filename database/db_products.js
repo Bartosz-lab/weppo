@@ -276,9 +276,63 @@ module.exports.get_product_to_basket = get_product_to_basket;
 
 /**
  * Find products in search bar
+ *  @param {String} search input in search bar
+ * @param {sort} sort_by type
+ * @param {Number} per_page
+ * @param {Number} page_nr
+ * @param {Number} price_min 
+ * @param {Number} price_max
+ * @param {String} brands
+ * @return {typedef.Product_for_list[]} list of products to display in list
+ * 
  */
  async function find_products(search, sort_by, per_page, page, price_min, price_max, brands) {
-  return await require('./db_products').get_product_by_subcategory(1,sort_by, per_page, page, price_min, price_max, brands, []);
+   // po co mi brands?
+  // if (brand === undefined || brand == "") brand = ' IS NOT NULL';
+  // else brand = "= " + "'"  + brand + "'"; 
+  search_array = [search];
+  if (sort_by == typedef.sort.price_asc) sort_by = ' ORDER BY price ASC';
+  else if (sort_by == typedef.sort.price_desc) sort_by = ' ORDER BY price DESC';
+  else if (sort_by == typedef.sort.name_asc) sort_by = ' ORDER BY name ASC';
+  else if (sort_by == typedef.sort.name_desc) sort_by = ' ORDER BY name DESC';
+  else sort_by = '';
+
+    try {
+    const result = await Pool.query(`SELECT * FROM products WHERE ((name LIKE '%' || $1 || '%')  OR  (brand LIKE '%' || $2 || '%') ) AND (price BETWEEN $3 AND $4) ${sort_by} LIMIT $5 OFFSET $6 ;`,
+    [search, search, price_min, price_max, per_page,(page - 1) * per_page ] );
+
+    let products_list = [];
+    for (let i = 0; i < result.rows.length; i++) {
+      const result_params = await Pool.query(`SELECT * FROM widok7 WHERE (product_id = $1);`, [result.rows[i].id]);
+      let params = [];
+      let j = 0;
+      while (result_params.rows[j] && j < 4) {
+        params.push(
+          {
+            key : result_params.rows[j].filter_name,
+            value: result_params.rows[j].option_value
+          }
+        )
+        j++;
+      }
+
+      products_list.push({
+        id: result.rows[i].id,
+        name: result.rows[i].name,
+        brand: result.rows[i].brand,
+        imgurl: result.rows[i].photo_url,
+        price: result.rows[i].price,
+        desc: result.rows[i].descr,
+        params: params
+      }
+      );
+    }
+    return (products_list);
+   } catch (err) {
+    throw_my_error(err);
+  }
+
+
 }
 
 module.exports.find_products = find_products;
