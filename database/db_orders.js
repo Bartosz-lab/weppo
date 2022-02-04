@@ -41,7 +41,7 @@ module.exports.add_order = add_order;
  */
 async function get_order_by_id(order_id) {
     try {
-        const result1 = await Pool.query(`SELECT * from widok13 WHERE order_id = $1;`, [order_id]);
+        const result1 = await Pool.query(`SELECT * from widok14 WHERE order_id = $1;`, [order_id]);
 
         let products_in_order = [];
         for (const prod of result1.rows) {
@@ -70,8 +70,30 @@ async function get_order_by_id(order_id) {
     }
 
 }
-
 module.exports.get_order_by_id = get_order_by_id;
+
+/**
+* Get all users orders sorted by statys
+* @param {number} user_id user ID
+* @return {Order[]} list of all users orders
+*/
+async function get_user_orders(user_id) {
+    try {
+        const result1 = await Pool.query(`SELECT * from all_orders WHERE user_id = $1 ORDER BY status;`, [user_id]);
+        let i = 0;
+        let all_users_orders = [];
+        while (result1.rows[i]) {
+            const result2 = await get_order_by_id(result1.rows[i].id);
+            all_users_orders.push(result2);
+            i++;
+        }
+        return all_users_orders;
+    } catch (err) {
+        throw_my_error(err);
+    }
+
+}
+module.exports.get_user_orders = get_user_orders;
 
 /**
  * Update orders status by his id 
@@ -120,3 +142,23 @@ async function get_user_orders_info(user_id) {
     }
 }
 module.exports.get_user_orders_info = get_user_orders_info;
+
+/**
+* Get all orders that are not already completed
+* @return {Order[]} list of orders
+*/
+ async function get_uncomplited_orders() {
+    const result1 = await Pool.query(`SELECT * FROM all_orders WHERE (status != $1 OR status IS NULL);`, [typedef.order_status.complited]);
+    let all_orders = [];
+    let i = 0;
+    console.log (result1.rows);
+    while (result1.rows[i]) {
+        
+        const order = await get_order_by_id (result1.rows[i].id);
+        all_orders.push(order);
+        i++;
+    }
+    return all_orders;
+}
+
+module.exports.get_uncomplited_orders = get_uncomplited_orders;

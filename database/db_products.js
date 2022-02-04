@@ -287,9 +287,6 @@ module.exports.get_product_to_basket = get_product_to_basket;
  * 
  */
  async function find_products(search, sort_by, per_page, page, price_min, price_max, brands) {
-   // po co mi brands?
-  // if (brand === undefined || brand == "") brand = ' IS NOT NULL';
-  // else brand = "= " + "'"  + brand + "'"; 
   search_array = [search];
   if (sort_by == typedef.sort.price_asc) sort_by = ' ORDER BY price ASC';
   else if (sort_by == typedef.sort.price_desc) sort_by = ' ORDER BY price DESC';

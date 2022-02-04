@@ -65,7 +65,7 @@ async function get_filters_by_subcategory(subcat_id) {
         let filter_list = [];
         var i = 0;
         while (result.rows[i]) {
-            const filter_values = await Pool.query(`SELECT DISTINCT option_value FROM widok9 WHERE subcat_id = $1 AND filter_id = $2`, [subcat_id, result.rows[i].filter_id]);
+            const filter_values = await Pool.query(`SELECT DISTINCT option_value FROM widok9 WHERE subcat_id = $1 AND filter_id = $2;`, [subcat_id, result.rows[i].filter_id]);
             let option_list = [];
             option_list = filter_values.rows.map(item => item.option_value);
             let filter_options = [];
