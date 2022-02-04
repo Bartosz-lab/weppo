@@ -19,14 +19,6 @@
     <% total += product.quantity * product.price %>
   <% } %>
 
-  
-  Tu powinien być formularz z danymi do uzupełnienia tzn imie nazwisko telefon adres itp
-
-  Wysyłane na ten sam adres POST
-
-  {"name":"aa","surname":"aaaa","phone":"123","email":"a"} {"id":"","user_id":65,"street":"","nr_house":"","nr_flat":"","zip_code":"","city":"","country":""} 
-  
-
   <% if ( products.length != 0 ) { %>
     <br><br>
     <form method="post" action="/order/new">
