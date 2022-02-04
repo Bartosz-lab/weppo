@@ -52,7 +52,7 @@ router.get('/new', auth.restrict_login, auth.restrict_role(Role.Customer), async
             user: await database.get_user_info_by_id(req.session.user),
             adress: await database.get_adress_by_user_id(req.session.user)
         }
-        res.render('./new_order', render_obj);
+        res.render('./new-order', render_obj);
     } catch (err) {
         req.session.error = err.message;
         res.redirect('/error');
@@ -103,7 +103,7 @@ router.post('/new', auth.restrict_login, auth.restrict_role(Role.Customer), asyn
     }
 });
 router.get('/folded', auth.restrict_login, auth.restrict_role(Role.Customer), async (req, res) => {
-    res.render('./new_order_folded');
+    res.render('./new-order-folded');
 });
 
 router.get('/:id', auth.restrict_login, async (req, res) => {
