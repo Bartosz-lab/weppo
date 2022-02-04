@@ -30,8 +30,8 @@
             <input type="button" value="Usuń z koszyka" onclick="update_product_in_basket(<%= id %>, 0)">
             
         <% } else if ( mode == 2) { %>
-            Ilość: <br><%= count %><br>
-            Cena całkowita: <br><%- price * count %> PLN
+            Ilość: <br><%= quantity %><br>
+            Cena całkowita: <br><%- price * quantity %> PLN
         <% } %>
         </div>
     <div style="clear:both"></div>

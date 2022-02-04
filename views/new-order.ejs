@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./template/head') %>
+<body id="body">
+<%- include('./template/topbar') %>
+
+<div class ="contener">
+
+  <% if ( products.length == 0 ) { %>
+    <div class = "main-page-title">Koszyk jest obecnie pusty.</div><br><br>
+    Zapraszamy na zakupy.  
+  <% } %>
+  
+  <% total = 0 %>
+
+  <% for(let product of products) { 
+    product.mode = 2; %>
+    <%- include('./components/wide-item', product) %>
+    <% total += product.quantity * product.price %>
+  <% } %>
+
+  <% if ( products.length != 0 ) { %>
+    <br><br>
+    <form method="post" action="/order/new">
+      Dane do wysyłki: <br><br>
+      <div class="column">
+        Imię:<br>
+        Nazwisko:<br>
+        Numer telefonu:<br>
+        Email:<br>
+      </div>
+      <div class="column" style="width:60%">
+        <input type="text" name="name" value="<%- user.name %>">
+        <input type="text" name="surname" value="<%- user.surname %>">
+        <input type="text" name="phone" value="<%- user.phone %>">
+        <input type="text" name="email" value="<%- user.email %>">
+      </div>
+      <div style="clear:both"></div>
+      <br><br>
+      <div class="column">
+        Ulica:<br>
+        Numer domu:<br>
+        Numer mieszkania:<br>
+        Kod pocztowy:<br>
+        Miasto:<br>
+        Kraj:<br>
+      </div>    
+      <div class="column" style="width:60%">
+        <input type="text" name="street" value="<%- adress.street %>">
+        <input type="text" name="nr_house" value="<%- adress.nr_house %>">
+        <input type="text" name="nr_flat" value="<%- adress.nr_flat %>">
+        <input type="text" name="zip_code" value="<%- adress.zip_code %>">
+        <input type="text" name="city" value="<%- adress.city %>">
+        <input type="text" name="country" value="<%- adress.country %>">
+      </div>
+      <div style="clear:both"></div>
+      <br>Całkowity koszt: <%- total %> PLN<br><br>
+      <input type="submit" value="Złóż zamówienie">
+    </form>
+    <br>
+  <% } %>
+
+
+</div>
+<div id="alert" class="alertBox"></div>
+</body>
+<script src="/scripts/basket.js"></script>
+</html>

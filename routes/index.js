@@ -7,7 +7,7 @@ const typedef = require('../typedef');
 const Sort = typedef.sort;
 
 router.get('/', (req, res) => {
-  res.render('index');
+  res.render('index', {display: []} );
 });
 router.get('/error', (req, res) => {
   res.render('./error');
