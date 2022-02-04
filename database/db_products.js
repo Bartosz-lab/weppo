@@ -15,13 +15,18 @@ const typedef = require('../typedef');
  * @return {typedef.Product_for_list[]} list of products to display in list
  */
 async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, min_price, max_price, brand, search_conds) {
-  //Ok pamiętaj o sort by
   if (min_price === undefined || min_price == "") min_price = 0;
   if (max_price === undefined || max_price == "") max_price = 99999999;
   if (per_page === undefined) per_page = 10;
   if (page === undefined) page = 1;
   if (brand === undefined || brand == "") brand = ' IS NOT NULL';
   else brand = "= " + "'"  + brand + "'"; 
+
+  if (sort_by == typedef.sort.price_asc) sort_by = ' ORDER BY price ASC';
+  else if (sort_by == typedef.sort.price_desc) sort_by = ' ORDER BY price DESC';
+  else if (sort_by == typedef.sort.name_asc) sort_by = ' ORDER BY name ASC';
+  else if (sort_by == typedef.sort.name_desc) sort_by = ' ORDER BY name DESC';
+  else sort_by = '';
 
   let products_list = [];
   let products_filtered = [];
@@ -51,7 +56,7 @@ async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, mi
   }
 
 
-  const result = await Pool.query(`SELECT * FROM products WHERE (subcat_id = $1) AND (price BETWEEN $2 AND $3) AND brand IN (SELECT brand from products WHERE brand ${brand}) AND (id = ANY ($4)) LIMIT $5 OFFSET $6;`,
+  const result = await Pool.query(`SELECT * FROM products WHERE (subcat_id = $1) AND (price BETWEEN $2 AND $3) AND brand IN (SELECT brand from products WHERE brand ${brand}) AND (id = ANY ($4)) ${sort_by} LIMIT $5 OFFSET $6;`,
       [subcat_id, min_price, max_price, products_filtered, per_page,(page - 1) * per_page] );
 
     for (let i = 0; i < result.rows.length; i++) {
