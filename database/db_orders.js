@@ -11,23 +11,19 @@ const db_addresses = require('../database/db_addresses');
  * @param {Order} order
  */
 async function add_order(order) {
-
     try {
         const result1 = await Pool.query(`INSERT INTO addresses (user_id, street, nr_house, nr_flat, zip_code, city, country)
     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING  id;`,
-            [order.user_id, order.Address.street, order.Address.nr_house, order.Address.nr_flat, order.Address.zip_code, order.Address.city, order.Address.country]);
-
+            [order.user_id, order.address.street, order.address.nr_house, order.address.nr_flat, order.address.zip_code, order.address.city, order.address.country]);
         const result2 = await Pool.query(`INSERT INTO all_orders (user_id, address_id, status, date_of_purchase) VALUES
     ($1, $2, $3, $4) RETURNING id;`, [order.user_id, result1.rows[0].id, order.Order_status, order.date]);
-
         for (const prod_in_order of order.products) {
             const result3 = await Pool.query(`INSERT INTO this_order (order_id, product_id, quantity, price_when_bought) VALUES
         ($1, $2, $3, $4);`, [result2.rows[0].id, prod_in_order.id, prod_in_order.quantity, prod_in_order.price]);
         }
         return;
-    }
 
-    catch (err) {
+    } catch (err) {
         throw_my_error(err);
     }
 }
@@ -116,27 +112,29 @@ module.exports.update_order_status = update_order_status;
  * Gets all orders from user by his id 
 * @param {number} user_id user ID
 * @return {Order} User password
-* @return {id: Number, date: date, price: Number[]} list of users orders with their id, date  and cost
+* @return {{id: Number, date: date, price: Number}[]} list of users orders with their id, date  and cost
  */
 async function get_user_orders_info(user_id) {
     try {
-        const result1 = await Pool.query(`SELECT * from widok13 WHERE user_id = $1 ORDER BY id;`, [user_id]);
+        const result1 = await Pool.query(`SELECT * from widok14 WHERE user_id = $1 ORDER BY id;`, [user_id]);
         let users_orders = [];
-        // var last_order_id = result1.rows[0].id;
-        // let i = 0;
-        // while (result1.rows[i]) {
-        //     if (i == 0) last_order_id = -1;
-        //     else last_order_id = result1.rows[i - 1].id;
-        //     if (result1.rows[i].id == last_order_id) { i++; continue; }
-        //     const sum = await Pool.query(`SELECT SUM (price_when_bought) AS total FROM widok13 WHERE order_id = $1;`, [result1.rows[i].id]);
-        //     users_orders.push({
-        //         id: result1.rows[i].id,
-        //         date: result1.rows[i].date_of_purchase,
-        //         price: sum.rows[0].total
-        //     })
-        //     i++;
-        // }
-        return users_orders;
+        if (!result1.rows[0]) return users_orders;
+        var last_order_id = result1.rows[0].id;
+        let i = 0;
+        while (result1.rows[i]) {
+            if (i == 0) last_order_id = -1;
+            else last_order_id = result1.rows[i - 1].id;
+            if (result1.rows[i].id == last_order_id) { i++; continue; }
+            const sum = await Pool.query(`SELECT SUM (price_when_bought) AS total FROM widok13 WHERE order_id = $1;`, [result1.rows[i].id]);
+            users_orders.push({
+                id: result1.rows[i].id,
+                date: result1.rows[i].date_of_purchase,
+                price: sum.rows[0].total
+            })
+            i++;
+        }
+       // console.log (users_orders);
+         return users_orders;
     } catch (err) {
         throw_my_error(err);
     }
@@ -151,7 +149,7 @@ module.exports.get_user_orders_info = get_user_orders_info;
     const result1 = await Pool.query(`SELECT * FROM all_orders WHERE (status != $1 OR status IS NULL);`, [typedef.order_status.complited]);
     let all_orders = [];
     let i = 0;
-    console.log (result1.rows);
+    //console.log (result1.rows);
     while (result1.rows[i]) {
         
         const order = await get_order_by_id (result1.rows[i].id);

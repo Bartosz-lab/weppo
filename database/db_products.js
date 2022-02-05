@@ -298,9 +298,10 @@ module.exports.get_product_to_basket = get_product_to_basket;
   if (price_max === undefined || price_max == "") price_max = 99999999;
   if (brand === undefined || brand == "") brand = ' IS NOT NULL';
   else brand = "= " + "'"  + brand + "'"; 
+  search = search.toLowerCase();
 
     try {
-    const result = await Pool.query(`SELECT * FROM products WHERE ((name LIKE '%' || $1 || '%')  OR  (brand LIKE '%' || $2 || '%') ) AND (price BETWEEN $3 AND $4) AND brand ${brand} ${sort_by} LIMIT $5 OFFSET $6 ;`,
+    const result = await Pool.query(`SELECT * FROM products WHERE (( LOWER (name) LIKE '%' || $1 || '%')  OR  (brand LIKE '%' || $2 || '%') ) AND (price BETWEEN $3 AND $4) AND brand ${brand} ${sort_by} LIMIT $5 OFFSET $6 ;`,
     [search, search, price_min, price_max, per_page,(page - 1) * per_page ] );
 
     let products_list = [];
