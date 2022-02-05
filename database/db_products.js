@@ -34,17 +34,17 @@ async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, mi
   let pf_i = 0;
   while (search_conds[pf_i]) {
     if (search_conds[pf_i].type == typedef.filter_type.number_min) {
-      min = search_conds[pf_i].value;
-      max = search_conds[pf_i + 1].value;
-      if (max === undefined || max == "") max = 999999;
-      if (min === undefined || min == "") min = 0;
-      var result_filters = (await Pool.query(`SELECT product_id FROM widok7 WHERE (filter_id = $1) AND (option_value BETWEEN $2 AND $3);`, [search_conds[pf_i].id, min, max])).rows;
+      if (search_conds[pf_i + 1] === undefined || search_conds[pf_i + 1].value == "") max = 999999;
+      else max = search_conds[pf_i + 1].value;
+      if (search_conds[pf_i] === undefined || search_conds[pf_i].value  == "") min = 0;
+      else min = search_conds[pf_i].value;
+      var result_filters = (await Pool.query(`SELECT product_id FROM widok9 WHERE (filter_id = $1) AND ( TO_NUMBER(option_value,'99G999D9S')  BETWEEN $2 AND $3);`, [search_conds[pf_i].id, min, max])).rows;
       result_filters = result_filters.map(item => item.product_id);
       if (pf_i == 0) products_filtered = result_filters;
       pf_i++;
     }
     else {
-      var result_filters = (await Pool.query(`SELECT product_id FROM widok7 WHERE (filter_id = $1) AND (option_value = $2);`, [search_conds[pf_i].id, search_conds[pf_i].value[0]])).rows;
+      var result_filters = (await Pool.query(`SELECT product_id FROM widok9 WHERE (filter_id = $1) AND (option_value = $2);`, [search_conds[pf_i].id, search_conds[pf_i].value[0]])).rows;
       result_filters = result_filters.map(item => item.product_id);
       if (pf_i == 0) products_filtered = result_filters;
       products_filtered = products_filtered.filter(value => result_filters.includes(value));
