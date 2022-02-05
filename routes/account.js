@@ -71,7 +71,6 @@ router.post('/edit_password', upload.single(), auth.restrict_login,   async (req
 });
 
 router.post('/edit_adress', auth.restrict_login, async (req, res) => {
-    console.log(req.body)
     try {
         await database.save_user_adress(
             req.session.user, 

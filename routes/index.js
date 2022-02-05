@@ -6,23 +6,25 @@ const database = require('../database/database');
 const typedef = require('../typedef');
 const Sort = typedef.sort;
 
-// lista ID porduktów do wyświetlenia na stronie głównej
-recommended_ids = [ 1, 1, 1, 1, 1, 1, 1, 1, 1 ]
-
 router.get('/', async (req, res) => {
+  try {
+    // lista ID porduktów do wyświetlenia na stronie głównej
+    const recommended_ids = [1, 2, 3, 5]
+    let display = [];
 
-  display = [];
+    // zebranie wszystkich produktów
+    for (id of recommended_ids) {
+      const products = await database.get_recemended_products_in_subcategory(id);
+      for (const product of products) {
+        display.push(product);
+      }
+    }
 
-  // zebranie wszystkich produktów
-  for( id of recommended_ids ) {
-    display[display.length] = await database.get_product_by_id(id);
+    res.render('index', { display: display });
+  } catch (err) {
+    req.session.error = err.message;
+    res.redirect('/error');
   }
-
-  console.log(display[0])
-
-  res.render('index', {
-    display: display
-  });
 });
 router.get('/error', (req, res) => {
   res.render('./error');
