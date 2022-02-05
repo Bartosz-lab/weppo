@@ -15,6 +15,7 @@ const typedef = require('../typedef');
  * @return {typedef.Product_for_list[]} list of products to display in list
  */
 async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, min_price, max_price, brand, search_conds) {
+  console.log(search_conds);
   if (min_price === undefined || min_price == "") min_price = 0;
   if (max_price === undefined || max_price == "") max_price = 99999999;
   if (per_page === undefined) per_page = 10;
@@ -32,7 +33,7 @@ async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, mi
   let products_filtered = [];
   let pf_i = 0;
   while (search_conds[pf_i]) {
-    if (search_conds[pf_i].type = typedef.filter_type.number_min) {
+    if (search_conds[pf_i].type == typedef.filter_type.number_min) {
       min = search_conds[pf_i].value;
       max = search_conds[pf_i + 1].value;
       if (max === undefined || max == "") max = 999999;
@@ -42,7 +43,7 @@ async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, mi
       pf_i++;
     }
     else {
-      var result_filters = (await Pool.query(`SELECT product_id FROM widok7 WHERE (filter_id = $1) AND (option_value = $2);`, [search_conds[pf_i].id, search_conds[pf_i].value])).rows;
+      var result_filters = (await Pool.query(`SELECT product_id FROM widok7 WHERE (filter_id = $1) AND (option_value = $2);`, [search_conds[pf_i].id, search_conds[pf_i].value[0]])).rows;
       result_filters = result_filters.map(item => item.product_id);
       if (pf_i == 0) products_filtered = result_filters;
       products_filtered = products_filtered.filter(value => result_filters.includes(value));

@@ -12,39 +12,38 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-    try {   
-        console.log(req.query);
+    try {
         const sort_by = (req.query.sort_by) ? req.query.sort_by : Sort.price_asc;
         const per_page = (req.query.per_page) ? req.query.per_page : 30;
         const page = (req.query.page) ? req.query.page : 1;
         const filters = await database.get_filters_by_subcategory(req.params.id);
-        
+
         let search_conds = [];
         for (const filter of filters) {
-            if(filter.type === Filter_type.number) {
+            if (filter.type === Filter_type.number) {
                 const min = filter.name + '-min';
-                if(req.query[min]) {
-                    search_conds.push({id: filter.id, value: req.query[min], type: Filter_type.number_min});
-                } 
+                if (req.query[min]) {
+                    search_conds.push({ id: filter.id, value: req.query[min], type: Filter_type.number_min });
+                }
                 const max = filter.name + '-max';
-                if(req.query[max]) {
-                    search_conds.push({id: filter.id, value: req.query[max], type: Filter_type.number_min});
-                } 
-            } else if(req.query[filter.name]) {
-                // search_conds.push({id: filter.id, value: req.query[filter.name], type: Filter_type.other});
-
-                /* Rozbij na osobne wyrazy rozsdzielone plusem i dodaj każdy z wyrazów do filtrów */
-                req.query[filter.name].split('+').forEach(opt => {
-                    search_conds.push({id: filter.id, value: opt, type: Filter_type.other});
-                });
-            } 
+                if (req.query[max]) {
+                    search_conds.push({ id: filter.id, value: req.query[max], type: Filter_type.number_min });
+                }
+            } else if (req.query[filter.name]) {
+                if (!Array.isArray(req.query[filter.name])) {
+                    search_conds.push({ id: filter.id, value: [req.query[filter.name]], type: Filter_type.other });
+                } else {
+                    search_conds.push({ id: filter.id, value: req.query[filter.name], type: Filter_type.other });
+                }
+            }
         }
         const render_obj = {
+            search: '',
             sort_by: sort_by,
             sort_opt: Sort,
             per_page: per_page,
             page: page,
-            products: await database.get_product_by_subcategory(req.params.id,sort_by, per_page, page, req.query['price-min'], req.query['price-max'], req.query['producer'], search_conds),
+            products: await database.get_product_by_subcategory(req.params.id, sort_by, per_page, page, req.query['price-min'], req.query['price-max'], req.query['producer'], search_conds),
             filters: filters,
             subcat_info: await database.get_position_of_subcategory(req.params.id),
             recommended: await database.get_recemended_products_in_subcategory(req.params.id),

@@ -122,20 +122,20 @@ async function get_user_orders_info(user_id) {
     try {
         const result1 = await Pool.query(`SELECT * from widok13 WHERE user_id = $1 ORDER BY id;`, [user_id]);
         let users_orders = [];
-        var last_order_id = result1.rows[0].id;
-        let i = 0;
-        while (result1.rows[i]) {
-            if (i == 0) last_order_id = -1;
-            else last_order_id = result1.rows[i - 1].id;
-            if (result1.rows[i].id == last_order_id) { i++; continue; }
-            const sum = await Pool.query(`SELECT SUM (price_when_bought) AS total FROM widok13 WHERE order_id = $1;`, [result1.rows[i].id]);
-            users_orders.push({
-                id: result1.rows[i].id,
-                date: result1.rows[i].date_of_purchase,
-                price: sum.rows[0].total
-            })
-            i++;
-        }
+        // var last_order_id = result1.rows[0].id;
+        // let i = 0;
+        // while (result1.rows[i]) {
+        //     if (i == 0) last_order_id = -1;
+        //     else last_order_id = result1.rows[i - 1].id;
+        //     if (result1.rows[i].id == last_order_id) { i++; continue; }
+        //     const sum = await Pool.query(`SELECT SUM (price_when_bought) AS total FROM widok13 WHERE order_id = $1;`, [result1.rows[i].id]);
+        //     users_orders.push({
+        //         id: result1.rows[i].id,
+        //         date: result1.rows[i].date_of_purchase,
+        //         price: sum.rows[0].total
+        //     })
+        //     i++;
+        // }
         return users_orders;
     } catch (err) {
         throw_my_error(err);
