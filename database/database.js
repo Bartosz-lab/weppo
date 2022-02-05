@@ -3,7 +3,5 @@ module.exports = {
     ...require('./db_products'),
     ...require('./db_addresses'),
     ...require('./db_categories'),
-    ...require('./db_orders'),
+    ...require('./db_orders')
 }
-
-

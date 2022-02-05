@@ -96,6 +96,7 @@ router.post('/new', auth.restrict_login, auth.restrict_role(Role.Customer), asyn
             date: new Date()
         }
         await database.add_order(order);
+        res.clearCookie('basket');
         res.redirect('/order/folded');
     } catch (err) {
         req.session.error = err.message;
@@ -133,7 +134,7 @@ router.get('/:id', auth.restrict_login, async (req, res) => {
 router.post('/:id', auth.restrict_login, async (req, res) => {
     try {
         const order = await database.get_order_by_id(req.params.id);
-        if (!(req.session.role != Role.Admin) && !(req.session.role != Role.Seller)) {
+        if ((req.session.role != Role.Admin) && (req.session.role != Role.Seller)) {
             throw new Error('1. Access deined');
         }
         await database.update_order_status(id, req.body.status);

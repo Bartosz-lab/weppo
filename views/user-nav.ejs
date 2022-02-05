@@ -10,14 +10,6 @@
     HELP
 
 <% } else if(user_role === role.Customer) { %> 
-    
-    <div class="richbutton">
-        <a href="/basket">Zobacz swój koszyk</a><br>
-    </div>
-
-    
-
-    <% if( orders ) { %>
         Aktywne zamówienia:<br>
 
         <% for( i in orders ) { %>
@@ -28,7 +20,7 @@
             <div class="nodecor" style="text-align: left;">Cena: </div>
             <div class="nodecor" style="text-align: right;"><%- orders[i].price %>zł</div>
         </div>
-    <% }} %>
+    <% } %>
 
     <div class="richbutton">
         <a href="">Historia zamówień</a>

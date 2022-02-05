@@ -10,7 +10,6 @@ const Role = typedef.role;
  * @return {{hash: string, salt: string}} User password
  */
 async function get_password_by_user_id(id) {
-  //OK
   try {
     const result = await Pool.query(`SELECT hash, salt FROM users WHERE ID=$1;`, [id]);
     if (result.rows[0]) {
@@ -28,27 +27,26 @@ module.exports.get_password_by_user_id = get_password_by_user_id;
  * Get a list of all users with their info
  * @return {{id : number, firstname : string, lastname : string, phone : string, email : string}[]} All users with their info
  */
- async function get_users() {
-     try {
-         const result = await Pool.query(`SELECT id, firstname, lastname, phone, email FROM users`);
-         let users = [];
-         for (const row of result.rows) {
-             const user = {
-                 id: row.id,
-                 name: row.firstname,
-                 surname: row.lastname,
-                 phone: row.phone,
-                 email: row.email
-             }
-         users.push(user);
-     }
-         return users;
- } catch (err) {
-     throw err;
- }
-     
- }
- module.exports.get_users = get_users;
+async function get_users() {
+  try {
+    const result = await Pool.query(`SELECT id, firstname, lastname, phone, email FROM users`);
+    let users = [];
+    for (const row of result.rows) {
+      const user = {
+        id: row.id,
+        name: row.firstname,
+        surname: row.lastname,
+        phone: row.phone,
+        email: row.email
+      }
+      users.push(user);
+    }
+    return users;
+  } catch (err) {
+    throw_my_error(err);
+  }
+}
+module.exports.get_users = get_users;
 
 /**
  * Finding User information by User ID
@@ -56,7 +54,6 @@ module.exports.get_password_by_user_id = get_password_by_user_id;
  * @return {typedef.User_info}  User_info object
  */
 async function get_user_info_by_id(id) {
-  //OK
   try {
     const result = await Pool.query(`SELECT firstname, lastname, phone, email FROM users WHERE ID=$1;`, [id]);
     if (result.rows[0]) {
@@ -82,7 +79,6 @@ module.exports.get_user_info_by_id = get_user_info_by_id
  * @return {number} user ID
  */
 async function add_user(user) {
-  //OK
   try {
     const result = await Pool.query(
       `INSERT INTO users (id, username, hash, salt, firstname, lastname, phone, email) VALUES 
@@ -95,7 +91,6 @@ async function add_user(user) {
   } catch (err) {
     throw_my_error(err);
   }
-
 }
 module.exports.add_user = add_user;
 
@@ -106,7 +101,6 @@ module.exports.add_user = add_user;
  * @param {typedef.Role} role role of user from typedef.role
  */
 async function add_role_to_user(id, role) {
-  //OK
   try {
     if (await check_user_role(id, role)) {
       throw new Error('9. User have this role');
@@ -125,7 +119,6 @@ module.exports.add_role_to_user = add_role_to_user;
  * @return {bool} true if user have this role
  */
 async function check_user_role(id, role) {
-  //OK
   try {
     const result = await Pool.query(`SELECT role FROM roles WHERE user_id =$1;`, [id]);
     let roles = [];
@@ -145,8 +138,7 @@ module.exports.check_user_role = check_user_role;
  * @param {number} id user ID
  * @return {Object} Object with key named by Role.role and bool value
  */
- async function check_user_roles(id) {
-   //OK
+async function check_user_roles(id) {
   try {
     const result = await Pool.query(`SELECT role FROM roles WHERE user_id =$1;`, [id]);
     let roles = [];
@@ -159,7 +151,7 @@ module.exports.check_user_role = check_user_role;
     ret_obj[Role.Admin] = roles.includes(Role.Admin);
     ret_obj[Role.Seller] = roles.includes(Role.Seller);
     ret_obj[Role.Customer] = roles.includes(Role.Customer);
-  
+
     return ret_obj;
   } catch (err) {
     throw_my_error(err);
@@ -172,8 +164,7 @@ module.exports.check_user_roles = check_user_roles;
  * @param {string} login username
  * @return {{id: int, hash: string, salt: string}} object with id, hash and salt
  */
- async function get_user_password(login) {
-   //OK
+async function get_user_password(login) {
   try {
     const result = await Pool.query(`SELECT id, hash, salt FROM users WHERE username=$1;`, [login]);
     if (!result.rows[0]) {
@@ -201,8 +192,6 @@ module.exports.get_user_password = get_user_password;
  * @param {string} new_salt User salt for Password
  */
 async function change_user_data(id, new_name, new_lastname, new_phone, new_email, new_hash, new_salt) {
-  //OK
-  //brakuje lepszego sprawdzenia czy parametr ma być przesłany
   try {
     const result = await Pool.query(`SELECT * FROM roles WHERE user_id=$1;`, [id]);
     if (result.rows[0]) {
