@@ -48,6 +48,7 @@ app.use(async (req, res, next) => {
 
     //navbar
     res.locals.role = Role;
+    res.locals.url = req.url;
 
     const user_role = req.session.role;
     res.locals.user_role = user_role;

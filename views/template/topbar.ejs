@@ -20,7 +20,7 @@
             </div>
         <% } else { %>
             <div style="float: left; text-align: center;" class="links2">
-                <a href="/login" class="richbutton">Zaloguj się</a>
+                <a href="/login<%= '?returnUrl=' + url %> " class="richbutton">Zaloguj się</a>
             </div>
         <% } %>
     </div>
