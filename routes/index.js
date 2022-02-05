@@ -23,7 +23,6 @@ router.get('/', async (req, res) => {
   res.render('index', {
     display: display
   });
-
 });
 router.get('/error', (req, res) => {
   res.render('./error');
@@ -46,7 +45,6 @@ router.get('/search', async (req, res) => {
       price_min: req.query['price-min'],
       price_max: req.query['price-max'],
       producer: req.query['producer']
-
     };
     res.render('products-list/products-search', render_obj);
   } catch (err) {

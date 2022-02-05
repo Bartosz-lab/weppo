@@ -15,7 +15,7 @@ const typedef = require('../typedef');
  * @return {typedef.Product_for_list[]} list of products to display in list
  */
 async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, min_price, max_price, brand, search_conds) {
-  console.log(search_conds);
+ // console.log(search_conds);
   if (min_price === undefined || min_price == "") min_price = 0;
   if (max_price === undefined || max_price == "") max_price = 99999999;
   if (per_page === undefined) per_page = 10;
@@ -34,16 +34,17 @@ async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, mi
   let pf_i = 0;
   while (search_conds[pf_i]) {
     if (search_conds[pf_i].type == typedef.filter_type.number_min) {
-      min = search_conds[pf_i].value;
-      max = search_conds[pf_i + 1].value;
-      if (max === undefined || max == "") max = 999999;
-      var result_filters = (await Pool.query(`SELECT product_id FROM widok7 WHERE (filter_id = $1) AND (option_value BETWEEN $2 AND $3);`, [search_conds[pf_i].id, min, max])).rows;
+      if (search_conds[pf_i + 1] === undefined || search_conds[pf_i + 1].value == "") max = 999999;
+      else max = search_conds[pf_i + 1].value;
+      if (search_conds[pf_i] === undefined || search_conds[pf_i].value  == "") min = 0;
+      else min = search_conds[pf_i].value;
+      var result_filters = (await Pool.query(`SELECT product_id FROM widok9 WHERE (filter_id = $1) AND ( TO_NUMBER(option_value,'99G999D9S')  BETWEEN $2 AND $3);`, [search_conds[pf_i].id, min, max])).rows;
       result_filters = result_filters.map(item => item.product_id);
       if (pf_i == 0) products_filtered = result_filters;
       pf_i++;
     }
     else {
-      var result_filters = (await Pool.query(`SELECT product_id FROM widok7 WHERE (filter_id = $1) AND (option_value = $2);`, [search_conds[pf_i].id, search_conds[pf_i].value[0]])).rows;
+      var result_filters = (await Pool.query(`SELECT product_id FROM widok9 WHERE (filter_id = $1) AND (option_value = $2);`, [search_conds[pf_i].id, search_conds[pf_i].value[0]])).rows;
       result_filters = result_filters.map(item => item.product_id);
       if (pf_i == 0) products_filtered = result_filters;
       products_filtered = products_filtered.filter(value => result_filters.includes(value));
@@ -283,20 +284,23 @@ module.exports.get_product_to_basket = get_product_to_basket;
  * @param {Number} page_nr
  * @param {Number} price_min 
  * @param {Number} price_max
- * @param {String} brands
+ * @param {String} brand
  * @return {typedef.Product_for_list[]} list of products to display in list
  * 
  */
- async function find_products(search, sort_by, per_page, page, price_min, price_max, brands) {
-  search_array = [search];
+ async function find_products(search, sort_by, per_page, page, price_min, price_max, brand) {
   if (sort_by == typedef.sort.price_asc) sort_by = ' ORDER BY price ASC';
   else if (sort_by == typedef.sort.price_desc) sort_by = ' ORDER BY price DESC';
   else if (sort_by == typedef.sort.name_asc) sort_by = ' ORDER BY name ASC';
   else if (sort_by == typedef.sort.name_desc) sort_by = ' ORDER BY name DESC';
   else sort_by = '';
+  if (price_min === undefined || price_min == "") price_min = 0;
+  if (price_max === undefined || price_max == "") price_max = 99999999;
+  if (brand === undefined || brand == "") brand = ' IS NOT NULL';
+  else brand = "= " + "'"  + brand + "'"; 
 
     try {
-    const result = await Pool.query(`SELECT * FROM products WHERE ((name LIKE '%' || $1 || '%')  OR  (brand LIKE '%' || $2 || '%') ) AND (price BETWEEN $3 AND $4) ${sort_by} LIMIT $5 OFFSET $6 ;`,
+    const result = await Pool.query(`SELECT * FROM products WHERE ((name LIKE '%' || $1 || '%')  OR  (brand LIKE '%' || $2 || '%') ) AND (price BETWEEN $3 AND $4) AND brand ${brand} ${sort_by} LIMIT $5 OFFSET $6 ;`,
     [search, search, price_min, price_max, per_page,(page - 1) * per_page ] );
 
     let products_list = [];
@@ -307,7 +311,7 @@ module.exports.get_product_to_basket = get_product_to_basket;
       while (result_params.rows[j] && j < 4) {
         params.push(
           {
-            key : result_params.rows[j].filter_name,
+            id : result_params.rows[j].filter_id,
             value: result_params.rows[j].option_value
           }
         )
@@ -334,6 +338,7 @@ module.exports.get_product_to_basket = get_product_to_basket;
 }
 
 module.exports.find_products = find_products;
+
 
 /**
  * Find products price by his id
