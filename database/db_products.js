@@ -37,6 +37,7 @@ async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, mi
       min = search_conds[pf_i].value;
       max = search_conds[pf_i + 1].value;
       if (max === undefined || max == "") max = 999999;
+      if (min === undefined || min == "") min = 0;
       var result_filters = (await Pool.query(`SELECT product_id FROM widok7 WHERE (filter_id = $1) AND (option_value BETWEEN $2 AND $3);`, [search_conds[pf_i].id, min, max])).rows;
       result_filters = result_filters.map(item => item.product_id);
       if (pf_i == 0) products_filtered = result_filters;
