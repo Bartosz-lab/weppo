@@ -19,22 +19,31 @@ router.get('/:id', async (req, res) => {
         const filters = await database.get_filters_by_subcategory(req.params.id);
 
         let search_conds = [];
+        // potrzebuję osobnego obiektu żeby zręcznie przechowywać dane
+        let filter_state = {};
+
         for (const filter of filters) {
             if (filter.type === Filter_type.number) {
                 const min = filter.name + '-min';
                 if (req.query[min]) {
-                    search_conds.push({ id: filter.id, value: req.query[min], type: Filter_type.number_min });
+                    search_conds.push({ id: filter.id, value: req.query[min], type: Filter_type.number_min });                
                 }
+                filter_state[min] = req.query[min] || 0;
+
                 const max = filter.name + '-max';
                 if (req.query[max]) {
-                    search_conds.push({ id: filter.id, value: req.query[max], type: Filter_type.number_min });
+                    search_conds.push({ id: filter.id, value: req.query[max], type: Filter_type.number_min });                 
                 }
+                filter_state[max] = req.query[max] || 10000;
+
             } else if (req.query[filter.name]) {
                 if (!Array.isArray(req.query[filter.name])) {
                     search_conds.push({ id: filter.id, value: [req.query[filter.name]], type: Filter_type.other });
+                    
                 } else {
                     search_conds.push({ id: filter.id, value: req.query[filter.name], type: Filter_type.other });
                 }
+                filter_state[filter.name] = req.query[filter.name] || [];
             }
         }
         const render_obj = {
@@ -48,6 +57,7 @@ router.get('/:id', async (req, res) => {
             subcat_info: await database.get_position_of_subcategory(req.params.id),
             recommended: await database.get_recemended_products_in_subcategory(req.params.id),
             search_conds: search_conds,
+            filter_state: filter_state,
             price_min: req.query['price-min'],
             price_max: req.query['price-max'],
             producer: req.query['producer']

@@ -18,22 +18,24 @@
         </select>
 
         Cena:<br>
-        Od: <input type="number" name="price-min">
-        Do: <input type="number" name="price-max">
+        Od: <input type="number" name="price-min" value="<%= price_min %>">
+        Do: <input type="number" name="price-max" value="<%= price_max %>">
         Producent: 
-        <input type="text" name="producer">
+        <input type="text" name="producer" value="<%= producer %>">
 
         <% for(filter of filters) { %>
             <%= filter.name %> <br>
 
             <% if( filter.type == "enum") { %>
                 <% for( opt of filter.options ) { %>
-                    <input type="checkbox" id="<%= opt.name+filter.name %>" name="<%= filter.name %>" value="<%= opt.name %>">
+                    <input type="checkbox" id="<%= opt.name+filter.name %>" name="<%= filter.name %>" 
+                        <% if( filter_state[ filter.name ].includes(opt.name) ) { %> checked="true" <% } %> 
+                        value="<%= opt.name %>">
                     <label for="<%= opt.name+filter.name %>"><%= opt.name %></label><br>
                 <% } %>
             <% } else { %>
-                Od: <input type="number" name="<%= filter.name+'-min' %>"><br>
-                Do: <input type="number" name="<%= filter.name+'-max' %>"><br>
+                Od: <input type="number" name="<%= filter.name+'-min' %>" value="<%= filter_state[filter.name+'-min'] %>"><br>
+                Do: <input type="number" name="<%= filter.name+'-max' %>" value="<%= filter_state[filter.name+'-max'] %>"><br>
                 
             <% } %>
         <% } %>   
