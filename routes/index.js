@@ -6,8 +6,24 @@ const database = require('../database/database');
 const typedef = require('../typedef');
 const Sort = typedef.sort;
 
-router.get('/', (req, res) => {
-  res.render('index', {display: []} );
+
+// lista ID porduktów do wyświetlenia na stronie głównej
+recommended_ids = [ 1, 1, 1, 1, 1, 1, 1, 1, 1 ]
+
+router.get('/', async (req, res) => {
+
+  display = [];
+
+  // zebranie wszystkich produktów
+  for( id of recommended_ids ) {
+    display[display.length] = await database.get_product_by_id(id);
+  }
+
+  console.log(display[0])
+
+  res.render('index', {
+    display: display
+  });
 });
 router.get('/error', (req, res) => {
   res.render('./error');
@@ -22,6 +38,7 @@ router.get('/search', async (req, res) => {
     const render_obj = {
         sort_by: sort_by,
         per_page: per_page,
+        sort_opt: Sort,
         page: page,
         products: await database.find_products(req.query.search, sort_by, per_page, page,req.query['price-min'], req.query['price-max'], req.query['producer']),
         filters: [],
