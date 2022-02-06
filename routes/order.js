@@ -142,7 +142,7 @@ router.post('/:id', auth.restrict_login, async (req, res) => {
         }
         await database.update_order_status(req.params.id, req.body.status);
         req.session.error = '0. Success';
-        res.redirect(`/order/${req.params.id}`);
+        res.redirect(`/order`);
     } catch (err) {
         req.session.error = err.message;
         res.redirect('/error');

@@ -6,7 +6,7 @@
 
 <div class ="contener">
   Zamówienie numer: <%- order.id %><br>
-  Status zamówienia: <%- status[order.status] %><br><br>
+  Status zamówienia: <%- order.status %><br><br>
   
   <% for(let product of order.products) { 
     product.mode = 2; %>

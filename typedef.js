@@ -137,11 +137,11 @@ module.exports.sort = sort;
  * @enum {Order_status}
  */
  const order_status = {
-    new: 'new',
-    in_realisation: 'in_realistaion',
-    to_send: 'to-send',
-    sended: 'sended',
-    complited: 'complited'
+    new: 'Nowe',
+    in_realisation: 'W Realizacji',
+    to_send: 'Do Wysłania',
+    sended: 'Wysłano',
+    complited: 'Zrealizowane'
 
 }
 module.exports.order_status = order_status;

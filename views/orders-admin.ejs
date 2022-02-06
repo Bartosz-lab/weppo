@@ -14,7 +14,7 @@
         <div class="nodecor" style="text-align: left;">Cena: </div>
         <div class="nodecor" style="text-align: right;"><%- orders[i].price %>zł</div>
         <div class="nodecor" style="text-align: left;">Status wysyłki: </div>
-        <div class="nodecor" style="text-align: right;"><%- status[orders[i].status] %></div><br>
+        <div class="nodecor" style="text-align: right;"><%- orders[i].status %></div><br>
         Zmień status na:<br>
         <div class="column">
           <form action="/order/<%-orders[i].id %>" method="post">

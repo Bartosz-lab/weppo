@@ -60,7 +60,6 @@ async function save_user_adress(user_id, street, nr_house, nr_flat, zip_code, ci
         }
     }
     catch (err) {
-        console.log(err);
         throw_my_error(err);
     }
 }
