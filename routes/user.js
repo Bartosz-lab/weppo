@@ -9,7 +9,6 @@ const Role = typedef.role;
 
 
 router.get('/', auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
-    //OK
     try {
         const users = await database.get_users();
         res.render('users-administration', { users: users });
@@ -21,7 +20,6 @@ router.get('/', auth.restrict_login, auth.restrict_role(Role.Admin), async (req,
 });
 
 router.post('/promote', auth.restrict_login, auth.restrict_role(Role.Admin), async (req, res) => {
-    //OK
     try {
         await database.add_role_to_user(req.body.id, +req.body.role);
         res.redirect('/users');

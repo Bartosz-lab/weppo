@@ -1,3 +1,4 @@
+const { get } = require('express/lib/response');
 const Pool = require('../database/db_pool');
 const throw_my_error = require('../database/throw_error');
 const typedef = require('../typedef');
@@ -11,15 +12,13 @@ async function get_categories() {
     try {
         const result = await Pool.query(`SELECT * FROM categories;`);
         let categories = [];
-        let i = 0;
-        while (result.rows[i]) {
+        for(const category of result.rows) {
             categories.push({
-                id: result.rows[i].id,
-                val: result.rows[i].name
+                id: category.id,
+                val: category.name
             })
-            i++;
         }
-        return (categories);
+        return categories;
     } catch (err) {
         throw_my_error(err);
     }
@@ -34,23 +33,20 @@ async function get_subcategories() {
     try {
         const result = await Pool.query(`SELECT * FROM subcategories;`);
         let subcategories = [];
-        let i = 0;
-        while (result.rows[i]) {
+        for(const category of result.rows) {
             subcategories.push({
-                id: result.rows[i].id,
-                cat_id: result.rows[i].cat_id,
-                val: result.rows[i].name
+                id: category.id,
+                cat_id: category.cat_id,
+                val: category.name
             })
-            i++;
         }
         subcategories.sort((a, b) => (a.cat_id > b.cat_id) ? 1 : ((a.cat_id == b.cat_id) ? ((a.id > b.id) ? 1 : -1) : -1));
-        return (subcategories);
+        return subcategories;
     } catch (err) {
         throw_my_error(err);
     }
 }
 module.exports.get_subcategories = get_subcategories;
-
 
 /**
  * Get list of filters for subcategory by its id
@@ -58,8 +54,6 @@ module.exports.get_subcategories = get_subcategories;
  * @return {typedef.Filter[]} list of Filters with his options
  */
 async function get_filters_by_subcategory(subcat_id) {
-    //OK, ale pamiętaj o kolejności sortowania
-    // parametry option są tylko dla enumu, dla numberu nie sa potrzebne
     try {
         const result = await Pool.query(`SELECT * FROM widok9 WHERE subcat_id = $1 ORDER BY filter_id;`, [subcat_id]);
         let filter_list = [];
@@ -98,7 +92,6 @@ module.exports.get_filters_by_subcategory = get_filters_by_subcategory;
  * @return {{category_id: Number, category_name: String, id: Number, name: String}} list of Filters with his options
  */
 async function get_position_of_subcategory(subcat_id) {
-    //OK
     try {
         const result = await Pool.query(`SELECT * FROM widok12 WHERE subcat_id = $1;`, [subcat_id]);
         if (!result.rows[0]) throw new Error('7. Database Error');

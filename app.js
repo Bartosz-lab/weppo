@@ -60,12 +60,11 @@ app.use(async (req, res, next) => {
     res.locals.subcats = await database.get_subcategories();
 
     if (user_role === Role.Customer) {
-      res.locals.orders = await database.get_user_orders_info();
+      res.locals.orders = await database.get_user_orders_info(req.session.user);
     }
     next();
-  } catch {
-    req.session.error = err.message;
-    res.redirect('/error');
+  } catch (err) {
+    res.send(err.message);
   }
 });
 
