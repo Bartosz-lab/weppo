@@ -1,3 +1,4 @@
+const { type } = require('express/lib/response');
 const Pool = require('../database/db_pool');
 const throw_my_error = require('../database/throw_error');
 const typedef = require('../typedef');
@@ -27,8 +28,6 @@ async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, mi
   else if (sort_by == typedef.sort.name_asc) sort_by = ' ORDER BY name ASC';
   else if (sort_by == typedef.sort.name_desc) sort_by = ' ORDER BY name DESC';
   else sort_by = '';
-
-
   let products_list = [];
   let products_filtered = [];
   let pf_i = 0;
@@ -43,6 +42,19 @@ async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, mi
       if (pf_i == 0) products_filtered = result_filters;
       else products_filtered = products_filtered.filter(value => result_filters.includes(value));
       pf_i++;
+    }
+    else if (search_conds[pf_i].type == typedef.filter_type.other) {
+      let cond_i = 0;
+      let query = "";
+      while (search_conds[pf_i].value[cond_i]) {
+        if (cond_i == 0) query = query + "'" + search_conds[pf_i].value[0] + "'";
+        else query = query + " OR option_value = " + "'" +  search_conds[pf_i].value[cond_i] + "'";
+        cond_i ++;
+      }
+      var result_filters = (await Pool.query(`SELECT product_id FROM widok9 WHERE (filter_id = $1) AND (option_value = ${query});`, [search_conds[pf_i].id])).rows;
+      result_filters = result_filters.map(item => item.product_id);
+      if (pf_i == 0) products_filtered = result_filters;
+      else products_filtered = products_filtered.filter(value => result_filters.includes(value));
     }
     else {
       var result_filters = (await Pool.query(`SELECT product_id FROM widok9 WHERE (filter_id = $1) AND (option_value = $2);`, [search_conds[pf_i].id, search_conds[pf_i].value[0]])).rows;
