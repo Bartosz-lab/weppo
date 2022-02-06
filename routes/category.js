@@ -36,12 +36,15 @@ router.get('/:id', async (req, res) => {
                 }
                 filter_state[max] = req.query[max] || 10000;
 
-            } else if (req.query[filter.name]) {
-                if (!Array.isArray(req.query[filter.name])) {
-                    search_conds.push({ id: filter.id, value: [req.query[filter.name]], type: Filter_type.other });
-                    
-                } else {
-                    search_conds.push({ id: filter.id, value: req.query[filter.name], type: Filter_type.other });
+            } 
+            else {
+                if (req.query[filter.name]) {
+                    if (!Array.isArray(req.query[filter.name])) {
+                        search_conds.push({ id: filter.id, value: [req.query[filter.name]], type: Filter_type.other });
+                        
+                    } else {
+                        search_conds.push({ id: filter.id, value: req.query[filter.name], type: Filter_type.other });
+                    }                   
                 }
                 filter_state[filter.name] = req.query[filter.name] || [];
             }

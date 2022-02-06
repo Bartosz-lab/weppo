@@ -1,15 +1,22 @@
-<!-- Po co komplikować, jeśli będzie potrzeba to się zmodyfikuje -->
-<%- include('order') %>
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <%- include('./template/head') %>
 <body id="body">
 <%- include('./template/topbar') %>
 
 <div class ="contener">
-  <%= JSON.stringify(order) %> 
+  Zamówienia:<br><br>
+  <% for( i in orders ) { %>
+        
+    <div class="prodcontener" style="width:auto" onclick="location.href='/order/<%-orders[i].id %>'"> 
+        <div class="nodecor" style="text-align: left"> Data złożenia: </div>
+        <div class="nodecor" style="text-align: right;"><%- orders[i].date %></div>
+        <div class="nodecor" style="text-align: left;">Cena: </div>
+        <div class="nodecor" style="text-align: right;"><%- orders[i].price %>zł</div>
+    </div>
+<% } %> 
 
 </div>
 
 </body>
-</html>-->
+</html>
