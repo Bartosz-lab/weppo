@@ -45,13 +45,16 @@ async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, mi
     }
     else if (search_conds[pf_i].type == typedef.filter_type.other) {
       let cond_i = 0;
+      let conditions = [search_conds[pf_i].id];
       let query = "";
       while (search_conds[pf_i].value[cond_i]) {
-        if (cond_i == 0) query = query + "'" + search_conds[pf_i].value[0] + "'";
-        else query = query + " OR option_value = " + "'" +  search_conds[pf_i].value[cond_i] + "'";
+        conditions.push (search_conds[pf_i].value[cond_i]);
+        if (cond_i == 0) query = query + " option_value = $2"; 
+        else query = query + " OR option_value = $" +  (cond_i+2);
         cond_i ++;
       }
-      var result_filters = (await Pool.query(`SELECT product_id FROM widok9 WHERE (filter_id = $1) AND (option_value = ${query});`, [search_conds[pf_i].id])).rows;
+
+      var result_filters = (await Pool.query(`SELECT product_id FROM widok9 WHERE (filter_id = $1) AND (${query});`, conditions )).rows;
       result_filters = result_filters.map(item => item.product_id);
       if (pf_i == 0) products_filtered = result_filters;
       else products_filtered = products_filtered.filter(value => result_filters.includes(value));
