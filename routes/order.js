@@ -67,9 +67,12 @@ router.post('/new', auth.restrict_login, auth.restrict_role(Role.Customer), asyn
         let products = [];
         let price = 0;
         for (info of req.cookies.basket) {
+            const order_product = await database.get_product_to_order(info.id);
             const product = {
                 id: info.id,
-                price: await database.get_product_price(info.id),
+                price: order_product.price,
+                name: order_product.name,
+                imgurl: order_product.imgurl,
                 quantity: info.quantity
             }
             price += product.price * product.quantity;
@@ -134,7 +137,6 @@ router.get('/:id', auth.restrict_login, async (req, res) => {
 });
 router.post('/:id', auth.restrict_login, async (req, res) => {
     try {
-        const order = await database.get_order_by_id(req.params.id);
         if ((req.session.role != Role.Admin) && (req.session.role != Role.Seller)) {
             throw new Error('1. Access denied');
         }

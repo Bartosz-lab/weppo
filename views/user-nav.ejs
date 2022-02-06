@@ -3,11 +3,21 @@
     <div class="richbutton">
         <a href="/account/admin">Panel administracyjny</a>
     </div>
+    <div class="richbutton">
+        <a href="/users">Użytkownicy</a>
+    </div>
+    <div class="richbutton">
+        <a href="/order">Zamówienia</a>
+    </div>
+    <div class="richbutton">
+        <a href="/p/create">Dodaj nowy produkt</a>
+    </div>
 
 <% } else if(user_role === role.Seller) { %> 
     
-    Zamówienia SELERA
-    HELP
+    <div class="richbutton">
+        <a href="/order">Zamówienia</a>
+    </div>
 
 <% } else if(user_role === role.Customer) { %> 
         Aktywne zamówienia:<br>

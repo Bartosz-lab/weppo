@@ -328,11 +328,15 @@ module.exports.find_products = find_products;
  * @param {Number} id product ID
  * @return {Number} Products price
  */
-async function get_product_price(prod_id) {
+async function get_product_to_order(prod_id) {
   try {
-    const result = await Pool.query('SELECT price FROM products WHERE id = $1;', [prod_id]);
+    const result = await Pool.query('SELECT * FROM products WHERE id = $1;', [prod_id]);
     if (result.rows[0]) {
-      return (result.rows[0].price);
+      return ({
+        price: result.rows[0].price,
+        name:  result.rows[0].name,
+        imgurl:  result.rows[0].photo_url
+      });
     } else {
       throw new Error('7. Database Error');
     }
@@ -340,4 +344,4 @@ async function get_product_price(prod_id) {
     throw_my_error(err);
   }
 }
-module.exports.get_product_price = get_product_price;
+module.exports.get_product_to_order = get_product_to_order;

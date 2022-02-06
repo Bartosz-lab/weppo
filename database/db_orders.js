@@ -14,15 +14,15 @@ async function add_order(order) {
         const result2 = await Pool.query(`INSERT INTO all_orders (user_id, address_id, status, date_of_purchase, price) VALUES
     ($1, $2, $3, $4, $5) RETURNING id;`, [order.user_id, result1.rows[0].id, order.status, order.date, order.price]);
         for (const prod_in_order of order.products) {
-            await Pool.query(`INSERT INTO this_order (order_id, product_id, quantity, price_when_bought) VALUES
-        ($1, $2, $3, $4);`, [result2.rows[0].id, prod_in_order.id, prod_in_order.quantity, prod_in_order.price]);
+            console.log(prod_in_order);
+            await Pool.query(`INSERT INTO this_order (order_id, product_id, quantity, price_when_bought, name, imgurl) VALUES
+        ($1, $2, $3, $4, $5, $6);`, [result2.rows[0].id, prod_in_order.id, prod_in_order.quantity, prod_in_order.price, prod_in_order.name, prod_in_order.imgurl]);
         }
     } catch (err) {
         throw_my_error(err);
     }
 }
 module.exports.add_order = add_order;
-
 
 /**
  * Get order by his id
