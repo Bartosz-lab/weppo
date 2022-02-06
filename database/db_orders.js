@@ -31,35 +31,46 @@ module.exports.add_order = add_order;
  */
 async function get_order_by_id(order_id) {
     try {
-        //to jest całkiem do zmiany
+        const order_info = await Pool.query(`SELECT * from all_orders WHERE id = $1;`, [order_id]);
+        if (!order_info.rows) {
+            throw new Error('7. Database Error');
+        }
 
+        const products = await Pool.query(`SELECT * from this_order WHERE order_id = $1;`, [order_id]);
+        let products_in_order = [];
+        for (const prod of products.rows) {
+            products_in_order.push({
+                id: prod.product_id,
+                name: prod.name,
+                price: prod.price_when_bought,
+                quantity: prod.quantity,
+                imgurl: prod.imgurl
+            })
+        }
+        const user_data = await Pool.query(`SELECT * from order_addresses WHERE id = $1;`, [order_info.rows[0].address_id]);
 
-
-
-        // const result1 = await Pool.query(`SELECT * from widok14 WHERE order_id = $1;`, [order_id]);
-
-        // let products_in_order = [];
-        // for (const prod of result1.rows) {
-        //     products_in_order.push({
-        //         id: prod.product_id,
-        //         price: prod.price_when_bought,
-        //         quantity: prod.quantity
-        //     })
-        // }
-
-        // //const user_info = await db_users.get_user_info_by_id(result1.rows[0].user_id);
-        // //const user_address = await db_addresses.get_adress_by_user_id(result1.rows[0].user_id);
-
-        // return ({
-        //     id: order_id,
-        //     user_id: result1.rows[0].user_id,
-        //     price: result1.rows[0].price_when_bought,
-        //     products: products_in_order,
-        //     user_info: user_info,
-        //     address: user_address,
-        //     status: result1.rows[0].status,
-        //     date: result1.rows[0].date_of_purchase,
-        // })
+        return {
+            id: order_id,
+            user_id: order_info.rows[0].user_id,
+            price:order_info.rows[0].price,
+            products: products_in_order,
+            user_info: {
+                name: user_data.rows[0].firstname,
+                surname: user_data.rows[0].lastname,
+                phone: user_data.rows[0].phone,
+                email: user_data.rows[0].email
+            },
+            address: {
+                street: user_data.rows[0].street,
+                nr_house: user_data.rows[0].nr_house,
+                nr_flat: user_data.rows[0].nr_flat,
+                zip_code: user_data.rows[0].zip_code,
+                city: user_data.rows[0].city,
+                country: user_data.rows[0].country
+            },
+            status: order_info.rows[0].status,
+            date: order_info.rows[0].date_of_purchase,
+        };
     } catch (err) {
         throw_my_error(err);
     }
