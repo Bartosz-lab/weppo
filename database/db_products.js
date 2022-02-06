@@ -61,7 +61,6 @@ async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, mi
   const result = await Pool.query(`SELECT * FROM products WHERE (subcat_id = $1) AND (price BETWEEN $2 AND $3) AND brand IN (SELECT brand from products WHERE brand ${brand}) AND (id = ANY ($4)) ${sort_by} LIMIT $5 OFFSET $6;`,
     [subcat_id, min_price, max_price, products_filtered, per_page, (page - 1) * per_page]);
 
-  console.log (result.rows);
   for (let i = 0; i < result.rows.length; i++) {
     const result_params = await Pool.query(`SELECT * FROM widok7 WHERE (product_id = $1);`, [result.rows[i].id]);
     let params = [];
