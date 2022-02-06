@@ -13,6 +13,40 @@
         <div class="nodecor" style="text-align: right;"><%- orders[i].date %></div>
         <div class="nodecor" style="text-align: left;">Cena: </div>
         <div class="nodecor" style="text-align: right;"><%- orders[i].price %>zł</div>
+        <div class="nodecor" style="text-align: left;">Status wysyłki: </div>
+        <div class="nodecor" style="text-align: right;"><%- status[orders[i].status] %></div><br>
+        Zmień status na:<br>
+        <div class="column">
+          <form action="/order/<%-orders[i].id %>" method="post">
+            <input type="hidden" name="status" value="<%- status.new %>">
+            <input type="submit" value = "<%- status.new %>">
+          </form>
+        </div>
+        <div class="column">
+          <form action="/order/<%-orders[i].id %>" method="post">
+            <input type="hidden" name="status" value="<%- status.in_realisation %>">
+            <input type="submit" value = "<%- status.in_realisation %>">
+          </form>
+        </div>
+        <div class="column">
+          <form action="/order/<%-orders[i].id %>" method="post">
+            <input type="hidden" name="status" value="<%- status.to_send %>">
+            <input type="submit" value = "<%- status.to_send %>">
+          </form>
+        </div>
+        <div class="column">
+          <form action="/order/<%-orders[i].id %>" method="post">
+            <input type="hidden" name="status" value="<%- status.sended %>">
+            <input type="submit" value = "<%- status.sended %>">
+          </form>
+        </div>
+        <div class="column">
+          <form action="/order/<%-orders[i].id %>" method="post">
+            <input type="hidden" name="status" value="<%- status.complited %>">
+            <input type="submit" value = "<%- status.complited %>">
+          </form>
+        </div>
+        <div style="clear:both"></div>
     </div>
 <% } %> 
 

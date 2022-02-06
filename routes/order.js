@@ -21,7 +21,7 @@ router.get('/', auth.restrict_login, async (req, res) => {
                 break;
             case Role.Customer:
                 const orders = await database.get_user_orders(req.session.user);
-                res.render('orders', {orders: orders});
+                res.render('orders', {orders: orders, status: Order_status});
                 break;
             default:
                 throw new Error('4. Something went wrong');
@@ -32,7 +32,7 @@ router.get('/', auth.restrict_login, async (req, res) => {
     }
     async function seller_function() {
         const orders = await database.get_uncomplited_orders();
-        res.render('orders-admin', {orders: orders});
+        res.render('orders-admin', {orders: orders, status: Order_status});
     }
 });
 
@@ -50,7 +50,8 @@ router.get('/new', auth.restrict_login, auth.restrict_role(Role.Customer), async
         const render_obj = {
             products: products,
             user: await database.get_user_info_by_id(req.session.user),
-            adress: await database.get_adress_by_user_id(req.session.user)
+            adress: await database.get_adress_by_user_id(req.session.user),
+            status: Order_status
         }
         res.render('./new-order', render_obj);
     } catch (err) {
@@ -112,16 +113,16 @@ router.get('/:id', auth.restrict_login, async (req, res) => {
         const order = await database.get_order_by_id(req.params.id);
         switch (req.session.role) {
             case Role.Admin:
-                res.render('order-admin', {order: order, Order_status: Order_status});
+                res.render('order-admin', {order: order, status: Order_status});
                 break;
             case Role.Seller:
-                res.render('order-admin', {order: order, Order_status: Order_status});
+                res.render('order-admin', {order: order, status: Order_status});
                 break;
             case Role.Customer:
                 if(req.session.user != order.user_id) {
                     throw new Error('1. Access deined');
                 } 
-                res.render('order', {order: order});
+                res.render('order', {order: order, status: Order_status});
                 break;
             default:
                 throw new Error('4. Something went wrong');
@@ -135,11 +136,11 @@ router.post('/:id', auth.restrict_login, async (req, res) => {
     try {
         const order = await database.get_order_by_id(req.params.id);
         if ((req.session.role != Role.Admin) && (req.session.role != Role.Seller)) {
-            throw new Error('1. Access deined');
+            throw new Error('1. Access denied');
         }
-        await database.update_order_status(id, req.body.status);
+        await database.update_order_status(req.params.id, req.body.status);
         req.session.error = '0. Success';
-        res.redirect(`order/${req.params.id}`);
+        res.redirect(`/order/${req.params.id}`);
     } catch (err) {
         req.session.error = err.message;
         res.redirect('/error');

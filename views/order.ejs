@@ -5,7 +5,9 @@
 <%- include('./template/topbar') %>
 
 <div class ="contener">
-  Zamówienie numer: <%- order.id %><br><br>
+  Zamówienie numer: <%- order.id %><br>
+  Status zamówienia: <%- status[order.status] %><br><br>
+  
   <% for(let product of order.products) { 
     product.mode = 2; %>
     <%- include('./components/wide-item', product) %>
