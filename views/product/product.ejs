@@ -43,11 +43,12 @@
     Polecamy również:<br><br>
     <% for(i in recommended) { 
         recommended[i].mode = 0; %>
-    <%- include('../components/item', recommended[i]) %>
-    <% if ( i%4 == 3 ) { %>
+      <%- include('../components/item', recommended[i]) %>
+      <% if ( i%4 == 3 ) { %>
+        <div style="clear:both"></div>
+      <% } %>
+    <% } %>
     <div style="clear:both"></div>
-    <% } %>
-    <% } %>
   </div>
   <%- include('../template/footer') %>
 
