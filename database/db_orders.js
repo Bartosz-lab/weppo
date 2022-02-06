@@ -10,7 +10,7 @@ async function add_order(order) {
     try {
         const result1 = await Pool.query(`INSERT INTO order_addresses (street, nr_house, nr_flat, zip_code, city, country, firstname, lastname, phone, email)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING  id;`,
-            [order.address.street, order.address.nr_house, order.address.nr_flat, order.address.zip_code, order.address.city, order.address.country, order.user_info.name, order.user_info.surname, order.user_info.phone, order.user_info.email]);
+            [order.address.street, +order.address.nr_house, +order.address.nr_flat, order.address.zip_code, order.address.city, order.address.country, order.user_info.name, order.user_info.surname, order.user_info.phone, order.user_info.email]);
         const result2 = await Pool.query(`INSERT INTO all_orders (user_id, address_id, status, date_of_purchase, price) VALUES
     ($1, $2, $3, $4, $5) RETURNING id;`, [order.user_id, result1.rows[0].id, order.status, order.date, order.price]);
         for (const prod_in_order of order.products) {
