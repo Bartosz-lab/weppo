@@ -14,7 +14,7 @@
 
         <% for( i in orders ) { %>
         
-        <div class="prodcontener" style="width:auto" onclick="alert('Przeniesienie do strony zamówienia. <%- orders[i].id %>')"> 
+        <div class="prodcontener" style="width:auto" onclick="location.href='/order/<%-orders[i].id %>'"> 
             <div class="nodecor" style="text-align: left"> Data złożenia: </div>
             <div class="nodecor" style="text-align: right;"><%- orders[i].date %></div>
             <div class="nodecor" style="text-align: left;">Cena: </div>
