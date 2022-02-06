@@ -28,6 +28,7 @@ async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, mi
   else if (sort_by == typedef.sort.name_desc) sort_by = ' ORDER BY name DESC';
   else sort_by = '';
 
+
   let products_list = [];
   let products_filtered = [];
   let pf_i = 0;
@@ -37,16 +38,17 @@ async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, mi
       else max = search_conds[pf_i + 1].value;
       if (search_conds[pf_i] === undefined || search_conds[pf_i].value == "") min = 0;
       else min = search_conds[pf_i].value;
-      var result_filters = (await Pool.query(`SELECT product_id FROM widok9 WHERE (filter_id = $1) AND ( TO_NUMBER(option_value,'99G999D9S')  BETWEEN $2 AND $3);`, [search_conds[pf_i].id, min, max])).rows;
+      var result_filters = (await Pool.query(`SELECT product_id FROM widok9 WHERE (filter_id = $1) AND ( TO_NUMBER(option_value,'99G999D9S')  BETWEEN $2 AND $3);`, [search_conds[pf_i].id, parseInt(min), parseInt(max)])).rows;
       result_filters = result_filters.map(item => item.product_id);
       if (pf_i == 0) products_filtered = result_filters;
+      else products_filtered = products_filtered.filter(value => result_filters.includes(value));
       pf_i++;
     }
     else {
       var result_filters = (await Pool.query(`SELECT product_id FROM widok9 WHERE (filter_id = $1) AND (option_value = $2);`, [search_conds[pf_i].id, search_conds[pf_i].value[0]])).rows;
       result_filters = result_filters.map(item => item.product_id);
       if (pf_i == 0) products_filtered = result_filters;
-      products_filtered = products_filtered.filter(value => result_filters.includes(value));
+      else products_filtered = products_filtered.filter(value => result_filters.includes(value));
     }
     pf_i++;
   }
@@ -56,10 +58,10 @@ async function get_product_by_subcategory(subcat_id, sort_by, per_page, page, mi
     products_filtered = products_filtered.map(item => item.id);
   }
 
-
   const result = await Pool.query(`SELECT * FROM products WHERE (subcat_id = $1) AND (price BETWEEN $2 AND $3) AND brand IN (SELECT brand from products WHERE brand ${brand}) AND (id = ANY ($4)) ${sort_by} LIMIT $5 OFFSET $6;`,
     [subcat_id, min_price, max_price, products_filtered, per_page, (page - 1) * per_page]);
 
+  console.log (result.rows);
   for (let i = 0; i < result.rows.length; i++) {
     const result_params = await Pool.query(`SELECT * FROM widok7 WHERE (product_id = $1);`, [result.rows[i].id]);
     let params = [];
